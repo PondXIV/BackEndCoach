@@ -1,0 +1,2 @@
+mysql:
+  dsn : "coach:first1234@tcp(202.28.34.197:3306)/proj63_coach?collation=utf8mb4_unicode_ci&parseTime=true"

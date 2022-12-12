@@ -9,6 +9,7 @@ import (
 )
 
 type ShowDataService interface {
+	Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error)
 	// Table Coach
 	PrintAllCoach()
 	LoginCoach(Email string, Password string) (*[]models.Coach, error)
@@ -28,6 +29,16 @@ type ShowDataService interface {
 }
 type ShowData struct {
 	db *gorm.DB
+}
+
+// Login implements ShowDataService
+func (s ShowData) Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error) {
+	repo := repository.NewLoginRepository(s.db)
+	coach, cus, err := repo.Login(Email, Password, Type)
+	if err != nil {
+		panic(err)
+	}
+	return coach, cus, nil
 }
 
 // Table Course

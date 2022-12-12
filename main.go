@@ -13,7 +13,6 @@ func main() {
 	// SERVER ******
 	//StartServer()
 
-
 	//เข้ารหัส DB
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
@@ -51,9 +50,9 @@ func main() {
 
 	// getAll Coach tast
 	coa := service.NewShowDataService(db)
-	coa.PrintAllCoach()
+	// coa.PrintAllCoach()
 
-	fmt.Printf("\n")
+	// fmt.Printf("\n")
 	//LoginCustomer
 	// result, err := cus.LoginCustomer("benzzaa@gmail.com", "1234")
 	// if err != nil {
@@ -64,12 +63,46 @@ func main() {
 	// }
 
 	//LoginCoach
-	result, err := coa.LoginCoach("babe@gmail.com", "1234")
+	// result, err := coa.LoginCoach("babe@gmail.com", "1234")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, v := range *result {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
+
+	/// Login
+	//Coach
+	coach, cus, err := coa.Login("babe@gmail.com", "1234", 0)
 	if err != nil {
 		panic(err)
 	}
-	for _, v := range *result {
+	for _, v := range *coach {
 		fmt.Printf("\n%v\n", v)
 	}
-
+	for _, v := range *cus {
+		fmt.Printf("\n%v\n", v)
+	}
+	//Customer
+	coach, cus, err = coa.Login("Tpangpond@gmail.com", "15978", 1)
+	if err != nil {
+		panic(err)
+	}
+	for _, v := range *coach {
+		fmt.Printf("\n%v\n", v)
+	}
+	for _, v := range *cus {
+		fmt.Printf("\n%v\n", v)
+	}
+	///
+	coach, cus, err = coa.Login("asdasdsad", "1213123", 1)
+	if err != nil {
+		panic(err)
+	}
+	for _, v := range *coach {
+		fmt.Printf("\n%v\n", v)
+	}
+	for _, v := range *cus {
+		fmt.Printf("\n%v\n", v)
+	}
 }

@@ -15,6 +15,6 @@ func NewDemoController(router *gin.Engine) {
 }
 func demoHello(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "HelloWorld",
+		"message": "ฟ่ดนะจ๊ะ",
 	})
 }

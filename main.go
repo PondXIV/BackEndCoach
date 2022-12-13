@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// SERVER ******
-	//StartServer()
+	StartServer()
 
 	//เข้ารหัส DB
 	viper.SetConfigName("config")

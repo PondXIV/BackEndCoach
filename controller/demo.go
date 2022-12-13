@@ -7,7 +7,7 @@ import (
 )
 
 func NewDemoController(router *gin.Engine) {
-	ping := router.Group("/demo")
+	ping := router.Group("/pp")
 	{
 		ping.GET("/", demoHello)
 

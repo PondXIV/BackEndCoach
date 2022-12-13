@@ -12,6 +12,7 @@ COPY ./ ./
 
 RUN go install github.com/cosmtrek/air@latest
 
+RUN rm .air.toml
 # Don't forget to add .air.toml .gitignore
 RUN air init
 

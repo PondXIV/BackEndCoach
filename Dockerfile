@@ -2,7 +2,7 @@ FROM golang
 
 WORKDIR /app
 
-RUN git clone -b develop https://PondXIV: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@github.com/PondXIV/github.com/PondXIV/BackEndCoach.git .
+RUN git clone -b develop https://PondXIV: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@github.com/PondXIV/BackEndCoach.git .
 
 RUN go mod download
 
@@ -16,6 +16,6 @@ RUN go install github.com/cosmtrek/air@latest
 RUN air init
 
 # 9775-9780-DailyWorkout
-EXPOSE 8888
+EXPOSE 9775
 
 CMD ["air"]

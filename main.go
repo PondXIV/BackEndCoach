@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// SERVER ******
-	StartServer()
+	//StartServer()
 
 	//เข้ารหัส DB
 	viper.SetConfigName("config")
@@ -73,7 +73,7 @@ func main() {
 
 	/// Login
 	//Coach
-	coach, cus, err := coa.Login("babe@gmail.com", "1234", 0)
+	coach, cus, err := coa.LoginNotType("babe@gmail.com", "1234")
 	if err != nil {
 		panic(err)
 	}
@@ -84,7 +84,7 @@ func main() {
 		fmt.Printf("\n%v\n", v)
 	}
 	//Customer
-	coach, cus, err = coa.Login("Tpangpond@gmail.com", "15978", 1)
+	coach, cus, err = coa.LoginNotType("Tpangpond@gmail.com", "15978")
 	if err != nil {
 		panic(err)
 	}
@@ -95,7 +95,7 @@ func main() {
 		fmt.Printf("\n%v\n", v)
 	}
 	///
-	coach, cus, err = coa.Login("asdasdsad", "1213123", 1)
+	coach, cus, err = coa.LoginNotType("asdasdsad", "1213123")
 	if err != nil {
 		panic(err)
 	}

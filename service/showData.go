@@ -10,6 +10,7 @@ import (
 
 type ShowDataService interface {
 	Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error)
+	LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
 	// Table Coach
 	PrintAllCoach()
 	LoginCoach(Email string, Password string) (*[]models.Coach, error)
@@ -31,9 +32,19 @@ type ShowData struct {
 	db *gorm.DB
 }
 
+// LoginTwo implements ShowDataService
+func (s ShowData) LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error) {
+	repo := repository.NewUserRepository(s.db)
+	coach, cus, err := repo.LoginNotType(Email, Password)
+	if err != nil {
+		panic(err)
+	}
+	return coach, cus, nil
+}
+
 // Login implements ShowDataService
 func (s ShowData) Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error) {
-	repo := repository.NewLoginRepository(s.db)
+	repo := repository.NewUserRepository(s.db)
 	coach, cus, err := repo.Login(Email, Password, Type)
 	if err != nil {
 		panic(err)

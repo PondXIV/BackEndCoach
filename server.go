@@ -13,5 +13,6 @@ func StartServer() {
 		c.String(http.StatusOK, "Api is working...")
 	})
 	controller.NewDemoController(router)
+	controller.NewUserController(router)
 	router.Run()
 }

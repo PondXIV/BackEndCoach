@@ -38,11 +38,11 @@ func loginPostBody(ctx *gin.Context) {
 		panic(err)
 	}
 
-	if len(*coach) == 1{
+	if len(*coach) == 1 {
 		ctx.JSON(http.StatusOK, coach)
-	}else if len(*cus) == 1{
+	} else if len(*cus) == 1 {
 		ctx.JSON(http.StatusOK, cus)
-	}else{
+	} else {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
 		})
@@ -50,7 +50,12 @@ func loginPostBody(ctx *gin.Context) {
 	// println("=================")
 }
 func registerCus(ctx *gin.Context) {
-
+	jsonDto := dto.RegisterDTO{}
+	err := ctx.ShouldBindJSON(&jsonDto)
+	fmt.Printf(jsonDto.AliasName, jsonDto.Password)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+	}
 }
 func registerCoach(ctx *gin.Context) {
 

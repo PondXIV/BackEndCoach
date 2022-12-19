@@ -75,6 +75,7 @@ func (u userDB) RegisterCus(AliasName string, Password string, Email string, Ful
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
 	return &customers, nil
 }
 

@@ -16,8 +16,8 @@ type Course struct {
 	Status         string    `gorm:"column:status;size:1"`
 	ExpirationDate time.Time `gorm:"column:expiration date"`
 
-	Coach		Coach 		`gorm:"foreignKey:cid"`
-	Buying		Buying 		`gorm:"foreignKey:bid"`
+	Coach  Coach  `gorm:"foreignKey:cid"`
+	Buying Buying `gorm:"foreignKey:bid"`
 }
 
 func (Course) TableName() string {

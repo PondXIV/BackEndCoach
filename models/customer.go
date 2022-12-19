@@ -22,7 +22,7 @@ type Customer struct {
 	Price      uint      `gorm:"column:price"`
 
 	//Chats	[]Chat		 `gorm:"foreignKey:uid"`
-	Buying  []Buying	 `gorm:"foreignKey:uid"`
+	Buying []Buying `gorm:"foreignKey:uid"`
 }
 
 func (Customer) TableName() string {

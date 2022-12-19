@@ -23,6 +23,11 @@ func (c courseDB) GetCourseAll() (*[]models.Course, error) {
 	return &courses, nil
 }
 
-func NewCourseRepository(gormdb *gorm.DB) CourseRepository {
-	return courseDB{db: gormdb}
+func NewCourseRepository() CourseRepository {
+	db, err := NewDatabaseConnection()
+	if err != nil {
+		return nil
+	}
+
+	return courseDB{db}
 }

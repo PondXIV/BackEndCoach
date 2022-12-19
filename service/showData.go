@@ -16,7 +16,6 @@ type ShowDataService interface {
 
 	// Table Customer
 	PrintAllCustomer()
-	
 
 	// Table Buying
 	PrintAllBuying()
@@ -54,7 +53,7 @@ func (s ShowData) Login(Email string, Password string, Type int) (*[]models.Coac
 // Table Course
 // PrintAllCourse implements ShowDataService
 func (s ShowData) PrintAllCourse() {
-	repo := repository.NewCourseRepository(s.db)
+	repo := repository.NewCourseRepository()
 	courses, err := repo.GetCourseAll()
 
 	if err != nil {
@@ -68,7 +67,7 @@ func (s ShowData) PrintAllCourse() {
 // Table Coach
 // PrintAllCoach implements ShowDataService
 func (s ShowData) PrintAllCoach() {
-	repo := repository.NewCoachRepository(s.db)
+	repo := repository.NewCoachRepository()
 	coachs, err := repo.GetCoachAll()
 
 	if err != nil {
@@ -79,11 +78,10 @@ func (s ShowData) PrintAllCoach() {
 	}
 }
 
-
 // Table Customer
 // PrintAllCustomer implements ShowDataService
 func (s ShowData) PrintAllCustomer() {
-	repo := repository.NewCustomerRepository(s.db)
+	repo := repository.NewCustomerRepository()
 	cus, err := repo.GetCustomerAll()
 
 	if err != nil {
@@ -94,11 +92,10 @@ func (s ShowData) PrintAllCustomer() {
 	}
 }
 
-
 // Table Buying
 // PrintAllBuying implements ShowDataService
 func (s ShowData) PrintAllBuying() {
-	repo := repository.NewBuyingRepository(s.db)
+	repo := repository.NewBuyingRepository()
 	buying, err := repo.GetBuyingrAll()
 
 	if err != nil {
@@ -112,7 +109,7 @@ func (s ShowData) PrintAllBuying() {
 // Table Chat
 // PrintAllChat implements ShowDataService
 func (s ShowData) PrintAllChat() {
-	repo := repository.NewChatRepository(s.db)
+	repo := repository.NewChatRepository()
 	chats, err := repo.GetChatAll()
 
 	if err != nil {

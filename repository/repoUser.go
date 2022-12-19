@@ -102,6 +102,6 @@ func NewUserRepository() UserRepository {
 	if err != nil {
 		return nil
 	}
-	
+
 	return userDB{db}
 }

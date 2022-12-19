@@ -23,6 +23,11 @@ func (b buyingDB) GetBuyingrAll() (*[]models.Buying, error) {
 	return &buying, nil
 }
 
-func NewBuyingRepository(gormdb *gorm.DB) BuyingRepository {
-	return buyingDB{db: gormdb}
+func NewBuyingRepository() BuyingRepository {
+	db, err := NewDatabaseConnection()
+	if err != nil {
+		return nil
+	}
+
+	return buyingDB{db}
 }

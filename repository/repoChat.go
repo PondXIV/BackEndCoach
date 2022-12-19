@@ -23,6 +23,11 @@ func (c chatDB) GetChatAll() (*[]models.Chat, error) {
 	return &chats, nil
 }
 
-func NewChatRepository(gormdb *gorm.DB) ChatRepository {
-	return chatDB{db: gormdb}
+func NewChatRepository() ChatRepository {
+	db, err := NewDatabaseConnection()
+	if err != nil {
+		return nil
+	}
+
+	return chatDB{db}
 }

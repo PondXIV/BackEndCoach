@@ -10,7 +10,7 @@ import (
 type UserRepository interface {
 	Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error)
 	LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
-	registerCus(
+	RegisterCus(
 		AliasName string,
 		Password string,
 		Email string,
@@ -23,7 +23,7 @@ type UserRepository interface {
 		Height int,
 		Price int,
 	) (*[]models.Customer, error)
-	registerCoach(
+	RegisterCoach(
 		AliasName string,
 		Password string,
 		Email string,
@@ -59,7 +59,7 @@ func (l userDB) LoginNotType(Email string, Password string) (*[]models.Coach, *[
 }
 
 // registerCoach implements UserRepository
-func (u userDB) registerCoach(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Qualification string, Property string) (*[]models.Coach, error) {
+func (u userDB) RegisterCoach(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Qualification string, Property string) (*[]models.Coach, error) {
 	coach := []models.Coach{}
 	result := u.db.Create(&coach)
 	if result.Error != nil {
@@ -69,7 +69,7 @@ func (u userDB) registerCoach(AliasName string, Password string, Email string, F
 }
 
 // register implements UserRepository
-func (u userDB) registerCus(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Weight int, Height int, Price int) (*[]models.Customer, error) {
+func (u userDB) RegisterCus(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Weight int, Height int, Price int) (*[]models.Customer, error) {
 	customers := []models.Customer{}
 	result := u.db.Create(&customers)
 	if result.Error != nil {

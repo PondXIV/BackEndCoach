@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var showDateService = service.NewShowDataService()
+var userDateService = service.NewUserDataService()
 
 func NewUserController(router *gin.Engine) {
 	ping := router.Group("/user")
@@ -30,7 +30,7 @@ func loginPostBody(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
 	// process
-	coach, cus, err := showDateService.Login(jsonDto.Email, jsonDto.Password, jsonDto.Type)
+	coach, cus, err := userDateService.ServiceLogin(jsonDto.Email, jsonDto.Password, jsonDto.Type)
 
 	// output json
 	// println("===============")
@@ -50,12 +50,33 @@ func loginPostBody(ctx *gin.Context) {
 	// println("=================")
 }
 func registerCus(ctx *gin.Context) {
-	jsonDto := dto.RegisterDTO{}
+	jsonDto := dto.RegisterCusDTO{}
 	err := ctx.ShouldBindJSON(&jsonDto)
-	fmt.Printf(jsonDto.AliasName, jsonDto.Password)
+	fmt.Printf(jsonDto.AliasName, jsonDto.Password,
+		jsonDto.Email, jsonDto.FullName,
+		jsonDto.Birthday, jsonDto.Gender,
+		jsonDto.Phone, jsonDto.Image,
+		jsonDto.Weight, jsonDto.Height, jsonDto.Price)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
+	ctx.JSON(http.StatusOK, jsonDto)
+	// cus, err := userDateService.ServiceRegisterCus(jsonDto.AliasName, jsonDto.Password,
+	// 	jsonDto.Email, jsonDto.FullName,
+	// 	jsonDto.Birthday, jsonDto.Gender,
+	// 	jsonDto.Phone, jsonDto.Image,
+	// 	jsonDto.Weight, jsonDto.Height, jsonDto.Price)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// if len(*cus) == 1 {
+	// 	ctx.JSON(http.StatusOK, cus)
+	// } else {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": err,
+	// 	})
+	// }
+
 }
 func registerCoach(ctx *gin.Context) {
 

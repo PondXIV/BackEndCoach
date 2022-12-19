@@ -17,6 +17,6 @@ RUN rm .air.toml
 RUN air init
 
 # 9775-9780-DailyWorkout
-EXPOSE 9775
+EXPOSE 8080
 
 CMD ["air"]

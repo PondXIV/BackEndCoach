@@ -34,6 +34,11 @@ func (c custimerDB) GetCustomerAll() (*[]models.Customer, error) {
 	return &customers, nil
 }
 
-func NewCustomerRepository(gormdb *gorm.DB) CustomerRepository {
-	return custimerDB{db: gormdb}
+func NewCustomerRepository() CustomerRepository {
+	db, err := NewDatabaseConnection()
+	if err != nil {
+		return nil
+	}
+
+	return custimerDB{db}
 }

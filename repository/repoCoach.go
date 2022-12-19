@@ -35,6 +35,11 @@ func (c coachDB) GetCoachAll() (*[]models.Coach, error) {
 	return &coachs, nil
 }
 
-func NewCoachRepository(gormdb *gorm.DB) CoachRepository {
-	return coachDB{db: gormdb}
+func NewCoachRepository() CoachRepository {
+	db, err := NewDatabaseConnection()
+	if err != nil {
+		return nil
+	}
+
+	return coachDB{db}
 }

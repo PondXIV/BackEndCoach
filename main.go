@@ -1,7 +1,7 @@
 package main
 
 import (
-	"backEndGo/service"
+
 	"fmt"
 
 	"github.com/spf13/viper"
@@ -10,8 +10,6 @@ import (
 )
 
 func main() {
-	// SERVER ******
-	//StartServer()
 
 	//เข้ารหัส DB
 	viper.SetConfigName("config")
@@ -49,7 +47,9 @@ func main() {
 	// cus.PrintAllCustomer()
 
 	// getAll Coach tast
-	coa := service.NewShowDataService(db)
+
+	// SERVER ******
+	StartServer()
 	// coa.PrintAllCoach()
 
 	// fmt.Printf("\n")
@@ -73,36 +73,36 @@ func main() {
 
 	/// Login
 	//Coach
-	coach, cus, err := coa.LoginNotType("babe@gmail.com", "1234")
-	if err != nil {
-		panic(err)
-	}
-	for _, v := range *coach {
-		fmt.Printf("\n%v\n", v)
-	}
-	for _, v := range *cus {
-		fmt.Printf("\n%v\n", v)
-	}
-	//Customer
-	coach, cus, err = coa.LoginNotType("Tpangpond@gmail.com", "15978")
-	if err != nil {
-		panic(err)
-	}
-	for _, v := range *coach {
-		fmt.Printf("\n%v\n", v)
-	}
-	for _, v := range *cus {
-		fmt.Printf("\n%v\n", v)
-	}
-	///
-	coach, cus, err = coa.LoginNotType("asdasdsad", "1213123")
-	if err != nil {
-		panic(err)
-	}
-	for _, v := range *coach {
-		fmt.Printf("\n%v\n", v)
-	}
-	for _, v := range *cus {
-		fmt.Printf("\n%v\n", v)
-	}
+	// coach, cus, err := coa.Login("babe@gmail.com", "1234", 0)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, v := range *coach {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
+	// for _, v := range *cus {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
+	// //Customer
+	// coach, cus, err = coa.LoginNotType("Tpangpond@gmail.com", "15978")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, v := range *coach {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
+	// for _, v := range *cus {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
+	// ///
+	// coach, cus, err = coa.LoginNotType("asdasdsad", "1213123")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, v := range *coach {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
+	// for _, v := range *cus {
+	// 	fmt.Printf("\n%v\n", v)
+	// }
 }

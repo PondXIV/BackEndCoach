@@ -8,19 +8,19 @@ import (
 
 type CoachRepository interface {
 	GetCoachAll() (*[]models.Coach, error)
-	LoginCoach(Email string, Password string) (*[]models.Coach, error)
+	GetCoachByID(Id int) (*[]models.Coach, error)
 }
 
 type coachDB struct {
 	db *gorm.DB
 }
 
-// LoginCoach implements CoachRepository
-func (c coachDB) LoginCoach(Email string, Password string) (*[]models.Coach, error) {
+// GetCoachByID implements CoachRepository
+func (c coachDB) GetCoachByID(Id int) (*[]models.Coach, error) {
 	coachs := []models.Coach{}
-	result := c.db.Where("email = ?", Email).Where("password = ?", Password).Find(&coachs)
-	if result.Error != nil {
-		return nil, result.Error
+	resultCoa := c.db.Where("cid = ?", Id).Find(&coachs)
+	if resultCoa.Error != nil {
+		return nil, resultCoa.Error
 	}
 	return &coachs, nil
 }

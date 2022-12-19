@@ -97,6 +97,11 @@ func (l userDB) Login(Email string, Password string, Type int) (*[]models.Coach,
 	return &coachs, &customers, nil
 }
 
-func NewUserRepository(gormdb *gorm.DB) UserRepository {
-	return userDB{db: gormdb}
+func NewUserRepository() UserRepository {
+	db, err := NewDatabaseConnection()
+	if err != nil {
+		return nil
+	}
+	
+	return userDB{db}
 }

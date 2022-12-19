@@ -13,11 +13,10 @@ type ShowDataService interface {
 	LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
 	// Table Coach
 	PrintAllCoach()
-	LoginCoach(Email string, Password string) (*[]models.Coach, error)
 
 	// Table Customer
 	PrintAllCustomer()
-	LoginCustomer(Email string, Password string) (*[]models.Customer, error)
+	
 
 	// Table Buying
 	PrintAllBuying()
@@ -34,7 +33,7 @@ type ShowData struct {
 
 // LoginTwo implements ShowDataService
 func (s ShowData) LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error) {
-	repo := repository.NewUserRepository(s.db)
+	repo := repository.NewUserRepository()
 	coach, cus, err := repo.LoginNotType(Email, Password)
 	if err != nil {
 		panic(err)
@@ -44,7 +43,7 @@ func (s ShowData) LoginNotType(Email string, Password string) (*[]models.Coach, 
 
 // Login implements ShowDataService
 func (s ShowData) Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error) {
-	repo := repository.NewUserRepository(s.db)
+	repo := repository.NewUserRepository()
 	coach, cus, err := repo.Login(Email, Password, Type)
 	if err != nil {
 		panic(err)
@@ -80,16 +79,6 @@ func (s ShowData) PrintAllCoach() {
 	}
 }
 
-// LoginCoach implements ShowDataService
-func (s ShowData) LoginCoach(Email string, Password string) (*[]models.Coach, error) {
-	repo := repository.NewCoachRepository(s.db)
-	coa, err := repo.LoginCoach(Email, Password)
-
-	if err != nil {
-		panic(err)
-	}
-	return coa, nil
-}
 
 // Table Customer
 // PrintAllCustomer implements ShowDataService
@@ -105,16 +94,6 @@ func (s ShowData) PrintAllCustomer() {
 	}
 }
 
-// LoginCustomer implements ShowDataService
-func (s ShowData) LoginCustomer(Email string, Password string) (*[]models.Customer, error) {
-	repo := repository.NewCustomerRepository(s.db)
-	cus, err := repo.LoginCustomer(Email, Password)
-
-	if err != nil {
-		panic(err)
-	}
-	return cus, nil
-}
 
 // Table Buying
 // PrintAllBuying implements ShowDataService
@@ -143,6 +122,6 @@ func (s ShowData) PrintAllChat() {
 		fmt.Printf("%v\n", v)
 	}
 }
-func NewShowDataService(gormdb *gorm.DB) ShowDataService {
-	return ShowData{db: gormdb}
+func NewShowDataService() ShowDataService {
+	return ShowData{}
 }

@@ -2,6 +2,8 @@ FROM golang
 
 WORKDIR /app
 
+ARG CACHEBUST=1
+
 RUN git clone -b develop https://PondXIV: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@github.com/PondXIV/BackEndCoach.git .
 
 RUN go mod download

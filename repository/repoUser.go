@@ -9,17 +9,6 @@ import (
 type UserRepository interface {
 	Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error)
 	LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
-	// RegisterCus(AliasName string,
-	// 	Password string,
-	// 	Email string,
-	// 	FullName string,
-	// 	Birthday time.Time,
-	// 	Gender string,
-	// 	Phone string,
-	// 	Image string,
-	// 	Weight int,
-	// 	Height int,
-	// 	Price int,) int64
 	RegisterCus(cus *models.Customer) int64
 	RegisterCoach(coach *models.Coach) int64
 }
@@ -57,7 +46,7 @@ func (u userDB) RegisterCoach(coach *models.Coach) int64 {
 
 // register implements UserRepository
 func (u userDB) RegisterCus(cus *models.Customer) int64 {
-	//cus := models.Customer{}
+
 	result := u.db.Create(&cus)
 	if result.Error != nil {
 		panic(result.Error)

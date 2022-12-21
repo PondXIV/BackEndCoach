@@ -2,7 +2,6 @@ package repository
 
 import (
 	"backEndGo/models"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -10,31 +9,19 @@ import (
 type UserRepository interface {
 	Login(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error)
 	LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
-	RegisterCus(
-		AliasName string,
-		Password string,
-		Email string,
-		FullName string,
-		Birthday time.Time,
-		Gender string,
-		Phone string,
-		Image string,
-		Weight int,
-		Height int,
-		Price int,
-	) (*[]models.Customer, error)
-	RegisterCoach(
-		AliasName string,
-		Password string,
-		Email string,
-		FullName string,
-		Birthday time.Time,
-		Gender string,
-		Phone string,
-		Image string,
-		Qualification string,
-		Property string,
-	) (*[]models.Coach, error)
+	// RegisterCus(AliasName string,
+	// 	Password string,
+	// 	Email string,
+	// 	FullName string,
+	// 	Birthday time.Time,
+	// 	Gender string,
+	// 	Phone string,
+	// 	Image string,
+	// 	Weight int,
+	// 	Height int,
+	// 	Price int,) int64
+	RegisterCus(cus *models.Customer) int64
+	RegisterCoach(coach *models.Coach) int64
 }
 type userDB struct {
 	db *gorm.DB
@@ -59,24 +46,24 @@ func (l userDB) LoginNotType(Email string, Password string) (*[]models.Coach, *[
 }
 
 // registerCoach implements UserRepository
-func (u userDB) RegisterCoach(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Qualification string, Property string) (*[]models.Coach, error) {
-	coach := []models.Coach{}
+func (u userDB) RegisterCoach(coach *models.Coach) int64 {
+
 	result := u.db.Create(&coach)
 	if result.Error != nil {
-		return nil, result.Error
+		panic(result.Error)
 	}
-	return &coach, nil
+	return result.RowsAffected
 }
 
 // register implements UserRepository
-func (u userDB) RegisterCus(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Weight int, Height int, Price int) (*[]models.Customer, error) {
-	customers := []models.Customer{}
-	result := u.db.Create(&customers)
+func (u userDB) RegisterCus(cus *models.Customer) int64 {
+	//cus := models.Customer{}
+	result := u.db.Create(&cus)
 	if result.Error != nil {
-		return nil, result.Error
+		panic(result.Error)
 	}
 
-	return &customers, nil
+	return result.RowsAffected
 }
 
 // Login implements LoginRepository

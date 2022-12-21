@@ -3,7 +3,8 @@ package service
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
-	"time"
+
+	//"time"
 
 	"gorm.io/gorm"
 )
@@ -11,34 +12,58 @@ import (
 type UserDataService interface {
 	ServiceLogin(Email string, Password string, Type int) (*[]models.Coach, *[]models.Customer, error)
 	ServiceLoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
-	ServiceRegisterCus(
-		AliasName string,
-		Password string,
-		Email string,
-		FullName string,
-		Birthday time.Time,
-		Gender string,
-		Phone string,
-		Image string,
-		Weight int,
-		Height int,
-		Price int,
-	) (*[]models.Customer, error)
+	ServiceRegisterCus(cus *models.Customer) int64
+	ServiceRegisterCoach(coach *models.Coach) int64
 }
 type UserData struct {
 	db *gorm.DB
 }
+var repoCus = repository.NewCustomerRepository()
+// ServiceRegisterCoach implements UserDataService
+func (UserData) ServiceRegisterCoach(coach *models.Coach) int64 {
+	repoCoach := repository.NewCoachRepository()
+	repoRegister := repository.NewUserRepository()
+	getAllCoach, err := repoCoach.GetCoachAll()
 
-// ServiceRegisterCus implements UserDataService
-func (UserData) ServiceRegisterCus(AliasName string, Password string, Email string, FullName string, Birthday time.Time, Gender string, Phone string, Image string, Weight int, Height int, Price int) (*[]models.Customer, error) {
-	repo := repository.NewUserRepository()
-	cus, err := repo.RegisterCus(AliasName, Password,
-		Email, FullName, Birthday,
-		Gender, Phone, Image, Weight, Height, Price)
 	if err != nil {
 		panic(err)
 	}
-	return cus, nil
+	for _, c := range *getAllCoach {
+		if c.Email == coach.Email {
+			return 0
+		}
+	}
+	RowsAffected := repoRegister.RegisterCoach(coach)
+	if RowsAffected > 0 {
+		return 1
+	} else if RowsAffected == 0 {
+		return 0
+	} else {
+		return -1
+	}
+}
+
+// ServiceRegisterCus implements UserDataService
+func (UserData) ServiceRegisterCus(cus *models.Customer) int64 {
+	repoRegister := repository.NewUserRepository()
+	getAllCus, err := repoCus.GetCustomerAll()
+
+	if err != nil {
+		panic(err)
+	}
+	for _, c := range *getAllCus {
+		if c.Email == cus.Email {
+			return 0
+		}
+	}
+	RowsAffected := repoRegister.RegisterCus(cus)
+	if RowsAffected > 0 {
+		return 1
+	} else if RowsAffected == 0 {
+		return 0
+	} else {
+		return -1
+	}
 }
 
 // LoginTwo implements ShowDataService

@@ -2,6 +2,7 @@ package controller
 
 import (
 	dto "backEndGo/DTO"
+	"backEndGo/models"
 	"backEndGo/service"
 
 	"fmt"
@@ -50,34 +51,38 @@ func loginPostBody(ctx *gin.Context) {
 	// println("=================")
 }
 func registerCus(ctx *gin.Context) {
-	jsonDto := dto.RegisterCusDTO{}
-	err := ctx.ShouldBindJSON(&jsonDto)
-	fmt.Printf(jsonDto.AliasName, jsonDto.Password,
-		jsonDto.Email, jsonDto.FullName,
-		jsonDto.Birthday, jsonDto.Gender,
-		jsonDto.Phone, jsonDto.Image,
-		jsonDto.Weight, jsonDto.Height, jsonDto.Price)
+	cus := models.Customer{}
+	err := ctx.ShouldBindJSON(&cus)
+	// fmt.Printf("%v", cus)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
-	ctx.JSON(http.StatusOK, jsonDto)
-	// cus, err := userDateService.ServiceRegisterCus(jsonDto.AliasName, jsonDto.Password,
-	// 	jsonDto.Email, jsonDto.FullName,
-	// 	jsonDto.Birthday, jsonDto.Gender,
-	// 	jsonDto.Phone, jsonDto.Image,
-	// 	jsonDto.Weight, jsonDto.Height, jsonDto.Price)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// if len(*cus) == 1 {
-	// 	ctx.JSON(http.StatusOK, cus)
-	// } else {
-	// 	ctx.JSON(http.StatusBadRequest, gin.H{
-	// 		"error": err,
-	// 	})
-	// }
+	RowsAffected := userDateService.ServiceRegisterCus(&cus)
 
+	if RowsAffected > 0 {
+		ctx.JSON(http.StatusOK, gin.H{
+			"massage": "Register Success",
+		})
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{
+			"massage": "Register failed",
+		})
+	}
 }
 func registerCoach(ctx *gin.Context) {
-
+	coach := models.Coach{}
+	err := ctx.ShouldBindJSON(&coach)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+	}
+	RowsAffected := userDateService.ServiceRegisterCoach(&coach)
+	if RowsAffected > 0 {
+		ctx.JSON(http.StatusOK, gin.H{
+			"massage": "Register Success",
+		})
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{
+			"massage": "Register failed",
+		})
+	}
 }

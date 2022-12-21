@@ -4,8 +4,8 @@ import (
 	dto "backEndGo/DTO"
 	"backEndGo/models"
 	"backEndGo/service"
-
 	"fmt"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,7 +28,8 @@ func loginPostBody(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&jsonDto)
 	fmt.Printf(jsonDto.Email, jsonDto.Password)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		// ctx.JSON(http.StatusBadRequest, err)
+		panic(err)
 	}
 	// process
 	coach, cus, err := userDateService.ServiceLogin(jsonDto.Email, jsonDto.Password, jsonDto.Type)
@@ -40,11 +41,26 @@ func loginPostBody(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, coach)
 	} else if len(*cus) == 1 {
 		ctx.JSON(http.StatusOK, cus)
-	} else {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err,
-		})
+	} else if len(*cus) == 0 {
+		if jsonDto.Type == 1 {
+			ctx.JSON(http.StatusOK, models.Customer{})
+		} else {
+			ctx.JSON(http.StatusOK, models.Coach{})
+		}
+
+	} else if len(*coach) == 0 {
+		if jsonDto.Type == 0 {
+			ctx.JSON(http.StatusOK, models.Coach{})
+		} else {
+			ctx.JSON(http.StatusOK, models.Customer{})
+		}
 	}
+	// else {
+	// 	ctx.JSON(http.StatusBadRequest, err)
+	// }
+	// else if len(*cus) == 0 {
+	// 	ctx.JSON(http.StatusOK, models.Customer{})
+	// }
 	// println("=================")
 }
 func registerCus(ctx *gin.Context) {

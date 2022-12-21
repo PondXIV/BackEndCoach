@@ -8,7 +8,7 @@ import (
 
 type Coach struct {
 	Cid           uint      `gorm:"column:cid;primaryKey"`
-	AliasName     string    `gorm:"column:aliasName;size:50"`
+	Username      string    `gorm:"column:username;size:50"`
 	Password      string    `gorm:"column:password;size:20"`
 	Email         string    `gorm:"column:email;size:100"`
 	FullName      string    `gorm:"column:fullName;size:100"`

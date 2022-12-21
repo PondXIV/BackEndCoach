@@ -18,7 +18,9 @@ type UserDataService interface {
 type UserData struct {
 	db *gorm.DB
 }
+
 var repoCus = repository.NewCustomerRepository()
+
 // ServiceRegisterCoach implements UserDataService
 func (UserData) ServiceRegisterCoach(coach *models.Coach) int64 {
 	repoCoach := repository.NewCoachRepository()

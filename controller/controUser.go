@@ -32,9 +32,6 @@ func loginPostBody(ctx *gin.Context) {
 	}
 	// process
 	coach, cus, err := userDateService.ServiceLogin(jsonDto.Email, jsonDto.Password, jsonDto.Type)
-
-	// output json
-	// println("===============")
 	if err != nil {
 		panic(err)
 	}

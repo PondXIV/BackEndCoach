@@ -60,15 +60,14 @@ func (l userDB) Login(Email string, Password string, Type int) (*[]models.Coach,
 	coachs := []models.Coach{}
 	customers := []models.Customer{}
 	if Type == 0 {
-		result := l.db.Where("email = ?", Email).Where("password = ?", Password).Find(&coachs)
-		if result.Error != nil {
-			return nil, nil, result.Error
+		resultCoa := l.db.Where("email = ?", Email).Where("password = ?", Password).Find(&coachs)
+		if resultCoa.Error != nil {
+			return nil, nil, resultCoa.Error
 		}
-	}
-	if Type == 1 {
-		result := l.db.Where("email = ?", Email).Where("password = ?", Password).Find(&customers)
-		if result.Error != nil {
-			return nil, nil, result.Error
+	} else if Type == 1 {
+		resultCus := l.db.Where("email = ?", Email).Where("password = ?", Password).Find(&customers)
+		if resultCus.Error != nil {
+			return nil, nil, resultCus.Error
 		}
 	}
 	return &coachs, &customers, nil

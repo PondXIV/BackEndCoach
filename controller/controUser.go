@@ -12,6 +12,8 @@ import (
 )
 
 var userDateService = service.NewUserDataService()
+var modelsCus = models.Customer{}
+var modelsCoach = models.Coach{}
 
 func NewUserController(router *gin.Engine) {
 	ping := router.Group("/user")
@@ -37,18 +39,18 @@ func loginPostBody(ctx *gin.Context) {
 		panic(err)
 	}
 
-	if len(*coach) == 1 {
-		ctx.JSON(http.StatusOK, coach)
-	} else if len(*cus) == 1 {
-		ctx.JSON(http.StatusOK, cus)
-	} else if len(*cus) == 0 {
+	if coach.Cid > 0 {
+		ctx.JSON(http.StatusOK, coach.Cid)
+	} else if cus.Uid > 0 {
+		ctx.JSON(http.StatusOK, cus.Uid)
+	} else if cus.Uid == 0 {
 		if jsonDto.Type == 1 {
 			ctx.JSON(http.StatusOK, models.Customer{})
 		} else {
 			ctx.JSON(http.StatusOK, models.Coach{})
 		}
 
-	} else if len(*coach) == 0 {
+	} else if coach.Cid == 0 {
 		if jsonDto.Type == 0 {
 			ctx.JSON(http.StatusOK, models.Coach{})
 		} else {
@@ -64,30 +66,28 @@ func loginPostBody(ctx *gin.Context) {
 	// println("=================")
 }
 func registerCus(ctx *gin.Context) {
-	cus := models.Customer{}
-	err := ctx.ShouldBindJSON(&cus)
+	err := ctx.ShouldBindJSON(&modelsCus)
 	// fmt.Printf("%v", cus)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
-	RowsAffected := userDateService.ServiceRegisterCus(&cus)
+	RowsAffected := userDateService.ServiceRegisterCus(&modelsCus)
 
 	if RowsAffected > 0 {
-		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+		ctx.JSON(http.StatusOK, models.Customer{Uid: modelsCus.Uid})
 	} else {
-		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+		ctx.JSON(http.StatusOK, models.Customer{Uid: modelsCus.Uid})
 	}
 }
 func registerCoach(ctx *gin.Context) {
-	coach := models.Coach{}
-	err := ctx.ShouldBindJSON(&coach)
+	err := ctx.ShouldBindJSON(&modelsCoach)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
-	RowsAffected := userDateService.ServiceRegisterCoach(&coach)
+	RowsAffected := userDateService.ServiceRegisterCoach(&modelsCoach)
 	if RowsAffected > 0 {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
+		ctx.JSON(http.StatusOK, models.Coach{Cid: modelsCoach.Cid})
 	} else {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
+		ctx.JSON(http.StatusOK, models.Coach{Cid: modelsCoach.Cid})
 	}
 }

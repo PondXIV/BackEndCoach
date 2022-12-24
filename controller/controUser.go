@@ -73,13 +73,9 @@ func registerCus(ctx *gin.Context) {
 	RowsAffected := userDateService.ServiceRegisterCus(&cus)
 
 	if RowsAffected > 0 {
-		ctx.JSON(http.StatusOK, gin.H{
-			"massage": "Register Success",
-		})
+		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"massage": "Register failed",
-		})
+		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
 	}
 }
 func registerCoach(ctx *gin.Context) {
@@ -90,12 +86,8 @@ func registerCoach(ctx *gin.Context) {
 	}
 	RowsAffected := userDateService.ServiceRegisterCoach(&coach)
 	if RowsAffected > 0 {
-		ctx.JSON(http.StatusOK, gin.H{
-			"massage": "Register Success",
-		})
+		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"massage": "Register failed",
-		})
+		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
 	}
 }

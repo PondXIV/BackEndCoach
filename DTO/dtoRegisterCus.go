@@ -3,7 +3,7 @@ package dto
 import "time"
 
 type RegisterCusDTO struct {
-	AliasName string    `json:"AliasName"`
+	Username string    `json:"Username"`
 	Password  string    `json:"Password"`
 	Email     string    `json:"Email"`
 	FullName  string    `json:"FullName"`

@@ -40,9 +40,9 @@ func loginPostBody(ctx *gin.Context) {
 	}
 
 	if coach.Cid > 0 {
-		ctx.JSON(http.StatusOK, coach.Cid)
+		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
 	} else if cus.Uid > 0 {
-		ctx.JSON(http.StatusOK, cus.Uid)
+		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
 	} else if cus.Uid == 0 {
 		if jsonDto.Type == 1 {
 			ctx.JSON(http.StatusOK, models.Customer{})

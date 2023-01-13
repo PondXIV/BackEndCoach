@@ -19,6 +19,7 @@ func NewUserController(router *gin.Engine) {
 	ping := router.Group("/user")
 	{
 		ping.POST("/login", loginPostBody)
+		//ping.POST("/loginNot", loginPostBody)
 		ping.POST("/loginfb", loginFBPostBody)
 		ping.POST("/registerCus", registerCus)
 		ping.POST("/registerCoach", registerCoach)
@@ -41,30 +42,51 @@ func loginPostBody(ctx *gin.Context) {
 	}
 
 	if coach.Cid > 0 {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid})
+		//ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
 	} else if cus.Uid > 0 {
-		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: cus.Uid})
 	} else if cus.Uid == 0 {
-		if jsonDto.Type == 1 {
-			ctx.JSON(http.StatusOK, models.Customer{})
-		} else {
-			ctx.JSON(http.StatusOK, models.Coach{})
-		}
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
 
 	} else if coach.Cid == 0 {
-		if jsonDto.Type == 0 {
-			ctx.JSON(http.StatusOK, models.Coach{})
-		} else {
-			ctx.JSON(http.StatusOK, models.Customer{})
-		}
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
+
 	}
-	// else {
-	// 	ctx.JSON(http.StatusBadRequest, err)
-	// }
-	// else if len(*cus) == 0 {
-	// 	ctx.JSON(http.StatusOK, models.Customer{})
-	// }
-	// println("=================")
+}
+func loginNotTypePostBody(ctx *gin.Context) {
+	// input json
+	jsonDto := dto.LoginNotTypeDTO{}
+	err := ctx.ShouldBindJSON(&jsonDto)
+	fmt.Printf(jsonDto.Email, jsonDto.Password)
+	if err != nil {
+		// ctx.JSON(http.StatusBadRequest, err)
+		panic(err)
+	}
+	// process
+	coach, cus, err := userDateService.ServiceLoginNotType(jsonDto.Email, jsonDto.Password)
+	if err != nil {
+		panic(err)
+	}
+
+	if coach.Cid > 0 {
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid})
+		//ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+	} else if cus.Uid > 0 {
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: cus.Uid})
+	} else if cus.Uid == 0 {
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
+
+	} else if coach.Cid == 0 {
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
+
+	}
 }
 func loginFBPostBody(ctx *gin.Context) {
 	// input json

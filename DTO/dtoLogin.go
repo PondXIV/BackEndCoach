@@ -8,3 +8,7 @@ type LoginDTO struct {
 type LoginFBDTO struct {
 	FacebookID string `json:"facebookID"`
 }
+type LoginNotTypeDTO struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}

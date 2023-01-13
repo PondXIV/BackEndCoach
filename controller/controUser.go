@@ -82,22 +82,18 @@ func loginFBPostBody(ctx *gin.Context) {
 	}
 
 	if coach.Cid > 0 {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
-		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid})
+		//ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
 	} else if cus.Uid > 0 {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
-		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: cus.Uid})
 	} else if cus.Uid == 0 {
 
-		ctx.JSON(http.StatusOK, models.Customer{})
-
-		ctx.JSON(http.StatusOK, models.Coach{})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
 
 	} else if coach.Cid == 0 {
 
-		ctx.JSON(http.StatusOK, models.Coach{})
-
-		ctx.JSON(http.StatusOK, models.Customer{})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
 
 	}
 	// else {

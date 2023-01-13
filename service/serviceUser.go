@@ -12,11 +12,22 @@ import (
 type UserDataService interface {
 	ServiceLogin(Email string, Password string, Type int) (*models.Coach, *models.Customer, error)
 	ServiceLoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
+	ServiceLoginFB(FackbookID string) (*models.Coach, *models.Customer, error)
 	ServiceRegisterCus(cus *models.Customer) int64
 	ServiceRegisterCoach(coach *models.Coach) int64
 }
 type UserData struct {
 	db *gorm.DB
+}
+
+// ServiceLoginFB implements UserDataService
+func (UserData) ServiceLoginFB(FackbookID string) (*models.Coach, *models.Customer, error) {
+	repo := repository.NewUserRepository()
+	coach, cus, err := repo.LoginFB(FackbookID)
+	if err != nil {
+		panic(err)
+	}
+	return coach, cus, nil
 }
 
 var repoCus = repository.NewCustomerRepository()

@@ -9,11 +9,30 @@ import (
 type UserRepository interface {
 	Login(Email string, Password string, Type int) (*models.Coach, *models.Customer, error)
 	LoginNotType(Email string, Password string) (*[]models.Coach, *[]models.Customer, error)
+	LoginFB(fackbookID string) (*models.Coach, *models.Customer, error)
 	RegisterCus(cus *models.Customer) int64
 	RegisterCoach(coach *models.Coach) int64
 }
 type userDB struct {
 	db *gorm.DB
+}
+
+// LoginFB implements UserRepository
+func (u userDB) LoginFB(fackbookID string) (*models.Coach, *models.Customer, error) {
+	coachs := models.Coach{}
+	customers := models.Customer{}
+
+	resultCoa := u.db.Where("facebookId = ?", fackbookID).Find(&coachs)
+	if resultCoa.Error != nil {
+		return nil, nil, resultCoa.Error
+	}
+
+	resultCus := u.db.Where("facebookId = ?", fackbookID).Find(&customers)
+	if resultCus.Error != nil {
+		return nil, nil, resultCus.Error
+	}
+
+	return &coachs, &customers, nil
 }
 
 // LoginTwo implements UserRepository

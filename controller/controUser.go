@@ -19,6 +19,7 @@ func NewUserController(router *gin.Engine) {
 	ping := router.Group("/user")
 	{
 		ping.POST("/login", loginPostBody)
+		ping.POST("/loginfb", loginFBPostBody)
 		ping.POST("/registerCus", registerCus)
 		ping.POST("/registerCoach", registerCoach)
 	}
@@ -56,6 +57,46 @@ func loginPostBody(ctx *gin.Context) {
 		} else {
 			ctx.JSON(http.StatusOK, models.Customer{})
 		}
+	}
+	// else {
+	// 	ctx.JSON(http.StatusBadRequest, err)
+	// }
+	// else if len(*cus) == 0 {
+	// 	ctx.JSON(http.StatusOK, models.Customer{})
+	// }
+	// println("=================")
+}
+func loginFBPostBody(ctx *gin.Context) {
+	// input json
+	jsonDto := dto.LoginFBDTO{}
+	err := ctx.ShouldBindJSON(&jsonDto)
+	fmt.Printf(jsonDto.FacebookID)
+	if err != nil {
+		// ctx.JSON(http.StatusBadRequest, err)
+		panic(err)
+	}
+	// process
+	coach, cus, err := userDateService.ServiceLoginFB(jsonDto.FacebookID)
+	if err != nil {
+		panic(err)
+	}
+
+	if coach.Cid > 0 {
+		ctx.JSON(http.StatusOK, models.Coach{Cid: coach.Cid})
+	} else if cus.Uid > 0 {
+		ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
+	} else if cus.Uid == 0 {
+
+		ctx.JSON(http.StatusOK, models.Customer{})
+
+		ctx.JSON(http.StatusOK, models.Coach{})
+
+	} else if coach.Cid == 0 {
+
+		ctx.JSON(http.StatusOK, models.Coach{})
+
+		ctx.JSON(http.StatusOK, models.Customer{})
+
 	}
 	// else {
 	// 	ctx.JSON(http.StatusBadRequest, err)

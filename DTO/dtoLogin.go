@@ -5,3 +5,6 @@ type LoginDTO struct {
 	Password string `json:"password"`
 	Type     int    `json:"Type"`
 }
+type LoginFBDTO struct {
+	FacebookID string `json:"facebookID"`
+}

@@ -127,9 +127,9 @@ func registerCus(ctx *gin.Context) {
 	RowsAffected := userDateService.ServiceRegisterCus(&modelsCus)
 
 	if RowsAffected > 0 {
-		ctx.JSON(http.StatusOK, models.Customer{Uid: modelsCus.Uid})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: modelsCus.Uid})
 	} else {
-		ctx.JSON(http.StatusOK, models.Customer{Uid: modelsCus.Uid})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: modelsCus.Uid})
 	}
 }
 func registerCoach(ctx *gin.Context) {
@@ -139,8 +139,8 @@ func registerCoach(ctx *gin.Context) {
 	}
 	RowsAffected := userDateService.ServiceRegisterCoach(&modelsCoach)
 	if RowsAffected > 0 {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: modelsCoach.Cid})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: modelsCoach.Cid})
 	} else {
-		ctx.JSON(http.StatusOK, models.Coach{Cid: modelsCoach.Cid})
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: modelsCoach.Cid})
 	}
 }

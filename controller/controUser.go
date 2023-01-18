@@ -19,12 +19,41 @@ func NewUserController(router *gin.Engine) {
 	ping := router.Group("/user")
 	{
 		ping.POST("/login", loginPostBody)
-		//ping.POST("/loginNot", loginPostBody)
 		ping.POST("/loginfb", loginFBPostBody)
 		ping.POST("/registerCus", registerCus)
 		ping.POST("/registerCoach", registerCoach)
 	}
 
+}
+func loginFBPostBody(ctx *gin.Context) {
+	// input json
+	jsonDto := dto.LoginFBDTO{}
+	err := ctx.ShouldBindJSON(&jsonDto)
+	fmt.Printf(jsonDto.FacebookID)
+	if err != nil {
+		panic(err)
+	}
+
+	coach, cus, err := userDateService.ServiceLoginFB(jsonDto.FacebookID)
+	if err != nil {
+		panic(err)
+	}
+
+	if coach.Cid > 0 {
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid})
+
+	} else if cus.Uid > 0 {
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: cus.Uid})
+	} else if cus.Uid == 0 {
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
+
+	} else if coach.Cid == 0 {
+
+		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
+
+	}
 }
 func loginPostBody(ctx *gin.Context) {
 	// input json
@@ -88,44 +117,7 @@ func loginNotTypePostBody(ctx *gin.Context) {
 
 	}
 }
-func loginFBPostBody(ctx *gin.Context) {
-	// input json
-	jsonDto := dto.LoginFBDTO{}
-	err := ctx.ShouldBindJSON(&jsonDto)
-	fmt.Printf(jsonDto.FacebookID)
-	if err != nil {
-		// ctx.JSON(http.StatusBadRequest, err)
-		panic(err)
-	}
-	// process
-	coach, cus, err := userDateService.ServiceLoginFB(jsonDto.FacebookID)
-	if err != nil {
-		panic(err)
-	}
 
-	if coach.Cid > 0 {
-		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid})
-		//ctx.JSON(http.StatusOK, models.Customer{Uid: cus.Uid})
-	} else if cus.Uid > 0 {
-
-		ctx.JSON(http.StatusOK, models.CoachAndCus{Uid: cus.Uid})
-	} else if cus.Uid == 0 {
-
-		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
-
-	} else if coach.Cid == 0 {
-
-		ctx.JSON(http.StatusOK, models.CoachAndCus{Cid: coach.Cid, Uid: cus.Uid})
-
-	}
-	// else {
-	// 	ctx.JSON(http.StatusBadRequest, err)
-	// }
-	// else if len(*cus) == 0 {
-	// 	ctx.JSON(http.StatusOK, models.Customer{})
-	// }
-	// println("=================")
-}
 func registerCus(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCus)
 	// fmt.Printf("%v", cus)

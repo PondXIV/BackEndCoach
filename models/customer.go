@@ -7,7 +7,7 @@ import (
 //import "time"
 
 type Customer struct {
-	Uid        uint      `gorm:"column:uid;primaryKey"`
+	Uid        uint      `gorm:"column:uid;primaryKey;autoIncrement"`
 	Username   string    `gorm:"column:username;size:50"`
 	Password   string    `gorm:"column:password;size:20"`
 	Email      string    `gorm:"column:email;size:100"`

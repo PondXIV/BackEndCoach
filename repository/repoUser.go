@@ -55,7 +55,7 @@ func (u userDB) LoginNotType(Email string, Password string) (*models.Coach, *mod
 
 // registerCoach implements UserRepository
 func (u userDB) RegisterCoach(coach *models.Coach) int64 {
-
+	coach.Cid = 0
 	result := u.db.Create(&coach)
 	if result.Error != nil {
 		panic(result.Error)
@@ -66,6 +66,7 @@ func (u userDB) RegisterCoach(coach *models.Coach) int64 {
 // register implements UserRepository
 func (u userDB) RegisterCus(cus *models.Customer) int64 {
 
+	cus.Uid = 0
 	result := u.db.Create(&cus)
 	if result.Error != nil {
 		panic(result.Error)

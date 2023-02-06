@@ -8,9 +8,20 @@ import (
 
 type CourseRepository interface {
 	GetCourseAll() (*[]models.Course, error)
+	GetCourseByIDCoach(Id int) (*[]models.Course, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseByIDCoach implements CourseRepository
+func (c courseDB) GetCourseByIDCoach(Id int) (*[]models.Course, error) {
+	courses := []models.Course{}
+	result := c.db.Where("cid = ?", Id).Find(&courses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &courses, nil
 }
 
 // GetCourseAll implements CourseRepository

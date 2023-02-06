@@ -17,7 +17,7 @@ type courseDB struct {
 // GetCourseByIDCoach implements CourseRepository
 func (c courseDB) GetCourseByIDCoach(Id int) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Where("cid = ?", Id).Find(&courses)
+	result := c.db.Where("cid = ?", Id).Where("bid IS NULL").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

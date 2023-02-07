@@ -1,4 +1,4 @@
-package controller
+package coachcontroller
 
 import (
 	coachdto "backEndGo/DTO/CoachDTO"
@@ -14,15 +14,10 @@ var courseDateService = coachservice.NewCourseDataService()
 func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
-		course.POST("/", getCourseByID)
-		course.GET("/", demoHelloo)
+		course.POST("/getCourseByIDCoach", getCourseByID)
+
 	}
 
-}
-func demoHelloo(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "ฟ่ดนะจ๊ะ",
-	})
 }
 
 func getCourseByID(ctx *gin.Context) {

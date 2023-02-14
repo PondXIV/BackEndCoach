@@ -8,16 +8,26 @@ import (
 
 type CourseRepository interface {
 	GetCourseAll() (*[]models.Course, error)
-	GetCourseByIDCoach(Id int) (*[]models.Course, error)
+	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
+	UpdateStatusCourse(Id int,Status int) int64
 }
 type courseDB struct {
 	db *gorm.DB
 }
 
-// GetCourseByIDCoach implements CourseRepository
-func (c courseDB) GetCourseByIDCoach(Id int) (*[]models.Course, error) {
+// UpdateStatusCourse implements CourseRepository
+func (c courseDB) UpdateStatusCourse(Id int, Status int) int64 {
 	courses := []models.Course{}
-	result := c.db.Where("cid = ?", Id).Where("bid IS NULL").Find(&courses)
+	result := c.db.Update("Course Set Status = ?",Status).Where("cid = ?", Id).Find(&courses)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	return result.RowsAffected
+}
+// GetCourseByIDCoach implements CourseRepository
+func (c courseDB) GetCourseByIDCoach(Cid int) (*[]models.Course, error) {
+	courses := []models.Course{}
+	result := c.db.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

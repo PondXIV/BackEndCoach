@@ -2,7 +2,7 @@ package main
 
 import (
 	"backEndGo/controller"
-	coachcontroller "backEndGo/controller/CoachController"
+	coursecontroller "backEndGo/controller/CoachController/CourseController"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +15,6 @@ func StartServer() {
 	})
 	//controller.NewDemoController(router)
 	controller.NewUserController(router)
-	coachcontroller.NewCourseController(router)
+	coursecontroller.NewCourseController(router)
 	router.Run()
 }

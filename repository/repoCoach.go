@@ -9,10 +9,21 @@ import (
 type CoachRepository interface {
 	GetCoachAll() (*[]models.Coach, error)
 	GetCoachByID(Id int) (*[]models.Coach, error)
+	GetCoachByName(Name string) (*[]models.Coach, error)
 }
 
 type coachDB struct {
 	db *gorm.DB
+}
+
+// GetCoachByName implements CoachRepository
+func (c coachDB) GetCoachByName(Name string) (*[]models.Coach, error) {
+	coachs := []models.Coach{}
+	resultCoa := c.db.Where("username = ?", Name).Find(&coachs)
+	if resultCoa.Error != nil {
+		return nil, resultCoa.Error
+	}
+	return &coachs, nil
 }
 
 // GetCoachByID implements CoachRepository

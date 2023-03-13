@@ -1,7 +1,6 @@
 package usercontroller
 
 import (
-	userdto "backEndGo/DTO/UserDto"
 	userservice "backEndGo/service/userService"
 	"net/http"
 
@@ -13,23 +12,24 @@ import (
 var nameCoachDateService = userservice.NewCoachByNameDataService()
 
 func NewCourseController(router *gin.Engine) {
-	course := router.Group("/user2")
+	nameCoach := router.Group("/user2")
 	{
-		course.POST("/getCoachByName", GetCoachByName)
+		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
 
 	}
 
 }
 
 func GetCoachByName(ctx *gin.Context) {
-	jsonDto := userdto.UsernameCoachdto{}
-	err := ctx.ShouldBindJSON(&jsonDto)
-	fmt.Printf("%v", jsonDto.Username)
-	if err != nil {
+	name := ctx.Param("name")
+	//jsonDto := userdto.UsernameCoachdto{}
+	//err := ctx.ShouldBindJSON(&jsonDto)
+	//fmt.Printf(name, jsonDto.Username)
+	/*if err != nil {
 		panic(err)
-	}
+	}*/
 
-	coachs, err := nameCoachDateService.ServiceGetNameCoach(jsonDto.Username)
+	coachs, err := nameCoachDateService.ServiceGetNameCoach(name)
 	if err != nil {
 		panic(err)
 	}

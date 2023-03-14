@@ -2,9 +2,8 @@ package coursecontroller
 
 import (
 	//"backEndGo/models"
-	"backEndGo/models"
+
 	coursesv "backEndGo/service/CoachService/CourseSV"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -38,14 +37,7 @@ func getCourseByID(ctx *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	for _, v := range *course {
-		fmt.Printf("%v\n", v)
-		ctx.JSON(http.StatusOK, v)
-	}
 
-	if cid > 0 {
-		ctx.JSON(http.StatusOK, models.Course{})
-
-	}
+	ctx.JSON(http.StatusOK, course)
 
 }

@@ -4,8 +4,6 @@ import (
 	userservice "backEndGo/service/userService"
 	"net/http"
 
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,10 +31,10 @@ func GetCoachByName(ctx *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	for _, v := range *coachs {
-		fmt.Printf("%v\n", v)
-		ctx.JSON(http.StatusOK, v)
-	}
+	// for _, v := range *coachs {
+	// 	fmt.Printf("%v\n", v)
+	ctx.JSON(http.StatusOK, coachs)
+	// }
 
 	// if course.CoID > 0 {
 	// 	ctx.JSON(http.StatusOK, models.Course{})

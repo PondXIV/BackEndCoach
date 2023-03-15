@@ -20,5 +20,6 @@ func StartServer() {
 	controller.NewUserController(router)
 	coursecontroller.NewCourseController(router)
 	usercontroller.NewCourseController(router)
+
 	router.Run()
 }

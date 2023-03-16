@@ -3,18 +3,25 @@ package coursesv
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
-
 	//"time"
-
-	"gorm.io/gorm"
 )
 
 type ShowCourseDataService interface {
 	ServiceGetCourseByIDCoach(Id int) (*[]models.Course, error)
 	SeviceGetCourseByName(Name string) (*[]models.Course, error)
+	SeviceGetCourseByCoID(CoID int) (*models.Course, error)
 }
 type CourseData struct {
-	db *gorm.DB
+}
+
+// SeviceGetCourseByCoID implements ShowCourseDataService
+func (CourseData) SeviceGetCourseByCoID(CoID int) (*models.Course, error) {
+	repo := repository.NewCourseRepository()
+	course, err := repo.GetCouseByCoID(CoID)
+	if err != nil {
+		panic(err)
+	}
+	return course, nil
 }
 
 // SeviceGetCourseByName implements ShowCourseDataService
@@ -38,8 +45,5 @@ func (CourseData) ServiceGetCourseByIDCoach(Id int) (*[]models.Course, error) {
 }
 
 func NewCourseDataService() ShowCourseDataService {
-	return CourseData{}
-}
-func NewCourseByNameService() ShowCourseDataService {
 	return CourseData{}
 }

@@ -11,9 +11,20 @@ type CourseRepository interface {
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
 	UpdateStatusCourse(Id int, Status int) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
+	GetCouseByCoID(CoID int) (*models.Course, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCoachByCoID implements CourseRepository
+func (c courseDB) GetCouseByCoID(CoID int) (*models.Course, error) {
+	courses := models.Course{}
+	result := c.db.Where("coID = ?", CoID).Find(&courses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &courses, nil
 }
 
 // GetCouseByname implements CourseRepository

@@ -8,13 +8,13 @@ import (
 )
 
 type UpdateCourseDataService interface {
-	ServiceUpdateStatusCourse(Id int, Status int) int64
+	ServiceUpdateStatusCourse(Id int, Status string) int64
 }
 type CourseDataUpdate struct {
 }
 
 // ServiceUpdateStatusCourse implements UpdateCourseDataService
-func (CourseDataUpdate) ServiceUpdateStatusCourse(Id int, Status int) int64 {
+func (CourseDataUpdate) ServiceUpdateStatusCourse(Id int, Status string) int64 {
 	repo := repository.NewCourseRepository()
 	RowsAffected := repo.UpdateStatusCourse(Id, Status)
 	if RowsAffected > 0 {

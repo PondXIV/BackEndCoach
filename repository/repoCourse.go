@@ -24,7 +24,7 @@ var courses = []models.Course{}
 // GetCoachByCoID implements CourseRepository
 func (c courseDB) GetCouseByCoID(CoID int) (*models.Course, error) {
 
-	result := c.db.Where("coID = ?", CoID).Find(&courses)
+	result := c.db.Where("coID = ?", CoID).Find(&course)
 	if result.Error != nil {
 		return nil, result.Error
 	}

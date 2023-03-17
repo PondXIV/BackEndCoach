@@ -3,7 +3,10 @@ package coursecontroller
 import (
 	//"backEndGo/models"
 
+	coachdto "backEndGo/DTO/CoachDTO"
+	"backEndGo/models"
 	coursesv "backEndGo/service/CoachService/CourseSV"
+	"fmt"
 
 	"net/http"
 	"strconv"
@@ -12,6 +15,8 @@ import (
 )
 
 var courseDateService = coursesv.NewCourseDataService()
+var updatecourseDateService = coursesv.NewUpdateCourseDataService()
+var modelsCourse = models.Course{}
 
 func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
@@ -19,7 +24,7 @@ func NewCourseController(router *gin.Engine) {
 		course.GET("/getCourseByIDCoach/:cid", getCourseByID)
 		course.GET("/getCourseByName/:name", GetCousehByName)
 		course.GET("/getCourseByCoID/:coID", GetCousehByCoID)
-
+		course.POST("/updateStatusCourse", updateStatusCourse)
 	}
 
 }
@@ -36,6 +41,36 @@ func getCourseByID(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, course)
+
+}
+func updateStatusCourse(ctx *gin.Context) {
+	jsonDto := coachdto.UpdateStatusCoachDTO{}
+	err := ctx.ShouldBindJSON(&jsonDto)
+	fmt.Printf(jsonDto.Status)
+
+	if err != nil {
+		// ctx.JSON(http.StatusBadRequest, err)
+		panic(err)
+	}
+	// // process
+	rowsAffected := updatecourseDateService.ServiceUpdateStatusCourse(jsonDto.CoID, jsonDto.Status)
+
+	if rowsAffected == 1 {
+
+		// ctx.JSON(http.StatusOK, gin.H{
+		// 	"message": rowsAffected,
+		// })
+		ctx.JSON(http.StatusOK, models.Course{Status: jsonDto.Status})
+		//fmt.Printf("ลงนะจ๊ะ")
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{
+			"Status": "191",
+		})
+	}
+
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 }
 func GetCousehByCoID(ctx *gin.Context) {

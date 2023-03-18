@@ -25,6 +25,7 @@ func NewCourseController(router *gin.Engine) {
 		course.GET("/getCourseByName/:name", GetCousehByName)
 		course.GET("/getCourseByCoID/:coID", GetCousehByCoID)
 		course.POST("/updateStatusCourse", updateStatusCourse)
+		course.POST("/updateCourse", updateCourse)
 	}
 
 }
@@ -65,6 +66,39 @@ func updateStatusCourse(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
 			"Status": "191",
+		})
+	}
+
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+}
+func updateCourse(ctx *gin.Context) {
+	// jsonDto := coachdto.UpdateCoachDTO{}
+	// err := ctx.ShouldBindJSON(&jsonDto)
+	// fmt.Printf(jsonDto.Status)
+
+	// if err != nil {
+	// 	// ctx.JSON(http.StatusBadRequest, err)
+	// 	panic(err)
+	// }
+	err := ctx.ShouldBindJSON(&modelsCourse)
+	// fmt.Printf("%v", cus)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+	}
+	// // process
+	rowsAffected := updatecourseDateService.ServiceUpdateCourse(&modelsCourse)
+
+	if rowsAffected == 1 {
+		ctx.JSON(http.StatusOK, gin.H{
+			"rowsAffected": "1",
+		})
+
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{
+			"rowsAffected": "0",
 		})
 	}
 

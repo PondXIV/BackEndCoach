@@ -13,13 +13,26 @@ type CourseRepository interface {
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
 	GetCouseByCoID(CoID int) (*models.Course, error)
+	UpdateCourse(course *models.Course) int64
 }
 type courseDB struct {
 	db *gorm.DB
 }
 
-var course = models.Course{}
-var courses = []models.Course{}
+// UpdateCourse implements CourseRepository
+func (c courseDB) UpdateCourse(course *models.Course) int64 {
+	result := c.db.Model(models.Course{}).Where("coID = ?", course.CoID).Updates(
+		models.Course{Name: course.Name, Details: course.Details, Level: course.Level, Amount: course.Amount,
+			Image: course.Image, Days: course.Days, Price: course.Price, Status: course.Status})
+
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected
+}
 
 // GetCoachByCoID implements CourseRepository
 func (c courseDB) GetCouseByCoID(CoID int) (*models.Course, error) {

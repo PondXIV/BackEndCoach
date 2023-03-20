@@ -19,7 +19,7 @@ type coachDB struct {
 // GetCoachByName implements CoachRepository
 func (c coachDB) GetCoachByName(Name string) (*[]models.Coach, error) {
 	coachs := []models.Coach{}
-	resultCoa := c.db.Where("username  like ?", Name+"%").Find(&coachs)
+	resultCoa := c.db.Where("username  like ?", "%"+Name+"%").Find(&coachs)
 	if resultCoa.Error != nil {
 		return nil, resultCoa.Error
 	}

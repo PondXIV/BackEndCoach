@@ -24,8 +24,8 @@ func NewCourseController(router *gin.Engine) {
 		course.GET("/getCourseByIDCoach/:cid", getCourseByID)
 		course.GET("/getCourseByName/:name", GetCousehByName)
 		course.GET("/getCourseByCoID/:coID", GetCousehByCoID)
-		course.POST("/updateStatusCourse", updateStatusCourse)
-		course.POST("/updateCourse", updateCourse)
+		course.PUT("/updateStatusCourse", updateStatusCourse)
+		course.PUT("/updateCourse", updateCourse)
 	}
 
 }

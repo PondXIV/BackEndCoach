@@ -3,6 +3,7 @@ package repository
 import (
 	"backEndGo/models"
 	"fmt"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -10,6 +11,10 @@ import (
 type CourseRepository interface {
 	GetCourseAll() (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
+	UpdateStatusCourse(CoID int, Status string) int64
+	GetCouseByname(Name string) (*[]models.Course, error)
+	GetCouseByCoID(CoID int) (*models.Course, error)
+	UpdateCourse(course *models.Course) int64
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
 	GetCouseByCoID(CoID int) (*models.Course, error)
@@ -58,14 +63,21 @@ func (c courseDB) GetCouseByname(Name string) (*[]models.Course, error) {
 func (c courseDB) UpdateStatusCourse(CoID int, Status string) int64 {
 
 	result := c.db.Model(models.Course{}).Where("coID = ?", CoID).Update("status", Status)
+func (c courseDB) UpdateStatusCourse(CoID int, Status string) int64 {
+
+	result := c.db.Model(models.Course{}).Where("coID = ?", CoID).Update("status", Status)
 	if result.Error != nil {
 		panic(result.Error)
 	}
 	if result.RowsAffected > 0 {
 		fmt.Println("Update completed")
 	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
 	return result.RowsAffected
 }
+
 
 // GetCourseByIDCoach implements CourseRepository
 func (c courseDB) GetCourseByIDCoach(Cid int) (*[]models.Course, error) {

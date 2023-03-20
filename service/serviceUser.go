@@ -3,10 +3,7 @@ package service
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
-
 	//"time"
-
-	"gorm.io/gorm"
 )
 
 type UserDataService interface {
@@ -17,7 +14,6 @@ type UserDataService interface {
 	ServiceRegisterCoach(coach *models.Coach) int64
 }
 type UserData struct {
-	db *gorm.DB
 }
 
 // ServiceLoginFB implements UserDataService

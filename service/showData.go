@@ -4,8 +4,6 @@ import (
 	// "backEndGo/models"
 	"backEndGo/repository"
 	"fmt"
-
-	"gorm.io/gorm"
 )
 
 type ShowDataService interface {
@@ -26,7 +24,6 @@ type ShowDataService interface {
 	PrintAllCourse()
 }
 type ShowData struct {
-	db *gorm.DB
 }
 
 // Table Course

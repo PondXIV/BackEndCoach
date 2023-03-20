@@ -47,7 +47,7 @@ func (c courseDB) GetCouseByCoID(CoID int) (*models.Course, error) {
 // GetCouseByname implements CourseRepository
 func (c courseDB) GetCouseByname(Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Where("name like ?", Name+"%").Find(&courses)
+	result := c.db.Where("name like ?", "%"+Name+"%").Where("bid IS NULL").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

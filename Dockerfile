@@ -19,6 +19,6 @@ RUN go install github.com/cosmtrek/air@latest
 RUN air init
 
 # 9775-9780-DailyWorkout
-EXPOSE 8080
+EXPOSE 8888
 
 CMD ["air"]

@@ -14,9 +14,21 @@ type CourseRepository interface {
 	GetCouseByname(Name string) (*[]models.Course, error)
 	GetCouseByCoID(CoID int) (*models.Course, error)
 	UpdateCourse(course *models.Course) int64
+	InsertCourse(course *models.Course) int64
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// InsertCourse implements CourseRepository
+func (c courseDB) InsertCourse(course *models.Course) int64 {
+	course.CoID = 0
+	result := c.db.Create(&course)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+
+	return result.RowsAffected
 }
 
 // UpdateCourse implements CourseRepository

@@ -15,13 +15,13 @@ type Customer struct {
 	Birthday   time.Time `gorm:"column:birthday"`
 	Gender     string    `gorm:"column:gender;size:1"`
 	Phone      string    `gorm:"column:phone;size:10"`
-	Image      string    `gorm:"column:image;size:3000"`
+	Image      string    `gorm:"default:null;column:image;size:3000"`
 	Weight     uint      `gorm:"column:weight"`
 	Height     uint      `gorm:"column:height"`
-	FacebookID string    `gorm:"column:facebookId;size:100"`
-	Price      uint      `gorm:"column:price"`
+	FacebookID string    `gorm:"default:null;column:facebookId;size:100"`
+	Price      uint      `gorm:"default:null;column:price"`
 
-	//Chats	[]Chat		 `gorm:"foreignKey:uid"`
+	Chats  []Chat   `gorm:"foreignKey:uid"`
 	Buying []Buying `gorm:"foreignKey:uid"`
 }
 

@@ -12,5 +12,5 @@ type IFood struct {
 }
 
 func (IFood) TableName() string {
-	return "iFood"
+	return "listFood"
 }

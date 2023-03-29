@@ -17,6 +17,8 @@ type userDB struct {
 	db *gorm.DB
 }
 
+// UserByUid implements UserRepository
+
 // LoginFB implements UserRepository
 func (u userDB) LoginFB(fackbookID string) (*models.Coach, *models.Customer, error) {
 	coachs := models.Coach{}

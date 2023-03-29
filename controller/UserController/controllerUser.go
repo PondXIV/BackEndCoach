@@ -10,12 +10,14 @@ import (
 
 var nameCoachDateService = userservice.NewCoachByNameDataService()
 var reviewDataService = userservice.NewReviewDataService()
+var customerService = userservice.NewUserDataService()
 
 func NewCourseController(router *gin.Engine) {
 	nameCoach := router.Group("/user2")
 	{
 		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
 		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
+		nameCoach.GET("/customer/:uid", Customer)
 
 	}
 
@@ -30,6 +32,16 @@ func GetCoachByName(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, coachs)
 
+}
+func Customer(ctx *gin.Context) {
+	cusID := ctx.Param("uid")
+	uid, err := strconv.Atoi(cusID)
+	customer, err := customerService.ServiceGetUserByUid(uid)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, customer)
 }
 func GetReviewByCoID(ctx *gin.Context) {
 

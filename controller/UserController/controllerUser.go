@@ -3,16 +3,19 @@ package usercontroller
 import (
 	userservice "backEndGo/service/userService"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 var nameCoachDateService = userservice.NewCoachByNameDataService()
+var reviewDataService = userservice.NewReviewDataService()
 
 func NewCourseController(router *gin.Engine) {
 	nameCoach := router.Group("/user2")
 	{
 		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
+		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
 
 	}
 
@@ -20,25 +23,23 @@ func NewCourseController(router *gin.Engine) {
 
 func GetCoachByName(ctx *gin.Context) {
 	name := ctx.Param("name")
-	//jsonDto := userdto.UsernameCoachdto{}
-	//err := ctx.ShouldBindJSON(&jsonDto)
-	//fmt.Printf(name, jsonDto.Username)
-	/*if err != nil {
-		panic(err)
-	}*/
-
 	coachs, err := nameCoachDateService.ServiceGetNameCoach(name)
 	if err != nil {
 		panic(err)
 	}
-	// for _, v := range *coachs {
-	// 	fmt.Printf("%v\n", v)
+
 	ctx.JSON(http.StatusOK, coachs)
-	// }
 
-	// if course.CoID > 0 {
-	// 	ctx.JSON(http.StatusOK, models.Course{})
+}
+func GetReviewByCoID(ctx *gin.Context) {
 
-	// }
+	courseID := ctx.Param("coID")
+	coID, err := strconv.Atoi(courseID)
+	review, err := reviewDataService.ServiceGetReviewByCoId(coID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, review)
 
 }

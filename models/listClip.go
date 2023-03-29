@@ -12,5 +12,5 @@ type IClip struct {
 }
 
 func (IClip) TableName() string {
-	return "iClip"
+	return "listClip"
 }

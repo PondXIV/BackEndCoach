@@ -13,9 +13,11 @@ type CourseDataInsert struct {
 
 // ServiceInsertCourse implements InsertCourseDataService
 func (CourseDataInsert) ServiceInsertCourse(course *models.Course) int64 {
-	repo := repository.NewCourseRepository()
-	RowsAffected := repo.InsertCourse(course)
-	if RowsAffected > 0 {
+	repoCourse := repository.NewCourseRepository()
+	repoDayOfCourse := repository.NewDayOfCourseRepository()
+	RowsAffected := repoCourse.InsertCourse(course)
+	RowsAffecteds := repoDayOfCourse.InsertDayOfCourse(course.CoID, course.Days)
+	if RowsAffected > 0 || RowsAffecteds > 0 {
 		return 1
 	} else if RowsAffected == 0 {
 		return 0

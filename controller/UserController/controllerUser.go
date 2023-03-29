@@ -15,7 +15,7 @@ func NewCourseController(router *gin.Engine) {
 	nameCoach := router.Group("/user2")
 	{
 		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
-		nameCoach.GET("/getReviewByCoId/:coID", GetReviewByCoID)
+		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
 
 	}
 

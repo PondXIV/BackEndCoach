@@ -11,14 +11,16 @@ type ShowUserService interface {
 type UserData struct {
 }
 
+// ServiceGetUserByUid implements ShowUserService
 func (UserData) ServiceGetUserByUid(Uid int) (*models.Customer, error) {
 	repo := repository.NewCustomerRepository()
-	user, err := repo.GetCustomerByID(Uid)
+	course, err := repo.GetCustomerByID(Uid)
 	if err != nil {
 		panic(err)
 	}
-	return user, nil
+	return course, nil
 }
+
 func NewUserDataService() ShowUserService {
 	return UserData{}
 }

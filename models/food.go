@@ -6,7 +6,7 @@ type Food struct {
 	Did  uint   `gorm:"column:did"`
 	Time string `gorm:"column:time;size:15"`
 
-	IClip      IClip      `gorm:"foreignKey:icpID"`
+	ListFood   ListFood   `gorm:"foreignKey:ifid"`
 	DayOfCouse DayOfCouse `gorm:"foreignKey:did"`
 }
 

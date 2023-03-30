@@ -3,6 +3,7 @@ package main
 import (
 	"backEndGo/controller"
 	coursecontroller "backEndGo/controller/CoachController/CourseController"
+	foodcontroller "backEndGo/controller/CoachController/FoodContoller"
 	usercontroller "backEndGo/controller/UserController"
 
 	"net/http"
@@ -20,6 +21,7 @@ func StartServer() {
 	controller.NewUserController(router)
 	coursecontroller.NewCourseController(router)
 	usercontroller.NewCourseController(router)
+	foodcontroller.NewListFoodController(router)
 
 	router.Run()
 }

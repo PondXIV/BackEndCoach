@@ -6,7 +6,7 @@ type Clip struct {
 	Did    uint `gorm:"column:did"`
 	Status uint `gorm:"column:status"`
 
-	IClip      IClip      `gorm:"foreignKey:icpID"`
+	ListClip   ListClip   `gorm:"foreignKey:icpID"`
 	DayOfCouse DayOfCouse `gorm:"foreignKey:did"`
 }
 

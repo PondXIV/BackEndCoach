@@ -1,6 +1,6 @@
 package models
 
-type IFood struct {
+type ListFood struct {
 	Ifid     uint   `gorm:"column:ifid;primaryKey"`
 	Cid      uint   `gorm:"column:cid"`
 	Name     string `gorm:"column:name;size:100"`
@@ -11,6 +11,6 @@ type IFood struct {
 	Coach Coach `gorm:"foreignKey:cid"`
 }
 
-func (IFood) TableName() string {
+func (ListFood) TableName() string {
 	return "listFood"
 }

@@ -1,6 +1,6 @@
 package models
 
-type IClip struct {
+type ListClip struct {
 	IcpID        uint   `gorm:"column:icpID;primaryKey"`
 	Cid          uint   `gorm:"column:cid"`
 	Name         string `gorm:"column:name;size:100"`
@@ -11,6 +11,6 @@ type IClip struct {
 	Coach Coach `gorm:"foreignKey:cid"`
 }
 
-func (IClip) TableName() string {
+func (ListClip) TableName() string {
 	return "listClip"
 }

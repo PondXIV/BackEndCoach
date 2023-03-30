@@ -6,7 +6,7 @@ type ListFood struct {
 	Name     string `gorm:"column:name;size:100"`
 	Image    string `gorm:"column:image;size:3000"`
 	Details  string `gorm:"column:details;size:1000"`
-	Calories int    `gorm:"column:calories"`
+	Calories int    `gorm:"column:calorie"`
 
 	Coach Coach `gorm:"foreignKey:cid"`
 }

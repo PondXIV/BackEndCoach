@@ -8,6 +8,7 @@ import (
 
 type ListFoodRepository interface {
 	GetListFoodAll() (*[]models.ListFood, error)
+	GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error)
 	GetListFoodByIDCoach(Cid int) (*[]models.ListFood, error)
 	InsertListFood(food *models.ListFood) int64
 }
@@ -15,9 +16,20 @@ type LisFoodDB struct {
 	db *gorm.DB
 }
 
+// GetListFoodAllByIDCoach implements ListFoodRepository
+func (l LisFoodDB) GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error) {
+	foods := []models.ListFood{}
+	result := l.db.Preload("listFood").Where("cid = ?", Cid).Find(&foods)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &foods, nil
+}
+
 // InsertListFood implements ListFoodRepository
 func (l LisFoodDB) InsertListFood(food *models.ListFood) int64 {
-	food.Ifid = 0
+	//food.Ifid = 0
 	result := l.db.Create(&food)
 	if result.Error != nil {
 		panic(result.Error)

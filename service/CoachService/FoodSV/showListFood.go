@@ -14,7 +14,7 @@ type ListFoodData struct {
 // GetFoodByIDCoach implements ShowListFoodDataService
 func (ListFoodData) SeviceGetFoodByIDCoach(Cid int) (*[]models.ListFood, error) {
 	repo := repository.NewListFoodRepository()
-	course, err := repo.GetFoodByIDCoach(Cid)
+	course, err := repo.GetListFoodByIDCoach(Cid)
 	if err != nil {
 		panic(err)
 	}

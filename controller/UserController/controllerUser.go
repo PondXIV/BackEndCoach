@@ -21,7 +21,7 @@ func NewCourseController(router *gin.Engine) {
 		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
 		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
 		nameCoach.GET("/customer/:uid", Customer)
-		nameCoach.GET("/updateCourse", updateCustomer)
+		nameCoach.PUT("/updateCus", updateCustomer)
 
 	}
 

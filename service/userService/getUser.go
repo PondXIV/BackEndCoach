@@ -7,8 +7,22 @@ import (
 
 type ShowUserService interface {
 	ServiceGetUserByUid(Uid int) (*models.Customer, error)
+	ServiceUpdateCustomer(customer *models.Customer) int64
 }
 type UserData struct {
+}
+
+// ServiceUpdateCustomer implements ShowUserService
+func (UserData) ServiceUpdateCustomer(customer *models.Customer) int64 {
+	repo := repository.NewCustomerRepository()
+	RowsAffected := repo.UpdateUser(customer)
+	if RowsAffected > 0 {
+		return 1
+	} else if RowsAffected == 0 {
+		return 0
+	} else {
+		return -1
+	}
 }
 
 // ServiceGetUserByUid implements ShowUserService

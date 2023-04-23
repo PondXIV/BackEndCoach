@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -10,9 +11,25 @@ type CustomerRepository interface {
 	GetCustomerAll() (*[]models.Customer, error)
 	GetCustomerByID(Id int) (*models.Customer, error)
 	UserByUid(Uid int) (*models.Customer, error)
+	UpdateUser(customer *models.Customer) int64
 }
 type custimerDB struct {
 	db *gorm.DB
+}
+
+// UpdateUser implements CustomerRepository
+func (c custimerDB) UpdateUser(customer *models.Customer) int64 {
+	result := c.db.Model(models.Customer{}).Where("uid = ?", customer.Uid).Updates(
+		models.Customer{Username: customer.Username, Password: customer.Username, FullName: customer.FullName, Birthday: customer.Birthday,
+			Gender: customer.Gender, Phone: customer.Phone, Image: customer.Image, Weight: customer.Weight, Height: customer.Height})
+
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected
 }
 
 // UserByUid implements CustomerRepository

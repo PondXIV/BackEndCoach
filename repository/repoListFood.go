@@ -29,7 +29,7 @@ func (l LisFoodDB) GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error) 
 
 // InsertListFood implements ListFoodRepository
 func (l LisFoodDB) InsertListFood(food *models.ListFood) int64 {
-	//food.Ifid = 0
+	food.Ifid = 0
 	result := l.db.Create(&food)
 	if result.Error != nil {
 		panic(result.Error)

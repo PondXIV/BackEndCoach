@@ -19,6 +19,7 @@ func NewListFoodController(router *gin.Engine) {
 	listFood := router.Group("/listFood")
 	{
 		listFood.GET("/:cid", getListFoodeByID)
+		listFood.GET("/foodID/:ifid", getListFoodeByIDFood)
 		listFood.POST("/insertListFood", insertListFood)
 		listFood.PUT("/updateListFood", updateListFood)
 	}
@@ -36,6 +37,18 @@ func getListFoodeByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, foods)
 
 }
+func getListFoodeByIDFood(ctx *gin.Context) {
+	foodID := ctx.Param("ifid")
+
+	ifid, err := strconv.Atoi(foodID)
+	food, err := listFoodDateService.SeviceGetFoodByID(ifid)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, food)
+
+}
 func insertListFood(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsListFood)
 	// fmt.Printf("%v", cus)
@@ -44,11 +57,12 @@ func insertListFood(ctx *gin.Context) {
 
 		if http.StatusBadRequest == 400 {
 			error400(ctx)
-		} else {
-			error500(ctx)
 		}
+		// else {
+		// 	error500(ctx)
+		// }
 	} else {
-		rowsAffected := insertListFoodDataService.SeviceInsertListFoodByID(&modelsListFood)
+		rowsAffected, err := insertListFoodDataService.SeviceInsertListFoodByID(&modelsListFood)
 		if err != nil {
 			if http.StatusBadRequest == 400 {
 				error400(ctx)
@@ -76,9 +90,10 @@ func updateListFood(ctx *gin.Context) {
 
 		if http.StatusBadRequest == 400 {
 			error400(ctx)
-		} else {
-			error500(ctx)
 		}
+		//else {
+		// 	error500(ctx)
+		// }
 	} else {
 		rowsAffected, err := updateListFoodDataService.ServiceUpdateListFood(&modelsListFood)
 		if err != nil {

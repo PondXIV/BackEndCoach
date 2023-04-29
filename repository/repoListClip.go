@@ -13,11 +13,16 @@ type ListClipDB struct {
 	db *gorm.DB
 }
 
-func NewListClipRepository() ListFoodRepository {
+// GetListClipByIDCoach implements ListClipRepository
+func (ListClipDB) GetListClipByIDCoach(Cid int) (*[]models.ListClip, error) {
+	panic("unimplemented")
+}
+
+func NewListClipRepository() ListClipRepository {
 	db, err := NewDatabaseConnection()
 	if err != nil {
 		return nil
 	}
 
-	return LisFoodDB{db}
+	return ListClipDB{db}
 }

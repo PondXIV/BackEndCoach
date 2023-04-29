@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -11,9 +12,24 @@ type ListFoodRepository interface {
 	GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error)
 	GetListFoodByIDCoach(Cid int) (*[]models.ListFood, error)
 	InsertListFood(food *models.ListFood) int64
+	UpdateListFood(food *models.ListFood) (int64, error)
 }
 type LisFoodDB struct {
 	db *gorm.DB
+}
+
+// UpdateListFood implements ListFoodRepository
+func (l LisFoodDB) UpdateListFood(food *models.ListFood) (int64, error) {
+	result := l.db.Model(models.ListFood{}).Where("ifid = ?", food.Ifid).Updates(
+		models.ListFood{Name: food.Name, Image: food.Image, Details: food.Details, Calories: food.Calories})
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
 }
 
 // GetListFoodAllByIDCoach implements ListFoodRepository

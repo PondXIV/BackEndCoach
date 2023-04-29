@@ -6,19 +6,30 @@ import (
 )
 
 type ShowListFoodDataService interface {
+	SeviceGetFoodByID(Ifid int) (*models.ListFood, error)
 	SeviceGetFoodByIDCoach(Cid int) (*[]models.ListFood, error)
 }
 type ListFoodData struct {
 }
 
-// GetFoodByIDCoach implements ShowListFoodDataService
-func (ListFoodData) SeviceGetFoodByIDCoach(Cid int) (*[]models.ListFood, error) {
+// SeviceGetFoodByID implements ShowListFoodDataService
+func (ListFoodData) SeviceGetFoodByID(Ifid int) (*models.ListFood, error) {
 	repo := repository.NewListFoodRepository()
-	course, err := repo.GetListFoodByIDCoach(Cid)
+	listFood, err := repo.GetListFoodByID(Ifid)
 	if err != nil {
 		return nil, err
 	}
-	return course, nil
+	return listFood, nil
+}
+
+// GetFoodByIDCoach implements ShowListFoodDataService
+func (ListFoodData) SeviceGetFoodByIDCoach(Cid int) (*[]models.ListFood, error) {
+	repo := repository.NewListFoodRepository()
+	listFood, err := repo.GetListFoodByIDCoach(Cid)
+	if err != nil {
+		return nil, err
+	}
+	return listFood, nil
 }
 
 func NewListFoodDataService() ShowListFoodDataService {

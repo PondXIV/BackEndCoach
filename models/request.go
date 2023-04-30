@@ -1,16 +1,16 @@
 package models
 
 type Request struct {
-	rpID    uint   `gorm:"column:rpID;primaryKey"`
-	Cid     uint   `gorm:"column:cid"`
-	Uid     uint   `gorm:"column:uid"`
-	CpID    uint   `gorm:"column:cpID"`
-	Status  string `gorm:"column:status;size:1"`
-	Details string `gorm:"column:details;size:250"`
+	rpID       uint   `gorm:"column:rpID;primaryKey"`
+	CoachID    uint   `gorm:"column:cid"`
+	CustomerID uint   `gorm:"column:uid"`
+	ClipID     uint   `gorm:"column:cpID"`
+	Status     string `gorm:"column:status;size:1"`
+	Details    string `gorm:"column:details;size:250"`
 
-	Coach    Coach    `gorm:"foreignKey:cid"`
-	Customer Customer `gorm:"foreignKey:uid"`
-	Clip     Clip     `gorm:"foreignKey:cpID"`
+	Coach    Coach    `gorm:"foreignKey:CoachID"`
+	Customer Customer `gorm:"foreignKey:CustomerID"`
+	Clip     Clip     `gorm:"foreignKey:ClipID"`
 }
 
 func (Request) TableName() string {

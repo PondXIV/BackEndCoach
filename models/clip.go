@@ -1,13 +1,13 @@
 package models
 
 type Clip struct {
-	CpID   uint `gorm:"column:cpID;primaryKey"`
-	IcpID  uint `gorm:"column:icpID"`
-	Did    uint `gorm:"column:did"`
-	Status uint `gorm:"column:status"`
+	CpID         uint `gorm:"column:cpID;primaryKey"`
+	ListClipID   uint `gorm:"column:icpID"`
+	DayOfCouseID uint `gorm:"column:did"`
+	Status       uint `gorm:"column:status"`
 
-	ListClip   ListClip   `gorm:"foreignKey:icpID"`
-	DayOfCouse DayOfCouse `gorm:"foreignKey:did"`
+	ListClip   ListClip   `gorm:"foreignKey:ListClipID"`
+	DayOfCouse DayOfCouse `gorm:"foreignKey:DayOfCouseID"`
 }
 
 func (Clip) TableName() string {

@@ -1,15 +1,15 @@
 package models
 
 type Chat struct {
-	ChID    uint   `gorm:"column:chID;primaryKey"`
-	Uid     uint   `gorm:"column:uid"`
-	Bid     uint   `gorm:"column:bid"`
-	Cid     uint   `gorm:"column:cid"`
-	Message string `gorm:"column:message;size250"`
+	ChID       uint   `gorm:"column:chID;primaryKey"`
+	CustomerID uint   `gorm:"column:uid"`
+	BuyingID   uint   `gorm:"column:bid"`
+	CoachID    uint   `gorm:"column:cid"`
+	Message    string `gorm:"column:message;size250"`
 
-	Customer Customer `gorm:"foreignKey:uid"`
-	Buying   Buying   `gorm:"foreignKey:bid"`
-	Coach    Coach    `gorm:"foreignKey:cid"`
+	Customer Customer `gorm:"foreignKey:CustomerID"`
+	Buying   Buying   `gorm:"foreignKey:BuyingID"`
+	Coach    Coach    `gorm:"foreignKey:CoachID"`
 }
 
 func (Chat) TableName() string {

@@ -3,9 +3,9 @@ package main
 import (
 	"backEndGo/controller"
 	coursecontroller "backEndGo/controller/CoachController/CourseController"
+	foodincoursecontooler "backEndGo/controller/CoachController/CourseController/Food_in_CourseContooler"
 	foodcontroller "backEndGo/controller/CoachController/FoodContoller"
 	usercontroller "backEndGo/controller/UserController"
-
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +22,6 @@ func StartServer() {
 	coursecontroller.NewCourseController(router)
 	usercontroller.NewCourseController(router)
 	foodcontroller.NewListFoodController(router)
-
+	foodincoursecontooler.NewFoodController(router)
 	router.Run()
 }

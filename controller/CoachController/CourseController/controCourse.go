@@ -79,39 +79,42 @@ func updateCourse(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCourse)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		error400(ctx)
 	}
 	// // process
 	rowsAffected := updatecourseDateService.ServiceUpdateCourse(&modelsCourse)
 
-	if rowsAffected == 1 {
-		ctx.JSON(http.StatusOK, gin.H{
-			"rowsAffected": "1",
-		})
+	if err != nil {
+		error400(ctx)
 
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"rowsAffected": "0",
-		})
+		if rowsAffected == 1 {
+			outputOne(ctx)
+
+		} else {
+			outputSoon(ctx)
+		}
 	}
 }
 func insertCourse(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCourse)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		error400(ctx)
 	}
 	rowsAffected := insertCourseDataService.ServiceInsertCourse(&modelsCourse)
-	if rowsAffected == 1 {
-		ctx.JSON(http.StatusOK, gin.H{
-			"rowsAffected": "1",
-		})
+	if err != nil {
+		error400(ctx)
 
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"rowsAffected": "0",
-		})
+		if rowsAffected == 1 {
+			outputOne(ctx)
+
+		} else {
+			outputSoon(ctx)
+		}
 	}
+
 }
 func GetCousehByCoID(ctx *gin.Context) {
 	// jsonDto := coachdto.IDCoachDTO{}
@@ -137,4 +140,29 @@ func GetCousehByName(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, course)
 
+}
+func error400(ctx *gin.Context) {
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"code":   "400",
+		"result": "null",
+	})
+}
+func error500(ctx *gin.Context) {
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"code":   "500",
+		"result": "null",
+	})
+}
+
+func outputOne(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "1",
+	})
+}
+func outputSoon(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "0",
+	})
 }

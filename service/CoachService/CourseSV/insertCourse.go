@@ -16,7 +16,7 @@ func (CourseDataInsert) ServiceInsertCourse(course *models.Course) int64 {
 	repoCourse := repository.NewCourseRepository()
 	repoDayOfCourse := repository.NewDayOfCourseRepository()
 	RowsAffected := repoCourse.InsertCourse(course)
-	RowsAffecteds := repoDayOfCourse.InsertDayOfCourse(course.CoachID, course.Days)
+	RowsAffecteds := repoDayOfCourse.InsertDayOfCourse(course.CoID, course.Days)
 	if RowsAffected > 0 || RowsAffecteds > 0 {
 		return 1
 	} else if RowsAffected == 0 {

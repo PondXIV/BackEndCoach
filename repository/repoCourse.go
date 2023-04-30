@@ -85,7 +85,7 @@ func (c courseDB) UpdateStatusCourse(CoID int, Status string) int64 {
 // GetCourseByIDCoach implements CourseRepository
 func (c courseDB) GetCourseByIDCoach(Cid int) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Preload("DayOfCouses").Joins("JOIN DayOfCouse ON DayOfCouse.coID = Course.coID ").Joins("JOIN Food ON DayOfCouse.did = Food.did ").Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
+	result := c.db.Preload("DayOfCouses").Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

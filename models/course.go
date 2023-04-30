@@ -4,8 +4,8 @@ import "time"
 
 type Course struct {
 	CoID           uint      `gorm:"column:coID;primaryKey"`
-	Cid            uint      `gorm:"column:cid"`
-	Bid            uint      `gorm:"default:null;column:bid"`
+	CoachID        uint      `gorm:"column:cid"`
+	BuyingID       uint      `gorm:"default:null;column:bid"`
 	Name           string    `gorm:"column:name;size:50"`
 	Details        string    `gorm:"column:details;size:250"`
 	Level          string    `gorm:"column:level;size:1"`
@@ -15,9 +15,12 @@ type Course struct {
 	Price          uint      `gorm:"column:price"`
 	Status         string    `gorm:"column:status;size:1"`
 	ExpirationDate time.Time `gorm:"default:null;column:expiration date"`
+	//DayOfCouses    []DayOfCouse `gorm:"foreignKey:coID"`
 
-	Coach  Coach  `gorm:"foreignKey:cid"`
-	Buying Buying `gorm:"foreignKey:bid"`
+	//Coach  Coach  `gorm:"foreignKey:CoachID"`
+	Buying Buying `gorm:"foreignKey:BuyingID"`
+
+	//DayOfCouses []DayOfCouse `gorm:"foreignKey:coID"`
 }
 
 func (Course) TableName() string {

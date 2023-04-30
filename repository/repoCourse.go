@@ -33,7 +33,7 @@ func (c courseDB) InsertCourse(course *models.Course) int64 {
 
 // UpdateCourse implements CourseRepository
 func (c courseDB) UpdateCourse(course *models.Course) int64 {
-	result := c.db.Model(models.Course{}).Where("coID = ?", course.CoID).Updates(
+	result := c.db.Model(models.Course{}).Where("coID = ?", course.CoachID).Updates(
 		models.Course{Name: course.Name, Details: course.Details, Level: course.Level, Amount: course.Amount,
 			Image: course.Image, Days: course.Days, Price: course.Price, Status: course.Status})
 
@@ -85,7 +85,7 @@ func (c courseDB) UpdateStatusCourse(CoID int, Status string) int64 {
 // GetCourseByIDCoach implements CourseRepository
 func (c courseDB) GetCourseByIDCoach(Cid int) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
+	result := c.db.Preload("Buying").Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -95,7 +95,8 @@ func (c courseDB) GetCourseByIDCoach(Cid int) (*[]models.Course, error) {
 // GetCourseAll implements CourseRepository
 func (c courseDB) GetCourseAll() (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Preload("Coach").Find(&courses)
+	// result := c.db.Preload("Coach").Find(&courses)
+	result := c.db.Preload("Buying").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

@@ -15,7 +15,7 @@ type InsertListFoodData struct {
 func (InsertListFoodData) SeviceInsertListFoodByID(food *models.ListFood) (int64, error) {
 	repoLisFood := repository.NewListFoodRepository()
 
-	getAllFood, err := repoLisFood.GetListFoodByIDCoach(food.Cid)
+	getAllFood, err := repoLisFood.GetListFoodByIDCoach(food.CoachID)
 
 	if err != nil {
 		panic(err)

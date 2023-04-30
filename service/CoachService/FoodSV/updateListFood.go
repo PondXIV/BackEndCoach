@@ -14,7 +14,7 @@ type UpdateListFoodData struct {
 // ServiceUpdateListFood implements UpdateListFoodDataService
 func (UpdateListFoodData) ServiceUpdateListFood(food *models.ListFood) (int64, error) {
 	repoLisFood := repository.NewListFoodRepository()
-	getAllFood, err := repoLisFood.GetListFoodByIDCoach(food.Cid)
+	getAllFood, err := repoLisFood.GetListFoodByIDCoach(food.CoachID)
 
 	if err != nil {
 		panic(err)

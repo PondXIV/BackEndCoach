@@ -28,10 +28,22 @@ func NewCourseController(router *gin.Engine) {
 		course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/updateCourse", updateCourse)
 		course.POST("/insertCourse", insertCourse)
+		course.GET("/", GetCourseAll)
 	}
 
 }
+func GetCourseAll(ctx *gin.Context) {
+	// coachID := ctx.Param("cid")
 
+	// cid, err := strconv.Atoi(coachID)
+	course, err := courseDateService.SeviceGetCourseAll()
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, course)
+
+}
 func getCourseByID(ctx *gin.Context) {
 	coachID := ctx.Param("cid")
 

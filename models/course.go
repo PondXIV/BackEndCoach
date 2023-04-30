@@ -18,9 +18,9 @@ type Course struct {
 	//DayOfCouses    []DayOfCouse `gorm:"foreignKey:coID"`
 
 	//Coach  Coach  `gorm:"foreignKey:CoachID"`
-	Buying Buying `gorm:"foreignKey:BuyingID"`
+	//Buying Buying `gorm:"foreignKey:BuyingID"`
 
-	//DayOfCouses []DayOfCouse `gorm:"foreignKey:coID"`
+	DayOfCouses []DayOfCouse `gorm:"foreignKey:CourseID"`
 }
 
 func (Course) TableName() string {

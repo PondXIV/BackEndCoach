@@ -56,7 +56,7 @@ func (d DayOfCourseDB) InsertDayOfCourse(CoID uint, Days int) int {
 		dayOfCourse := models.DayOfCouse{
 			CourseID: CoID,
 			Sequence: i,
-			Course:   models.Course{},
+			//Course:   models.Course{},
 		}
 		result := d.db.Create(&dayOfCourse)
 		num += int(result.RowsAffected)

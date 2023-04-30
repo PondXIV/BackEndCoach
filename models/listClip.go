@@ -8,7 +8,7 @@ type ListClip struct {
 	Video        string `gorm:"column:video;size:3000"`
 	Details      string `gorm:"column:details;size:2000"`
 
-	Coach Coach `gorm:"foreignKey:CoachID"`
+	// Coach Coach `gorm:"foreignKey:CoachID"`
 }
 
 func (ListClip) TableName() string {

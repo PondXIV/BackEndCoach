@@ -5,7 +5,9 @@ type DayOfCouse struct {
 	CourseID uint `gorm:"column:coID"`
 	Sequence int  `gorm:"column:sequence"`
 
-	Course Course `gorm:"foreignKey:CourseID"`
+	Foods []Food `gorm:"foreignKey:DayOfCouseID"`
+	Clips []Clip `gorm:"foreignKey:DayOfCouseID"`
+	//Course Course `gorm:"foreignKey:CourseID"`
 }
 
 func (DayOfCouse) TableName() string {

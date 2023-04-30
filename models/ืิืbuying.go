@@ -8,8 +8,8 @@ type Buying struct {
 	BuyDateTime time.Time `gorm:"column:buyDateTime"`
 	Image       string    `gorm:"column:image;size:3000"`
 
-	//Courses  []Course `gorm:"foreignKey:bid"`
 	Customer Customer `gorm:"foreignKey:CustomerID"`
+	//Courses  []Course `gorm:"foreignKey:BuyingID"`
 }
 
 func (Buying) TableName() string {

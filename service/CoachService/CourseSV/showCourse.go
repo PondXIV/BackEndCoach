@@ -30,17 +30,7 @@ func (CourseData) SeviceGetCourseAll() (*[]models.Course, error) {
 func (CourseData) SeviceGetCourseByCoID(CoID int) (*models.Course, error) {
 	repo := repository.NewCourseRepository()
 	course, err := repo.GetCouseByCoID(CoID)
-	//days, err := repository.NewDayOfCourseRepository().DayOfCourseByCoid(CoID)
-	// for _, c := range *days {
-	// 	// if c.CoID == models.Course[course.CoID] {
-	// 	// 	// return 0, nil
-	// 	// }
-	// 	days, err := repository.NewDayOfCourseRepository().DayOfCourseByCoid(int(c.CoID))
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
 
-	// }
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +49,7 @@ func (CourseData) SeviceGetCourseByName(Name string) (*[]models.Course, error) {
 
 // ServiceGetCourseByIDCoach implements ShowCourseDataService
 func (CourseData) ServiceGetCourseByIDCoach(Id int) (*[]models.Course, error) {
-
+	_, err := repository.NewDayOfCourseRepository().DayOfCourseAll()
 	// course, err := repo.GetCourseByIDCoach(Id)
 	repo := repository.NewCourseRepository()
 	course, err := repo.GetCourseByIDCoach(Id)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"backEndGo/controller"
+	clipcontroller "backEndGo/controller/CoachController/ClipController"
 	coursecontroller "backEndGo/controller/CoachController/CourseController"
 	foodincoursecontooler "backEndGo/controller/CoachController/CourseController/Food_in_CourseContooler"
 	foodcontroller "backEndGo/controller/CoachController/FoodContoller"
@@ -23,5 +24,6 @@ func StartServer() {
 	usercontroller.NewCourseController(router)
 	foodcontroller.NewListFoodController(router)
 	foodincoursecontooler.NewFoodController(router)
+	clipcontroller.NewListClipController(router)
 	router.Run()
 }

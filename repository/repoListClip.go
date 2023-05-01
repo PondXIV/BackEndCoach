@@ -14,8 +14,14 @@ type ListClipDB struct {
 }
 
 // GetListClipByIDCoach implements ListClipRepository
-func (ListClipDB) GetListClipByIDCoach(Cid int) (*[]models.ListClip, error) {
-	panic("unimplemented")
+func (l ListClipDB) GetListClipByIDCoach(Cid int) (*[]models.ListClip, error) {
+	clips := []models.ListClip{}
+	result := l.db.Where("cid = ?", Cid).Find(&clips)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &clips, nil
 }
 
 func NewListClipRepository() ListClipRepository {

@@ -15,9 +15,20 @@ type CourseRepository interface {
 	GetCouseByCoID(CoID int) (*models.Course, error)
 	UpdateCourse(course *models.Course) int64
 	InsertCourse(course *models.Course) int64
+	GetCourseByIDCus(Uid int) (*[]models.Course, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseByIDCus implements CourseRepository
+func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
+	courses := []models.Course{}
+	result := c.db.Preload("Bill.Uid").Joins("Bill").Where("uid=?", Uid).Find(&courses)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &courses, nil
 }
 
 // InsertCourse implements CourseRepository

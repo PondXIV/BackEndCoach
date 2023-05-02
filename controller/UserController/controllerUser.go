@@ -22,16 +22,20 @@ func NewCourseController(router *gin.Engine) {
 		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
 		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
 		nameCoach.GET("/customer/:uid", Customer)
-		nameCoach.GET("/mycourst/:uid", GetMycourse)
+		nameCoach.GET("/mycourse/:uid", GetMycourse)
 		nameCoach.PUT("/updateCus", updateCustomer)
 
 	}
 
 }
 func GetMycourse(ctx *gin.Context) {
-	// cusID := ctx.Param("Uid")
-	// uid, err := strconv.Atoi(cusID)
-	// course, err := mycourseService.ServiceGetMycourse(int(modelsCustomer.Uid))
+	cusID := ctx.Param("Uid")
+	uid, err := strconv.Atoi(cusID)
+	course, err := mycourseService.ServiceGetMycourse(uid)
+	if err != nil {
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, course)
 }
 func updateCustomer(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCustomer)

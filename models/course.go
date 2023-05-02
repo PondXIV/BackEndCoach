@@ -5,7 +5,7 @@ import "time"
 type Course struct {
 	CoID           uint      `gorm:"column:coID;primaryKey"`
 	CoachID        uint      `gorm:"column:cid"`
-	BuyingID       uint      `gorm:"default:null;column:bid"`
+	BuyingID       uint      `gorm:"default:null;column:bid;foreignKey"`
 	Name           string    `gorm:"column:name;size:50"`
 	Details        string    `gorm:"column:details;size:250"`
 	Level          string    `gorm:"column:level;size:1"`
@@ -18,7 +18,7 @@ type Course struct {
 	//DayOfCouses    []DayOfCouse `gorm:"foreignKey:coID"`
 
 	//Coach  Coach  `gorm:"foreignKey:CoachID"`
-	//Buying Buying `gorm:"foreignKey:BuyingID"`
+	Buying Buying `gorm:"references:BuyingID"`
 
 	DayOfCouses []DayOfCouse `gorm:"foreignKey:CourseID"`
 }

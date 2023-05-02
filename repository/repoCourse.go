@@ -24,7 +24,7 @@ type courseDB struct {
 // GetCourseByIDCus implements CourseRepository
 func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Preload("Bill.Uid").Joins("Bill").Where("uid=?", Uid).Find(&courses)
+	result := c.db.Joins("Buying").Where("uid=?", Uid).Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

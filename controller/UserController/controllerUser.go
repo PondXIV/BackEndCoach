@@ -29,7 +29,7 @@ func NewCourseController(router *gin.Engine) {
 
 }
 func GetMycourse(ctx *gin.Context) {
-	cusID := ctx.Param("Uid")
+	cusID := ctx.Param("uid")
 	uid, err := strconv.Atoi(cusID)
 	course, err := mycourseService.ServiceGetMycourse(uid)
 	if err != nil {

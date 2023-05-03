@@ -1,4 +1,4 @@
-package coachdto
+package request
 
 type IDCoachDTO struct {
 	Cid int `json:"cid"`

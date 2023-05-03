@@ -15,7 +15,7 @@ type InsertListClipData struct {
 func (InsertListClipData) SeviceInsertListClip(Cid int, Clip *models.ListClip) (int64, error) {
 	repoListClip := repository.NewListClipRepository()
 
-	getAllClip, err := repoListClip.GetListClipByIDCoach(Cid)
+	getAllClip, err := repoListClip.GetListClip(0, Cid, "")
 
 	if err != nil {
 		panic(err)

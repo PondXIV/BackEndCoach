@@ -3,8 +3,8 @@ package coursecontroller
 import (
 	//"backEndGo/models"
 
-	coachdto "backEndGo/DTO/CoachDTO"
 	"backEndGo/models"
+	coachdto "backEndGo/models/request"
 	coursesv "backEndGo/service/CoachService/CourseSV"
 	"fmt"
 
@@ -22,21 +22,25 @@ var modelsCourse = models.Course{}
 func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
-		course.GET("/CoachID/:cid", getCourseByID)
-		course.GET("/name/:name", GetCousehByName)
-		course.GET("/courseID/:coID", GetCousehByCoID)
-		course.PUT("/updateStatusCourse", updateStatusCourse)
+		course.GET("", getCourse)
+		// course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/courseID/:coID", updateCourse)
 		course.POST("/coachID/:cid", insertCourse)
-		course.GET("/", GetCourseAll)
+
 	}
 
 }
-func GetCourseAll(ctx *gin.Context) {
-	// coachID := ctx.Param("cid")
+func getCourse(ctx *gin.Context) {
+	qcoid := ctx.Query("coID")
+	qcid := ctx.Query("cid")
+	qname := ctx.Query("name")
 
-	// cid, err := strconv.Atoi(coachID)
-	course, err := courseDateService.SeviceGetCourseAll()
+	coid, err := strconv.Atoi(qcoid)
+	cid, err := strconv.Atoi(qcid)
+
+	// If params not exist string = "", int = 0
+
+	course, err := courseDateService.SeviceGetCourse(coid, cid, qname)
 	if err != nil {
 		panic(err)
 	}
@@ -44,18 +48,7 @@ func GetCourseAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, course)
 
 }
-func getCourseByID(ctx *gin.Context) {
-	coachID := ctx.Param("cid")
 
-	cid, err := strconv.Atoi(coachID)
-	course, err := courseDateService.ServiceGetCourseByIDCoach(cid)
-	if err != nil {
-		panic(err)
-	}
-
-	ctx.JSON(http.StatusOK, course)
-
-}
 func updateStatusCourse(ctx *gin.Context) {
 	jsonDto := coachdto.UpdateStatusCoachDTO{}
 	err := ctx.ShouldBindJSON(&jsonDto)
@@ -129,31 +122,7 @@ func insertCourse(ctx *gin.Context) {
 	}
 
 }
-func GetCousehByCoID(ctx *gin.Context) {
-	// jsonDto := coachdto.IDCoachDTO{}
-	// err := ctx.ShouldBindJSON(&jsonDto)
-	courseID := ctx.Param("coID")
 
-	coID, err := strconv.Atoi(courseID)
-	course, err := courseDateService.SeviceGetCourseByCoID(coID)
-	if err != nil {
-		panic(err)
-	}
-
-	ctx.JSON(http.StatusOK, course)
-
-}
-func GetCousehByName(ctx *gin.Context) {
-	name := ctx.Param("name")
-
-	course, err := courseDateService.SeviceGetCourseByName(name)
-	if err != nil {
-		panic(err)
-	}
-
-	ctx.JSON(http.StatusOK, course)
-
-}
 func error400(ctx *gin.Context) {
 	ctx.JSON(http.StatusBadRequest, gin.H{
 		"code":   "400",

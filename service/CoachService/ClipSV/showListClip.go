@@ -6,15 +6,15 @@ import (
 )
 
 type ShowListClipDataService interface {
-	SeviceGetListClipByIDCoach(Cid int) (*[]models.ListClip, error)
+	SeviceGetListClip(IcpID int, Cid int, Name string) (*[]models.ListClip, error)
 }
 type ListClipData struct {
 }
 
 // SeviceGetListClipByIDCoach implements ShowListClipDataService
-func (ListClipData) SeviceGetListClipByIDCoach(Cid int) (*[]models.ListClip, error) {
+func (ListClipData) SeviceGetListClip(IcpID int, Cid int, Name string) (*[]models.ListClip, error) {
 	repo := repository.NewListClipRepository()
-	listClips, err := repo.GetListClipByIDCoach(Cid)
+	listClips, err := repo.GetListClip(IcpID, Cid, Name)
 	if err != nil {
 		return nil, err
 	}

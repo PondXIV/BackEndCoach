@@ -18,18 +18,22 @@ var modelsListFood = models.ListFood{}
 func NewListFoodController(router *gin.Engine) {
 	listFood := router.Group("/listFood")
 	{
-		listFood.GET("/cid/:cid", getListFoodeByID)
-		listFood.GET("/ifid/:ifid", getListFoodeByIDFood)
+		listFood.GET("", getListFoode)
 		listFood.POST("/coachID/:cid", insertListFood)
 		listFood.PUT("/foodID/:ifid", updateListFood)
 	}
 
 }
-func getListFoodeByID(ctx *gin.Context) {
-	coachID := ctx.Param("cid")
+func getListFoode(ctx *gin.Context) {
 
-	cid, err := strconv.Atoi(coachID)
-	foods, err := listFoodDateService.SeviceGetFoodByIDCoach(cid)
+	qcid := ctx.Query("cid")
+	qifid := ctx.Query("ifid")
+	qname := ctx.Query("name")
+
+	ifid, err := strconv.Atoi(qifid)
+	cid, err := strconv.Atoi(qcid)
+
+	foods, err := listFoodDateService.SeviceGetFood(ifid, cid, qname)
 	if err != nil {
 		panic(err)
 	}
@@ -37,18 +41,7 @@ func getListFoodeByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, foods)
 
 }
-func getListFoodeByIDFood(ctx *gin.Context) {
-	foodID := ctx.Param("ifid")
 
-	ifid, err := strconv.Atoi(foodID)
-	food, err := listFoodDateService.SeviceGetFoodByID(ifid)
-	if err != nil {
-		panic(err)
-	}
-
-	ctx.JSON(http.StatusOK, food)
-
-}
 func insertListFood(ctx *gin.Context) {
 	coachID := ctx.Param("cid")
 

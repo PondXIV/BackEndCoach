@@ -16,16 +16,20 @@ var insertListClipDataService = clipsv.NewInsertListClipDataService()
 func NewListClipController(router *gin.Engine) {
 	listClip := router.Group("/listClip")
 	{
-		listClip.GET("/coachID/:cid", getListClipByID)
+		listClip.GET("", getListClip)
 		listClip.POST("/coachID/:cid", insertListClip)
 	}
 
 }
-func getListClipByID(ctx *gin.Context) {
-	coachID := ctx.Param("cid")
+func getListClip(ctx *gin.Context) {
+	qicpID := ctx.Query("icpID")
+	qcid := ctx.Query("cid")
+	qname := ctx.Query("name")
 
-	cid, err := strconv.Atoi(coachID)
-	clips, err := clipsv.NewListClipDataService().SeviceGetListClipByIDCoach(cid)
+	icpID, err := strconv.Atoi(qicpID)
+	cid, err := strconv.Atoi(qcid)
+
+	clips, err := clipsv.NewListClipDataService().SeviceGetListClip(icpID, cid, qname)
 	if err != nil {
 		panic(err)
 	}

@@ -7,7 +7,7 @@ import (
 
 type ShowListFoodDataService interface {
 	SeviceGetFoodByID(Ifid int) (*models.ListFood, error)
-	SeviceGetFoodByIDCoach(Cid int) (*[]models.ListFood, error)
+	SeviceGetFood(Ifid int, Cid int, Name string) (*[]models.ListFood, error)
 }
 type ListFoodData struct {
 }
@@ -23,9 +23,9 @@ func (ListFoodData) SeviceGetFoodByID(Ifid int) (*models.ListFood, error) {
 }
 
 // GetFoodByIDCoach implements ShowListFoodDataService
-func (ListFoodData) SeviceGetFoodByIDCoach(Cid int) (*[]models.ListFood, error) {
+func (ListFoodData) SeviceGetFood(Ifid int, Cid int, Name string) (*[]models.ListFood, error) {
 	repo := repository.NewListFoodRepository()
-	listFood, err := repo.GetListFoodByIDCoach(Cid)
+	listFood, err := repo.GetListFood(Ifid, Cid, Name)
 	if err != nil {
 		return nil, err
 	}

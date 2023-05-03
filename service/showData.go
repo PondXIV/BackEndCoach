@@ -21,24 +21,24 @@ type ShowDataService interface {
 	PrintAllChat()
 
 	// Table Course
-	PrintAllCourse()
+	// PrintAllCourse()
 }
 type ShowData struct {
 }
 
 // Table Course
 // PrintAllCourse implements ShowDataService
-func (s ShowData) PrintAllCourse() {
-	repo := repository.NewCourseRepository()
-	courses, err := repo.GetCourseAll()
+// func (s ShowData) PrintAllCourse() {
+// 	repo := repository.NewCourseRepository()
+// 	courses, err := repo.GetCourseAll()
 
-	if err != nil {
-		panic(err)
-	}
-	for _, v := range *courses {
-		fmt.Printf("%v\n", v)
-	}
-}
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	for _, v := range *courses {
+// 		fmt.Printf("%v\n", v)
+// 	}
+// }
 
 // Table Coach
 // PrintAllCoach implements ShowDataService

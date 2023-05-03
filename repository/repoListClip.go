@@ -8,7 +8,7 @@ import (
 
 type ListClipRepository interface {
 	GetListClipByIDCoach(Cid int) (*[]models.ListClip, error)
-	InsertListClip(Clip *models.ListClip) (int64, error)
+	InsertListClip(Cid int, Clip *models.ListClip) (int64, error)
 	UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error)
 }
 type ListClipDB struct {
@@ -28,9 +28,16 @@ func (l ListClipDB) UpdateListClip(IcpID int, Clip *models.ListClip) (int64, err
 }
 
 // InsertListClip implements ListClipRepository
-func (l ListClipDB) InsertListClip(Clip *models.ListClip) (int64, error) {
+func (l ListClipDB) InsertListClip(Cid int, Clip *models.ListClip) (int64, error) {
 	Clip.IcpID = 0
-	result := l.db.Create(&Clip)
+	result := l.db.Create(&models.ListClip{
+		IcpID:        Clip.IcpID,
+		CoachID:      Cid,
+		Name:         Clip.Name,
+		AmountPerSet: Clip.AmountPerSet,
+		Video:        Clip.Video,
+		Details:      Clip.Details,
+	})
 	if result.Error != nil {
 		return -1, result.Error
 	}

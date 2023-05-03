@@ -16,9 +16,32 @@ type CourseRepository interface {
 	UpdateCourse(course *models.Course) int64
 	InsertCourse(course *models.Course) int64
 	GetCourseByIDCus(Uid int) (*[]models.Course, error)
+	GetCourse(Uid int, CoId int, Name string) (*[]models.Course, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseByIDCus implements CourseRepository
+func (c courseDB) GetCourse(Uid int, CoId int, Name string) (*[]models.Course, error) {
+	courses := []models.Course{}
+	var result *gorm.DB = c.db.Joins("Buying")
+
+	if Uid != 0 {
+		result.Where("uid=?", Uid)
+	}
+	if CoId != 0 {
+		result.Where("cid=?", CoId)
+	}
+	if Name != "" {
+		result.Where("name like ?", "%"+Name+"%")
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	result.Find(&courses)
+	return &courses, nil
+
 }
 
 // GetCourseByIDCus implements CourseRepository

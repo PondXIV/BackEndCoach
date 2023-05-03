@@ -12,8 +12,8 @@ type ListFoodRepository interface {
 	GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error)
 	GetListFoodByIDCoach(Cid int) (*[]models.ListFood, error)
 	GetListFoodByID(Ifid int) (*models.ListFood, error)
-	InsertListFood(food *models.ListFood) (int64, error)
-	UpdateListFood(food *models.ListFood) (int64, error)
+	InsertListFood(Cid int, food *models.ListFood) (int64, error)
+	UpdateListFood(Ifid int, food *models.ListFood) (int64, error)
 }
 type LisFoodDB struct {
 	db *gorm.DB
@@ -30,8 +30,8 @@ func (l LisFoodDB) GetListFoodByID(Ifid int) (*models.ListFood, error) {
 }
 
 // UpdateListFood implements ListFoodRepository
-func (l LisFoodDB) UpdateListFood(food *models.ListFood) (int64, error) {
-	result := l.db.Model(models.ListFood{}).Where("ifid = ?", food.Ifid).Updates(
+func (l LisFoodDB) UpdateListFood(Ifid int, food *models.ListFood) (int64, error) {
+	result := l.db.Model(models.ListFood{}).Where("ifid = ?", Ifid).Updates(
 		models.ListFood{Name: food.Name, Image: food.Image, Details: food.Details, Calories: food.Calories})
 
 	if result.Error != nil {
@@ -55,9 +55,16 @@ func (l LisFoodDB) GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error) 
 }
 
 // InsertListFood implements ListFoodRepository
-func (l LisFoodDB) InsertListFood(food *models.ListFood) (int64, error) {
+func (l LisFoodDB) InsertListFood(Cid int, food *models.ListFood) (int64, error) {
 	food.Ifid = 0
-	result := l.db.Create(&food)
+	result := l.db.Create(&models.ListFood{
+		Ifid:     food.Ifid,
+		CoachID:  Cid,
+		Name:     food.Name,
+		Image:    food.Image,
+		Details:  food.Details,
+		Calories: food.Calories,
+	})
 	if result.Error != nil {
 		return -1, result.Error
 	}

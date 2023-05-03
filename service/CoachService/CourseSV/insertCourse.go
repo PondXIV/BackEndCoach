@@ -6,23 +6,29 @@ import (
 )
 
 type InsertCourseDataService interface {
-	ServiceInsertCourse(course *models.Course) int64
+	ServiceInsertCourse(Cid int, course *models.Course) (int64, error)
 }
 type CourseDataInsert struct {
 }
 
 // ServiceInsertCourse implements InsertCourseDataService
-func (CourseDataInsert) ServiceInsertCourse(course *models.Course) int64 {
+func (CourseDataInsert) ServiceInsertCourse(Cid int, course *models.Course) (int64, error) {
+
+	
 	repoCourse := repository.NewCourseRepository()
-	repoDayOfCourse := repository.NewDayOfCourseRepository()
-	RowsAffected := repoCourse.InsertCourse(course)
-	RowsAffecteds := repoDayOfCourse.InsertDayOfCourse(course.CoID, course.Days)
-	if RowsAffected > 0 || RowsAffecteds > 0 {
-		return 1
+	//repoDayOfCourse := repository.NewDayOfCourseRepository()
+	RowsAffected, err := repoCourse.InsertCourse(Cid, course)
+	if err != nil {
+		return -1, err
+	}
+	//rowsAffecteds := repoDayOfCourse.InsertDayOfCourse(course.CoID, course.Days)
+
+	if RowsAffected > 0 {
+		return 1, nil
 	} else if RowsAffected == 0 {
-		return 0
+		return 0, nil
 	} else {
-		return -1
+		return -1, nil
 	}
 }
 

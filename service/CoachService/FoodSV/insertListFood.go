@@ -6,16 +6,16 @@ import (
 )
 
 type InsertListFoodDataService interface {
-	SeviceInsertListFoodByID(food *models.ListFood) (int64, error)
+	SeviceInsertListFoodByID(Cid int, food *models.ListFood) (int64, error)
 }
 type InsertListFoodData struct {
 }
 
 // InsertListFoodByID implements InsertListFoodDataService
-func (InsertListFoodData) SeviceInsertListFoodByID(food *models.ListFood) (int64, error) {
+func (InsertListFoodData) SeviceInsertListFoodByID(Cid int, food *models.ListFood) (int64, error) {
 	repoLisFood := repository.NewListFoodRepository()
 
-	getAllFood, err := repoLisFood.GetListFoodByIDCoach(food.CoachID)
+	getAllFood, err := repoLisFood.GetListFoodByIDCoach(Cid)
 
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func (InsertListFoodData) SeviceInsertListFoodByID(food *models.ListFood) (int64
 			return 0, nil
 		}
 	}
-	RowsAffected, err := repoLisFood.InsertListFood(food)
+	RowsAffected, err := repoLisFood.InsertListFood(Cid, food)
 	if err != nil {
 		return -1, err
 	}

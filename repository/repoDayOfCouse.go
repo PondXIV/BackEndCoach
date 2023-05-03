@@ -41,7 +41,7 @@ func (d DayOfCourseDB) DayOfCourseByCoid(CoID int) (*[]models.DayOfCouse, error)
 // DayOfCourseAll implements DayOfCourseRepository
 func (d DayOfCourseDB) DayOfCourseAll() (*[]models.DayOfCouse, error) {
 	days := []models.DayOfCouse{}
-	result := d.db.Preload("Course").Find(&days)
+	result := d.db.Find(&days)
 
 	if result.Error != nil {
 		return nil, result.Error

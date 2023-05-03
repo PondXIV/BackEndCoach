@@ -7,15 +7,15 @@ import (
 
 type ShowUserService interface {
 	ServiceGetUserByUid(Uid int) (*models.Customer, error)
-	ServiceUpdateCustomer(customer *models.Customer) int64
+	ServiceUpdateCustomer(Uid int, customer *models.Customer) int64
 }
 type UserData struct {
 }
 
 // ServiceUpdateCustomer implements ShowUserService
-func (UserData) ServiceUpdateCustomer(customer *models.Customer) int64 {
+func (UserData) ServiceUpdateCustomer(Uid int, customer *models.Customer) int64 {
 	repo := repository.NewCustomerRepository()
-	RowsAffected := repo.UpdateUser(customer)
+	RowsAffected := repo.UpdateUser(Uid, customer)
 	if RowsAffected > 0 {
 		return 1
 	} else if RowsAffected == 0 {

@@ -14,7 +14,7 @@ type Course struct {
 	Days           int       `gorm:"column:days"`
 	Price          uint      `gorm:"column:price"`
 	Status         string    `gorm:"column:status;size:1"`
-	ExpirationDate time.Time `gorm:"default:null;column:expiration date"`
+	ExpirationDate time.Time `gorm:"default:null;column:expiration_date"`
 	//DayOfCouses    []DayOfCouse `gorm:"foreignKey:coID"`
 
 	//Coach  Coach  `gorm:"foreignKey:CoachID"`

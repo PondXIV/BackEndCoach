@@ -14,6 +14,7 @@ var reviewDataService = userservice.NewReviewDataService()
 var customerService = userservice.NewUserDataService()
 var updatecustomerService = userservice.NewUserDataService()
 var modelsCustomer = models.Customer{}
+var mycourseService = userservice.NewMyCourseDataService()
 
 func NewCourseController(router *gin.Engine) {
 	nameCoach := router.Group("/user2")
@@ -22,9 +23,19 @@ func NewCourseController(router *gin.Engine) {
 		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
 		nameCoach.GET("/customer/:uid", Customer)
 		nameCoach.PUT("/updateCus", updateCustomer)
+		nameCoach.GET("/mycourse/:uid", GetMycourse)
 
 	}
 
+}
+func GetMycourse(ctx *gin.Context) {
+	cusID := ctx.Param("uid")
+	uid, err := strconv.Atoi(cusID)
+	course, err := mycourseService.ServiceGetMycourse(uid)
+	if err != nil {
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, course)
 }
 func updateCustomer(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCustomer)

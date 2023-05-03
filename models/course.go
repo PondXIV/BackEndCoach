@@ -4,7 +4,7 @@ import "time"
 
 type Course struct {
 	CoID           uint      `gorm:"column:coID;primaryKey"`
-	CoachID        uint      `gorm:"column:cid"`
+	CoachID        int       `gorm:"column:cid"`
 	BuyingID       uint      `gorm:"default:null;column:bid;foreignKey"`
 	Name           string    `gorm:"column:name;size:50"`
 	Details        string    `gorm:"column:details;size:250"`

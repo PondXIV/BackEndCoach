@@ -10,21 +10,24 @@ import (
 
 type UpdateCourseDataService interface {
 	ServiceUpdateStatusCourse(Id int, Status string) int64
-	ServiceUpdateCourse(course *models.Course) int64
+	ServiceUpdateCourse(CoID int, course *models.Course) (int64,error)
 }
 type CourseDataUpdate struct {
 }
 
 // ServiceUpdateCourse implements UpdateCourseDataService
-func (CourseDataUpdate) ServiceUpdateCourse(course *models.Course) int64 {
+func (CourseDataUpdate) ServiceUpdateCourse(CoID int,course *models.Course) (int64,error) {
 	repo := repository.NewCourseRepository()
-	RowsAffected := repo.UpdateCourse(course)
+	RowsAffected, err := repo.UpdateCourse(CoID,course)
+	if err != nil {
+		return -1, err
+	}
 	if RowsAffected > 0 {
-		return 1
+		return 1,nil
 	} else if RowsAffected == 0 {
-		return 0
+		return 0,nil
 	} else {
-		return -1
+		return -1,nil
 	}
 }
 

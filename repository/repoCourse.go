@@ -13,8 +13,8 @@ type CourseRepository interface {
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
 	GetCouseByCoID(CoID int) (*models.Course, error)
-	UpdateCourse(course *models.Course) int64
-	InsertCourse(course *models.Course) int64
+	UpdateCourse(CoID int, course *models.Course) (int64, error)
+	InsertCourse(Cid int, course *models.Course) (int64, error)
 	GetCourseByIDCus(Uid int) (*[]models.Course, error)
 }
 type courseDB struct {
@@ -32,29 +32,46 @@ func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
 }
 
 // InsertCourse implements CourseRepository
-func (c courseDB) InsertCourse(course *models.Course) int64 {
+func (c courseDB) InsertCourse(Cid int, course *models.Course) (int64, error) {
 	course.CoID = 0
-	result := c.db.Create(&course)
+	
+	//course.CoachID = Cid;
+	result := c.db.Create(&models.Course{
+		CoID:           course.CoID,
+		CoachID:        Cid,
+		BuyingID:       course.BuyingID,
+		Name:           course.Name,
+		Details:        course.Details,
+		Level:          course.Level,
+		Amount:         course.Amount,
+		Image:          course.Image,
+		Days:           course.Days,
+		Price:          course.Price,
+		Status:         course.Status,
+		ExpirationDate: course.ExpirationDate,
+		// Buying:         models.Buying{},
+		// DayOfCouses:    []models.DayOfCouse{},
+	})
 	if result.Error != nil {
-		panic(result.Error)
+		return -1, result.Error
 	}
 
-	return result.RowsAffected
+	return result.RowsAffected, nil
 }
 
 // UpdateCourse implements CourseRepository
-func (c courseDB) UpdateCourse(course *models.Course) int64 {
-	result := c.db.Model(models.Course{}).Where("coID = ?", course.CoachID).Updates(
+func (c courseDB) UpdateCourse(CoID int, course *models.Course) (int64, error) {
+	result := c.db.Model(models.Course{}).Where("coID = ?", CoID).Updates(
 		models.Course{Name: course.Name, Details: course.Details, Level: course.Level, Amount: course.Amount,
 			Image: course.Image, Days: course.Days, Price: course.Price, Status: course.Status})
 
 	if result.Error != nil {
-		panic(result.Error)
+		return -1, result.Error
 	}
 	if result.RowsAffected > 0 {
 		fmt.Println("Update completed")
 	}
-	return result.RowsAffected
+	return result.RowsAffected, nil
 }
 
 // GetCoachByCoID implements CourseRepository

@@ -22,12 +22,12 @@ var modelsCourse = models.Course{}
 func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
-		course.GET("/getCourseByIDCoach/:cid", getCourseByID)
-		course.GET("/getCourseByName/:name", GetCousehByName)
-		course.GET("/getCourseByCoID/:coID", GetCousehByCoID)
+		course.GET("/CoachID/:cid", getCourseByID)
+		course.GET("/name/:name", GetCousehByName)
+		course.GET("/courseID/:coID", GetCousehByCoID)
 		course.PUT("/updateStatusCourse", updateStatusCourse)
-		course.PUT("/updateCourse", updateCourse)
-		course.POST("/insertCourse", insertCourse)
+		course.PUT("/courseID/:coID", updateCourse)
+		course.POST("/coachID/:cid", insertCourse)
 		course.GET("/", GetCourseAll)
 	}
 
@@ -76,13 +76,20 @@ func updateStatusCourse(ctx *gin.Context) {
 	}
 }
 func updateCourse(ctx *gin.Context) {
+	courseID := ctx.Param("coID")
+
+	coID, errs := strconv.Atoi(courseID)
+	if errs != nil {
+		panic(errs)
+	}
+
 	err := ctx.ShouldBindJSON(&modelsCourse)
 	// fmt.Printf("%v", cus)
 	if err != nil {
 		error400(ctx)
 	}
 	// // process
-	rowsAffected := updatecourseDateService.ServiceUpdateCourse(&modelsCourse)
+	rowsAffected, err := updatecourseDateService.ServiceUpdateCourse(coID, &modelsCourse)
 
 	if err != nil {
 		error400(ctx)
@@ -97,12 +104,18 @@ func updateCourse(ctx *gin.Context) {
 	}
 }
 func insertCourse(ctx *gin.Context) {
+	coachID := ctx.Param("cid")
+
+	cid, errs := strconv.Atoi(coachID)
+	if errs != nil {
+		panic(errs)
+	}
 	err := ctx.ShouldBindJSON(&modelsCourse)
 	// fmt.Printf("%v", cus)
 	if err != nil {
 		error400(ctx)
 	}
-	rowsAffected := insertCourseDataService.ServiceInsertCourse(&modelsCourse)
+	rowsAffected, err := insertCourseDataService.ServiceInsertCourse(cid, &modelsCourse)
 	if err != nil {
 		error400(ctx)
 

@@ -11,7 +11,7 @@ import (
 func NewListClipController(router *gin.Engine) {
 	listClip := router.Group("/listClip")
 	{
-		listClip.GET("/:cid", getListClipByID)
+		listClip.GET("/coachID/:cid", getListClipByID)
 
 	}
 

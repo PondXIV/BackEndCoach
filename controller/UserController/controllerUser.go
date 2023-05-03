@@ -17,13 +17,13 @@ var modelsCustomer = models.Customer{}
 var mycourseService = userservice.NewMyCourseDataService()
 
 func NewCourseController(router *gin.Engine) {
-	nameCoach := router.Group("/user2")
+	nameCoach := router.Group("/user")
 	{
-		nameCoach.GET("/getCoachByName/:name", GetCoachByName)
-		nameCoach.GET("/getReviewByCoID/:coID", GetReviewByCoID)
-		nameCoach.GET("/customer/:uid", Customer)
-		nameCoach.PUT("/updateCus", updateCustomer)
-		nameCoach.GET("/mycourse/:uid", GetMycourse)
+		nameCoach.GET("/nameCourse/:name", GetCoachByName)
+		nameCoach.GET("/review/courseID/:coID", GetReviewByCoID)
+		nameCoach.GET("/customerID/:uid", Customer)
+		nameCoach.PUT("/customerID/:uid", updateCustomer)
+		nameCoach.GET("/course/customerID/:uid", GetMycourse)
 
 	}
 
@@ -38,13 +38,15 @@ func GetMycourse(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, course)
 }
 func updateCustomer(ctx *gin.Context) {
+	cusID := ctx.Param("uid")
+	uid, _ := strconv.Atoi(cusID)
 	err := ctx.ShouldBindJSON(&modelsCustomer)
 	// fmt.Printf("%v", cus)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
 	// // process
-	rowsAffected := updatecustomerService.ServiceUpdateCustomer(&modelsCustomer)
+	rowsAffected := updatecustomerService.ServiceUpdateCustomer(uid, &modelsCustomer)
 
 	if rowsAffected == 1 {
 		ctx.JSON(http.StatusOK, gin.H{

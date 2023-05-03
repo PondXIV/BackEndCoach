@@ -6,13 +6,13 @@ import (
 )
 
 type UpdateListFoodDataService interface {
-	ServiceUpdateListFood(food *models.ListFood) (int64, error)
+	ServiceUpdateListFood(Ifid int, food *models.ListFood) (int64, error)
 }
 type UpdateListFoodData struct {
 }
 
 // ServiceUpdateListFood implements UpdateListFoodDataService
-func (UpdateListFoodData) ServiceUpdateListFood(food *models.ListFood) (int64, error) {
+func (UpdateListFoodData) ServiceUpdateListFood(Ifid int, food *models.ListFood) (int64, error) {
 	repoLisFood := repository.NewListFoodRepository()
 	getAllFood, err := repoLisFood.GetListFoodByIDCoach(food.CoachID)
 
@@ -25,7 +25,7 @@ func (UpdateListFoodData) ServiceUpdateListFood(food *models.ListFood) (int64, e
 		}
 	}
 
-	RowsAffected, err := repoLisFood.UpdateListFood(food)
+	RowsAffected, err := repoLisFood.UpdateListFood(Ifid, food)
 	if err != nil {
 		return -1, err
 	}

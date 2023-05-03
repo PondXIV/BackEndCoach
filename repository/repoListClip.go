@@ -8,9 +8,37 @@ import (
 
 type ListClipRepository interface {
 	GetListClipByIDCoach(Cid int) (*[]models.ListClip, error)
+	InsertListClip(Clip *models.ListClip) (int64, error)
+	UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error)
 }
 type ListClipDB struct {
 	db *gorm.DB
+}
+
+// UpdateListClip implements ListClipRepository
+func (l ListClipDB) UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error) {
+	result := l.db.Model(models.ListClip{}).Where("icpID = ?", IcpID).Updates(
+		models.ListClip{
+			Name:         Clip.Name,
+			AmountPerSet: Clip.AmountPerSet,
+			Video:        Clip.Video,
+			Details:      Clip.Details,
+		})
+	return result.RowsAffected, nil
+}
+
+// InsertListClip implements ListClipRepository
+func (l ListClipDB) InsertListClip(Clip *models.ListClip) (int64, error) {
+	Clip.IcpID = 0
+	result := l.db.Create(&Clip)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.Error != nil {
+		panic(result.Error)
+	}
+
+	return result.RowsAffected, nil
 }
 
 // GetListClipByIDCoach implements ListClipRepository

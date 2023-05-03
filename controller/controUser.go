@@ -16,7 +16,7 @@ var modelsCus = models.Customer{}
 var modelsCoach = models.Coach{}
 
 func NewUserController(router *gin.Engine) {
-	ping := router.Group("/user")
+	ping := router.Group("wait_for_edit")
 	{
 		ping.POST("/login", loginPostBody)
 		ping.POST("/loginfb", loginFBPostBody)

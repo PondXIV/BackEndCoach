@@ -8,7 +8,7 @@ import (
 )
 
 type CourseRepository interface {
-	GetCourseAll() (*[]models.Course, error)
+	GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
@@ -19,6 +19,28 @@ type CourseRepository interface {
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseAll implements CourseRepository
+func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
+	courses := []models.Course{}
+	result := c.db.Where("bid IS NULL")
+	if CoID != 0 {
+		result.Where("coID=?", CoID)
+	}
+	if Cid != 0 {
+		result.Where("cid=?", Cid)
+	}
+	if Name != "" {
+		result.Where("name like ?", "%"+Name+"%")
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	result.Find(&courses)
+
+	return &courses, nil
 }
 
 // GetCourseByIDCus implements CourseRepository
@@ -34,7 +56,7 @@ func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
 // InsertCourse implements CourseRepository
 func (c courseDB) InsertCourse(Cid int, course *models.Course) (int64, error) {
 	course.CoID = 0
-	
+
 	//course.CoachID = Cid;
 	result := c.db.Create(&models.Course{
 		CoID:           course.CoID,
@@ -114,17 +136,6 @@ func (c courseDB) UpdateStatusCourse(CoID int, Status string) int64 {
 func (c courseDB) GetCourseByIDCoach(Cid int) (*[]models.Course, error) {
 	courses := []models.Course{}
 	result := c.db.Preload("DayOfCouses").Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &courses, nil
-}
-
-// GetCourseAll implements CourseRepository
-func (c courseDB) GetCourseAll() (*[]models.Course, error) {
-	courses := []models.Course{}
-	// result := c.db.Preload("Coach").Find(&courses)
-	result := c.db.Preload("Buying").Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

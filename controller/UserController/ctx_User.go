@@ -19,10 +19,12 @@ var mycourseService = userservice.NewMyCourseDataService()
 func NewCourseController(router *gin.Engine) {
 	nameCoach := router.Group("/user")
 	{
+		//เอา repo GetCourse ของเค้าได้
 		nameCoach.GET("/nameCourse/:name", GetCoachByName)
 		nameCoach.GET("/review/courseID/:coID", GetReviewByCoID)
 		nameCoach.GET("/customerID/:uid", Customer)
 		nameCoach.PUT("/customerID/:uid", updateCustomer)
+		//ฟ่ด repo GetCourse ของเค้า bid IS NULL นะ ต้องเอาอันอืน
 		nameCoach.GET("/course/customerID/:uid", GetMycourse)
 
 	}

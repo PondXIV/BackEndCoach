@@ -7,7 +7,7 @@ import (
 )
 
 type ListClipRepository interface {
-	GetListClipByIDCoach(Cid int) (*[]models.ListClip, error)
+	GetListClip(IcpID int, Cid int, Name string) (*[]models.ListClip, error)
 	InsertListClip(Cid int, Clip *models.ListClip) (int64, error)
 	UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error)
 }
@@ -49,13 +49,23 @@ func (l ListClipDB) InsertListClip(Cid int, Clip *models.ListClip) (int64, error
 }
 
 // GetListClipByIDCoach implements ListClipRepository
-func (l ListClipDB) GetListClipByIDCoach(Cid int) (*[]models.ListClip, error) {
+func (l ListClipDB) GetListClip(IcpID int, Cid int, Name string) (*[]models.ListClip, error) {
 	clips := []models.ListClip{}
-	result := l.db.Where("cid = ?", Cid).Find(&clips)
-
+	result := l.db.Where("icpID IS NOT NULL")
+	if IcpID != 0 {
+		result.Where("icpID=?", IcpID)
+	}
+	if Cid != 0 {
+		result.Where("cid=?", Cid)
+	}
+	if Name != "" {
+		result.Where("name like ?", "%"+Name+"%")
+	}
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	result.Find(&clips)
+
 	return &clips, nil
 }
 

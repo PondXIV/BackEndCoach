@@ -20,7 +20,7 @@ type coachDB struct {
 // Getcoach implements CoachRepository
 func (c coachDB) Getcoach(Id int, Name string) (*[]models.Coach, error) {
 	coachs := []models.Coach{}
-	var result *gorm.DB = c.db
+	var result *gorm.DB = c.db.Find(&coachs)
 	if Id != 0 {
 		result.Where("cid = ?", Id).Find(&coachs)
 	}

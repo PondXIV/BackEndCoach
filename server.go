@@ -7,6 +7,7 @@ import (
 	foodincoursecontooler "backEndGo/controller/CoachController/CourseController/Food_in_CourseContooler"
 	foodcontroller "backEndGo/controller/CoachController/FoodContoller"
 	usercontroller "backEndGo/controller/UserController"
+	coachctl "backEndGo/controller/UserController/Coach_CTL"
 	coursectl "backEndGo/controller/UserController/Course_CTL"
 	reviewctl "backEndGo/controller/UserController/Review_CTL"
 	"net/http"
@@ -29,5 +30,6 @@ func StartServer() {
 	clipcontroller.NewListClipController(router)
 	reviewctl.NewReviewController(router)
 	coursectl.NewCourseController(router)
+	coachctl.NewCoachController(router)
 	router.Run()
 }

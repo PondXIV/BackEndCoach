@@ -7,6 +7,8 @@ import (
 	foodincoursecontooler "backEndGo/controller/CoachController/CourseController/Food_in_CourseContooler"
 	foodcontroller "backEndGo/controller/CoachController/FoodContoller"
 	usercontroller "backEndGo/controller/UserController"
+	coursectl "backEndGo/controller/UserController/Course_CTL"
+	reviewctl "backEndGo/controller/UserController/Review_CTL"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,9 +23,11 @@ func StartServer() {
 	//controller.NewDemoController(router)
 	controller.NewUserController(router)
 	coursecontroller.NewCourseController(router)
-	usercontroller.NewCourseController(router)
+	usercontroller.NewUserController(router)
 	foodcontroller.NewListFoodController(router)
 	foodincoursecontooler.NewFoodController(router)
 	clipcontroller.NewListClipController(router)
+	reviewctl.NewReviewController(router)
+	coursectl.NewCourseController(router)
 	router.Run()
 }

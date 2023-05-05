@@ -7,8 +7,7 @@ import (
 )
 
 type UserDataService interface {
-	ServiceLogin(Email string, Password string, Type int) (*models.Coach, *models.Customer, error)
-	ServiceLoginNotType(Email string, Password string) (*models.Coach, *models.Customer, error)
+	ServiceLogin(Email string, Password string) (*models.Coach, *models.Customer, error)
 	ServiceLoginFB(FackbookID string) (*models.Coach, *models.Customer, error)
 	ServiceRegisterCus(cus *models.Customer) int64
 	ServiceRegisterCoach(coach *models.Coach) int64
@@ -81,19 +80,9 @@ func (UserData) ServiceRegisterCus(cus *models.Customer) int64 {
 }
 
 // LoginTwo implements ShowDataService
-func (s UserData) ServiceLoginNotType(Email string, Password string) (*models.Coach, *models.Customer, error) {
+func (s UserData) ServiceLogin(Email string, Password string) (*models.Coach, *models.Customer, error) {
 	repo := repository.NewUserRepository()
-	coach, cus, err := repo.LoginNotType(Email, Password)
-	if err != nil {
-		panic(err)
-	}
-	return coach, cus, nil
-}
-
-// Login implements ShowDataService
-func (s UserData) ServiceLogin(Email string, Password string, Type int) (*models.Coach, *models.Customer, error) {
-	repo := repository.NewUserRepository()
-	coach, cus, err := repo.Login(Email, Password, Type)
+	coach, cus, err := repo.Login(Email, Password)
 	if err != nil {
 		panic(err)
 	}

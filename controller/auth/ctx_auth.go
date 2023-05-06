@@ -77,8 +77,8 @@ func loginPostBody(ctx *gin.Context) {
 	coach, cus, err := userDateService.ServiceLogin(jsonDto.Email, jsonDto.Password)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"cid": nil,
-			"uid": nil,
+			"cid": 0,
+			"uid": 0,
 		})
 	}
 	if coach.Cid > 0 && cus.Uid > 0 {
@@ -89,17 +89,17 @@ func loginPostBody(ctx *gin.Context) {
 	} else if coach.Cid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
 			"cid": coach.Cid,
-			"uid": nil,
+			"uid": 0,
 		})
 	} else if cus.Uid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
+			"cid": 0,
 			"uid": cus.Uid,
 		})
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": nil,
+			"cid": 0,
+			"uid": 0,
 		})
 	}
 }

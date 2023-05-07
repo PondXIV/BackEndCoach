@@ -35,10 +35,11 @@ func (c custimerDB) UpdateUser(Uid int, customer *models.Customer) int64 {
 // UserByUid implements CustomerRepository
 func (c custimerDB) UserByUid(Uid int) (*models.Customer, error) {
 	users := models.Customer{}
-	result := c.db.Where("uid = ?", Uid).Find(&users)
-	if result.Error != nil {
-		return nil, result.Error
+	result := c.db.Find(&users)
+	if Uid != 0 {
+		result.Where("uid = ?", Uid).Find(&users)
 	}
+	result.Find(&users)
 	return &users, nil
 }
 

@@ -19,8 +19,8 @@ func NewUserController(router *gin.Engine) {
 		//เอา repo GetCourse ของเค้าได้
 		// nameCoach.GET("/nameCourse/:name", GetCoachByName)
 		//nameCoach.GET("/review/courseID/:coID", GetReviewByCoID)
-		nameCoach.GET("/customerID/:uid", Customer)
-		nameCoach.PUT("/customerID/:uid", updateCustomer)
+		nameCoach.GET("", Customer)
+		nameCoach.PUT("", updateCustomer)
 		//ฟ่ด repo GetCourse ของเค้า bid IS NULL นะ ต้องเอาอันอืน
 		// nameCoach.GET("/course/customerID/:uid", GetMycourse)
 
@@ -52,7 +52,7 @@ func updateCustomer(ctx *gin.Context) {
 }
 
 func Customer(ctx *gin.Context) {
-	cusID := ctx.Param("uid")
+	cusID := ctx.Query("uid")
 	uid, err := strconv.Atoi(cusID)
 	customer, err := customerService.ServiceGetUserByUid(uid)
 	if err != nil {

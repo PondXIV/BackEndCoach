@@ -1,7 +1,6 @@
 package main
 
 import (
-	"backEndGo/controller"
 	clipcontroller "backEndGo/controller/CoachController/ClipController"
 	coursecontroller "backEndGo/controller/CoachController/CourseController"
 	foodincoursecontooler "backEndGo/controller/CoachController/CourseController/Food_in_CourseContooler"
@@ -10,6 +9,7 @@ import (
 	coachctl "backEndGo/controller/UserController/Coach_CTL"
 	coursectl "backEndGo/controller/UserController/Course_CTL"
 	reviewctl "backEndGo/controller/UserController/Review_CTL"
+	auth "backEndGo/controller/auth"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +22,7 @@ func StartServer() {
 
 	})
 	//controller.NewDemoController(router)
-	controller.NewUserController(router)
+	auth.NewAuthController(router)
 	coursecontroller.NewCourseController(router)
 	usercontroller.NewUserController(router)
 	foodcontroller.NewListFoodController(router)

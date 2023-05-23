@@ -2,7 +2,7 @@ package foodcontroller
 
 import (
 	"backEndGo/models"
-	foodsv "backEndGo/service/CoachService/FoodSV"
+	foodsv "backEndGo/service/CoachService/FoodSV/Food_in_Coach"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -21,6 +21,7 @@ func NewListFoodController(router *gin.Engine) {
 		listFood.GET("", getListFoode)
 		listFood.POST("/coachID/:cid", insertListFood)
 		listFood.PUT("/foodID/:ifid", updateListFood)
+		listFood.DELETE("/foodID/:ifid", deleteListFood)
 	}
 
 }
@@ -115,6 +116,39 @@ func updateListFood(ctx *gin.Context) {
 	}
 
 }
+
+func deleteListFood(ctx *gin.Context) {
+	foodID := ctx.Param("ifid")
+
+	ifid, errs := strconv.Atoi(foodID)
+
+	if errs != nil {
+		fmt.Print(http.StatusBadRequest)
+
+		if http.StatusBadRequest == 400 {
+			error400(ctx)
+		}
+		//else {
+		// 	error500(ctx)
+		// }
+	} else {
+		rowsAffected, err := foodsv.NewDeleteListFoodDataService().SeviceDeleteListFood(ifid)
+		if err != nil {
+			error400(ctx)
+
+		} else {
+			if rowsAffected == 1 {
+				outputOne(ctx)
+
+			} else {
+				outputSoon(ctx)
+			}
+		}
+
+	}
+
+}
+
 func error400(ctx *gin.Context) {
 	ctx.JSON(http.StatusBadRequest, gin.H{
 		"code":   "400",

@@ -10,9 +10,20 @@ type ListClipRepository interface {
 	GetListClip(IcpID int, Cid int, Name string) (*[]models.ListClip, error)
 	InsertListClip(Cid int, Clip *models.ListClip) (int64, error)
 	UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error)
+	DeleteListClip(IcpID int) (int64, error)
 }
 type ListClipDB struct {
 	db *gorm.DB
+}
+
+// DeleteListClip implements ListClipRepository
+func (l ListClipDB) DeleteListClip(IcpID int) (int64, error) {
+	clipID := &models.ListClip{IcpID: uint(IcpID)}
+	result := l.db.Delete(clipID)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return result.RowsAffected, nil
 }
 
 // UpdateListClip implements ListClipRepository

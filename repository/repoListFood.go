@@ -14,9 +14,20 @@ type ListFoodRepository interface {
 	GetListFoodByID(Ifid int) (*models.ListFood, error)
 	InsertListFood(Cid int, food *models.ListFood) (int64, error)
 	UpdateListFood(Ifid int, food *models.ListFood) (int64, error)
+	DeleteListFood(Ifid int) (int64, error)
 }
 type LisFoodDB struct {
 	db *gorm.DB
+}
+
+// DeleteListFood implements ListFoodRepository
+func (l LisFoodDB) DeleteListFood(Ifid int) (int64, error) {
+	foodID := &models.ListFood{Ifid: uint(Ifid)}
+	result := l.db.Delete(foodID)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return result.RowsAffected, nil
 }
 
 // GetFood implements ListFoodRepository

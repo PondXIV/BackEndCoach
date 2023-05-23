@@ -21,7 +21,10 @@ func (UpdateListFoodData) ServiceUpdateListFood(Ifid int, food *models.ListFood)
 	}
 	for _, f := range *getAllFood {
 		if f.Name == food.Name {
-			return 0, nil
+			if f.Ifid != uint(Ifid) {
+				return 0, nil
+			}
+
 		}
 	}
 

@@ -1,4 +1,4 @@
-package foodincourse
+package foodsv
 
 import (
 	"backEndGo/models"

@@ -1,10 +1,11 @@
 package main
 
 import (
-	clipcontroller "backEndGo/controller/CoachController/ClipController"
-	coursecontroller "backEndGo/controller/CoachController/CourseController"
-	foodincoursecontooler "backEndGo/controller/CoachController/CourseController/Food_in_CourseContooler"
-	foodcontroller "backEndGo/controller/CoachController/FoodContoller"
+	ctrlListClip "backEndGo/controller/CoachController/ClipController/Clip_in_Coach"
+	ctrlCourse "backEndGo/controller/CoachController/CourseController"
+	ctrlListFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Coach"
+	ctrlFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Course"
+
 	usercontroller "backEndGo/controller/UserController"
 	coachctl "backEndGo/controller/UserController/Coach_CTL"
 	coursectl "backEndGo/controller/UserController/Course_CTL"
@@ -21,15 +22,20 @@ func StartServer() {
 		c.String(http.StatusOK, "Api is working...")
 
 	})
-	//controller.NewDemoController(router)
+
+	///Coach
+	ctrlListFood.NewListFoodController(router)
+	ctrlListClip.NewListClipController(router)
+	coachctl.NewCoachController(router)
+	//Course
+	ctrlCourse.NewCourseController(router)
+	ctrlFood.NewFoodController(router)
+
+	//User
 	auth.NewAuthController(router)
-	coursecontroller.NewCourseController(router)
 	usercontroller.NewUserController(router)
-	foodcontroller.NewListFoodController(router)
-	foodincoursecontooler.NewFoodController(router)
-	clipcontroller.NewListClipController(router)
 	reviewctl.NewReviewController(router)
 	coursectl.NewCourseController(router)
-	coachctl.NewCoachController(router)
+
 	router.Run()
 }

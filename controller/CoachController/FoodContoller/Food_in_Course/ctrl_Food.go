@@ -1,7 +1,7 @@
-package foodincoursecontooler
+package foodcontroller
 
 import (
-	foodincourse "backEndGo/service/CoachService/CourseSV/Food_in_Course"
+	foodincourse "backEndGo/service/CoachService/FoodSV/Food_in_Course"
 	"net/http"
 	"strconv"
 

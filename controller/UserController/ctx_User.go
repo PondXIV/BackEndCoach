@@ -20,7 +20,7 @@ func NewUserController(router *gin.Engine) {
 		// nameCoach.GET("/nameCourse/:name", GetCoachByName)
 		//nameCoach.GET("/review/courseID/:coID", GetReviewByCoID)
 		nameCoach.GET("", Customer)
-		nameCoach.PUT("", updateCustomer)
+		nameCoach.PUT(":uid", updateCustomer)
 		//ฟ่ด repo GetCourse ของเค้า bid IS NULL นะ ต้องเอาอันอืน
 		// nameCoach.GET("/course/customerID/:uid", GetMycourse)
 
@@ -30,24 +30,30 @@ func NewUserController(router *gin.Engine) {
 
 func updateCustomer(ctx *gin.Context) {
 	cusID := ctx.Param("uid")
-	uid, _ := strconv.Atoi(cusID)
+	uid, errs := strconv.Atoi(cusID)
+	//err := ctx.ShouldBindJSON(&modelsCustomer)
+	// fmt.Printf("%v", cus)
+	if errs != nil {
+		panic(errs)
+	}
+	// // process
 	err := ctx.ShouldBindJSON(&modelsCustomer)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		error400(ctx)
 	}
-	// // process
-	rowsAffected := updatecustomerService.ServiceUpdateCustomer(uid, &modelsCustomer)
+	rowsAffected, err := updatecustomerService.ServiceUpdateCustomer(uid, &modelsCustomer)
 
-	if rowsAffected == 1 {
-		ctx.JSON(http.StatusOK, gin.H{
-			"rowsAffected": "1",
-		})
+	if err != nil {
+		error400(ctx)
 
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"rowsAffected": "0",
-		})
+		if rowsAffected == 1 {
+			outputOne(ctx)
+
+		} else {
+			outputSoon(ctx)
+		}
 	}
 }
 
@@ -60,4 +66,30 @@ func Customer(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, customer)
+}
+
+func error400(ctx *gin.Context) {
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"code":   "400",
+		"result": "null",
+	})
+}
+func error500(ctx *gin.Context) {
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"code":   "500",
+		"result": "null",
+	})
+}
+
+func outputOne(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "1",
+	})
+}
+func outputSoon(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "0",
+	})
 }

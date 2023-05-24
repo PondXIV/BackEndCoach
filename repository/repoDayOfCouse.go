@@ -10,10 +10,32 @@ type DayOfCourseRepository interface {
 	DayOfCourseAll() (*[]models.DayOfCouse, error)
 	DayOfCourseByCoid(CoID int) (*[]models.DayOfCouse, error)
 	DayOfCourseByDid(Did int) (*models.DayOfCouse, error)
+	DayOfCourse(Did int, CoID int, Sequence int) (*[]models.DayOfCouse, error)
 	InsertDayOfCourse(CourseID uint, Days int) int
 }
 type DayOfCourseDB struct {
 	db *gorm.DB
+}
+
+// DayOfCourse implements DayOfCourseRepository
+func (d DayOfCourseDB) DayOfCourse(Did int, CoID int, Sequence int) (*[]models.DayOfCouse, error) {
+	days := []models.DayOfCouse{}
+	result := d.db.Preload("Foods").Preload("Clips").Order("sequence")
+	if Did != 0 {
+		result.Where("did = ?", Did)
+	}
+	if CoID != 0 {
+		result.Where("coID = ?", CoID)
+	}
+	if Sequence != 0 {
+		result.Where("sequence = ?", Sequence).Joins("Foods")
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	result.Find(&days)
+
+	return &days, nil
 }
 
 // DayOfCourseByDid implements DayOfCourseRepository

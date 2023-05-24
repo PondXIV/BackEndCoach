@@ -3,6 +3,7 @@ package main
 import (
 	ctrlListClip "backEndGo/controller/CoachController/ClipController/Clip_in_Coach"
 	ctrlCourse "backEndGo/controller/CoachController/CourseController"
+	ctrlDays "backEndGo/controller/CoachController/DaysController"
 	ctrlListFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Coach"
 	ctrlFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Course"
 
@@ -30,7 +31,7 @@ func StartServer() {
 	//Course
 	ctrlCourse.NewCourseController(router)
 	ctrlFood.NewFoodController(router)
-
+	ctrlDays.NewDayController(router)
 	//User
 	auth.NewAuthController(router)
 	usercontroller.NewUserController(router)

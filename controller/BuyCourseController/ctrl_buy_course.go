@@ -53,8 +53,11 @@ func buyPostBody(ctx *gin.Context) {
 		}
 
 	} else {
-		if rowsAffected == 1 {
-			outputOne(ctx)
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": rowsAffected,
+			})
 
 		} else {
 			outputSoon(ctx)

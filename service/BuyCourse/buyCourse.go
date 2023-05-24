@@ -3,7 +3,14 @@ package buycourse
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
+	"fmt"
 )
+
+var repoBuying = repository.NewBuyingRepository()
+var repoUser = repository.NewUserRepository()
+var repoCourse = repository.NewCourseRepository()
+var repoCustomer = repository.NewCustomerRepository()
+var repoDay = repository.NewDayOfCourseRepository()
 
 type BuyCourseDataService interface {
 	ServiceBuyCourse(CoID int, Buying *models.Buying) (int64, error)
@@ -14,27 +21,25 @@ type BuyCourseData struct {
 // ServiceBuyCourse implements BuyCourseDataService
 func (BuyCourseData) ServiceBuyCourse(CoID int, Buying *models.Buying) (int64, error) {
 
-	repo := repository.NewBuyingRepository()
-
-	bid, err := repo.BuyCourse(Buying)
+	bid, err := repoBuying.BuyCourse(Buying)
 	if err != nil {
 		return -1, err
 	}
 
-	repoCourse := repository.NewCourseRepository()
+	user := repoUser.GetUserID(int(Buying.CustomerID))
 
-	Price, err := repoCourse.InsertCourseByID(CoID, int(bid))
+	Price, courseID, Days, err := repoCourse.InsertCourseByID(CoID, int(bid))
+	sum := int64(Price) - int64(user.Price)
 
-	if err != nil {
-		return -1, err
+	rowsAffected := repoDay.InsertDayOfCourse(uint(courseID), Days)
+	if rowsAffected != 0 {
+		fmt.Print(sum)
 	}
-	if Price > 0 {
-		return 1, nil
-	} else if Price == 0 {
-		return 0, nil
-	} else {
-		return -1, nil
-	}
+	// updateMoney := repoCustomer.EditPrice(CoID,CoID)
+	// if updateMoney != 0 {
+
+	// }
+	return int64(courseID), nil
 }
 
 func NewBuyCourseDataService() BuyCourseDataService {

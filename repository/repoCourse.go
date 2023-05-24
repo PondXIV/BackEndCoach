@@ -16,14 +16,14 @@ type CourseRepository interface {
 	UpdateCourse(CoID int, course *models.Course) (int64, error)
 	InsertCourse(Cid int, course *models.Course) (int64, error)
 	GetCourseByIDCus(Uid int) (*[]models.Course, error)
-	InsertCourseByID(CoID int, Bid int) (int, error)
+	InsertCourseByID(CoID int, Bid int) (int, int, int, error)
 }
 type courseDB struct {
 	db *gorm.DB
 }
 
 // InsertCourseByID implements CourseRepository
-func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, error) {
+func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 	course := models.Course{}
 	getCourse := c.db.Where("coID = ?", CoID).Find(&course)
 	if getCourse.Error != nil {
@@ -46,10 +46,14 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, error) {
 		ExpirationDate: course.ExpirationDate,
 	})
 	if result.Error != nil {
-		return -1, result.Error
+		return -1, -1, -1, result.Error
 	}
-
-	return int(course.Price), nil
+	course2 := models.Course{}
+	getCourseLast := c.db.Order("coID DESC").Find(&course2)
+	if getCourseLast.Error != nil {
+		panic(getCourse.Error)
+	}
+	return int(course2.Price), int(course2.CoID), int(course2.Days), nil
 }
 
 // GetCourseAll implements CourseRepository

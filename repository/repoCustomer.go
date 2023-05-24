@@ -12,9 +12,21 @@ type CustomerRepository interface {
 	GetCustomerByID(Id int) (*models.Customer, error)
 	UserByUid(Uid int) (*models.Customer, error)
 	UpdateUser(Uid int, customer *models.Customer) (int64, error)
+	EditPrice(Uid int, Price int) (int64, error)
 }
 type custumerDB struct {
 	db *gorm.DB
+}
+
+// editMoney implements CustomerRepository
+func (c custumerDB) EditPrice(Uid int, Price int) (int64, error) {
+	result := c.db.Model(models.Customer{}).Where("uid = ?", Uid).Updates(
+		models.Customer{Price: uint(Price)})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+
+	return result.RowsAffected, nil
 }
 
 // UpdateUser implements CustomerRepository

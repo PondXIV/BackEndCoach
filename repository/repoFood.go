@@ -67,7 +67,7 @@ func (f FoodDB) InsertFood(Did int, Food *models.Food) (int64, error) {
 // GetListClipByIDDid implements FoodRepository
 func (f FoodDB) GetFood(Fid int, Ifid int, Did int) (*[]models.Food, error) {
 	foods := []models.Food{}
-	result := f.db.Where("ifid IS NOT NULL")
+	result := f.db.Where("fid IS NOT NULL")
 	if Fid != 0 {
 		result.Where("fid=?", Fid)
 	}

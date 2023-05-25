@@ -27,7 +27,7 @@ func (InsertListClipData) SeviceInsertListClip(Cid int, Clip *models.ListClip) (
 	}
 	RowsAffected, err := repoListClip.InsertListClip(Cid, Clip)
 	if err != nil {
-		return -1, err
+		return 3, err
 	}
 	if RowsAffected > 0 {
 		return 1, nil

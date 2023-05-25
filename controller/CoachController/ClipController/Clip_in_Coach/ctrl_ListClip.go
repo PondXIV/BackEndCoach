@@ -52,25 +52,18 @@ func insertListClip(ctx *gin.Context) {
 	// fmt.Printf("%v", cus)
 	if err != nil {
 		fmt.Print(http.StatusBadRequest)
-
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		}
-		// else {
-		// 	error500(ctx)
-		// }
 	}
 	rowsAffected, err := insertListClipDataService.SeviceInsertListClip(cid, &modelsListClip)
 	if err != nil {
 		if http.StatusBadRequest == 400 {
 			error400(ctx)
-		} else {
-			error500(ctx)
 		}
-
 	} else {
 		if rowsAffected == 1 {
-			outputOne(ctx)
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": rowsAffected,
+			})
 
 		} else {
 			outputSoon(ctx)
@@ -91,12 +84,6 @@ func updateListClip(ctx *gin.Context) {
 	if err != nil {
 		fmt.Print(http.StatusBadRequest)
 
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		}
-		//else {
-		// 	error500(ctx)
-		// }
 	} else {
 		rowsAffected, err := clipsv.NewUpdateListClipDataService().ServiceUpdateListClip(icpID, &modelsListClip)
 		if err != nil {
@@ -104,7 +91,10 @@ func updateListClip(ctx *gin.Context) {
 
 		} else {
 			if rowsAffected == 1 {
-				outputOne(ctx)
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": rowsAffected,
+				})
 
 			} else {
 				outputSoon(ctx)
@@ -121,13 +111,6 @@ func deleteListClip(ctx *gin.Context) {
 
 	if errs != nil {
 		fmt.Print(http.StatusBadRequest)
-
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		}
-		//else {
-		// 	error500(ctx)
-		// }
 	} else {
 		rowsAffected, err := clipsv.NewDeleteListClipDataService().SeviceDeleteListClip(icpID)
 		if err != nil {
@@ -135,7 +118,10 @@ func deleteListClip(ctx *gin.Context) {
 
 		} else {
 			if rowsAffected == 1 {
-				outputOne(ctx)
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": rowsAffected,
+				})
 
 			} else {
 				outputSoon(ctx)
@@ -148,22 +134,10 @@ func deleteListClip(ctx *gin.Context) {
 func error400(ctx *gin.Context) {
 	ctx.JSON(http.StatusBadRequest, gin.H{
 		"code":   "400",
-		"result": "null",
-	})
-}
-func error500(ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"code":   "500",
-		"result": "null",
+		"result": nil,
 	})
 }
 
-func outputOne(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"code":   "200",
-		"result": "1",
-	})
-}
 func outputSoon(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":   "200",

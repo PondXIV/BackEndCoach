@@ -56,24 +56,17 @@ func insertListFood(ctx *gin.Context) {
 	if err != nil {
 		fmt.Print(http.StatusBadRequest)
 
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		}
-		// else {
-		// 	error500(ctx)
-		// }
 	}
 	rowsAffected, err := insertListFoodDataService.SeviceInsertListFoodByID(cid, &modelsListFood)
 	if err != nil {
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		} else {
-			error500(ctx)
-		}
+		error400(ctx)
 
 	} else {
-		if rowsAffected == 1 {
-			outputOne(ctx)
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": rowsAffected,
+			})
 
 		} else {
 			outputSoon(ctx)
@@ -91,22 +84,17 @@ func updateListFood(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsListFood)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		fmt.Print(http.StatusBadRequest)
-
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		}
-		//else {
-		// 	error500(ctx)
-		// }
 	} else {
 		rowsAffected, err := updateListFoodDataService.ServiceUpdateListFood(ifid, &modelsListFood)
 		if err != nil {
 			error400(ctx)
 
 		} else {
-			if rowsAffected == 1 {
-				outputOne(ctx)
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": rowsAffected,
+				})
 
 			} else {
 				outputSoon(ctx)
@@ -123,22 +111,16 @@ func deleteListFood(ctx *gin.Context) {
 	ifid, errs := strconv.Atoi(foodID)
 
 	if errs != nil {
-		fmt.Print(http.StatusBadRequest)
-
-		if http.StatusBadRequest == 400 {
-			error400(ctx)
-		}
-		//else {
-		// 	error500(ctx)
-		// }
 	} else {
 		rowsAffected, err := foodsv.NewDeleteListFoodDataService().SeviceDeleteListFood(ifid)
 		if err != nil {
 			error400(ctx)
-
 		} else {
-			if rowsAffected == 1 {
-				outputOne(ctx)
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": rowsAffected,
+				})
 
 			} else {
 				outputSoon(ctx)
@@ -152,25 +134,13 @@ func deleteListFood(ctx *gin.Context) {
 func error400(ctx *gin.Context) {
 	ctx.JSON(http.StatusBadRequest, gin.H{
 		"code":   "400",
-		"result": "null",
-	})
-}
-func error500(ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"code":   "500",
-		"result": "null",
+		"result": nil,
 	})
 }
 
-func outputOne(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"code":   "200",
-		"result": "1",
-	})
-}
 func outputSoon(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":   "200",
-		"result": "0",
+		"result": 0,
 	})
 }

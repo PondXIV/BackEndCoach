@@ -1,4 +1,4 @@
-package foodsv
+package foodSV
 
 import (
 	"backEndGo/models"
@@ -11,17 +11,17 @@ type UpdateFoodDataService interface {
 type UpdateFoodData struct {
 }
 
-// ServiceUpdateListFood implements UpdateListFoodDataService
+// ServiceUpdateFood implements UpdateFoodDataService
 func (UpdateFoodData) ServiceUpdateFood(Fid int, food *models.Food) (int64, error) {
-	repoFood := repository.NewFoodRepository()
-	getAllFood, err := repoFood.GetFood(Fid, 0, 0)
+	repoLisFood := repository.NewFoodRepository()
+	getAllFood, err := repoLisFood.GetFood(0, food.ListFoodID, 0)
 
 	if err != nil {
 		panic(err)
 	}
 	for _, f := range *getAllFood {
-		if uint(f.ListFoodID) == uint(food.ListFoodID) {
-			if f.fid != uint(Fid) {
+		if f.ListFoodID == food.ListFoodID {
+			if f.Fid != uint(Fid) {
 				return 3, nil
 			}
 

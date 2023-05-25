@@ -1,7 +1,9 @@
 package foodcontroller
 
 import (
+	"backEndGo/models"
 	foodincourse "backEndGo/service/CoachService/FoodSV/Food_in_Course"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -9,11 +11,18 @@ import (
 )
 
 var foodSV = foodincourse.NewFoodDataService()
+var insertFoodDataService = foodincourse.NewInsertFoodDataService()
+var updateFoodDataService = foodincourse.NewUpdateFoodDataService()
+var deleteFoodDataService = foodincourse.NewDeleteFoodDataService()
+var modelsFood = models.Food{}
 
 func NewFoodController(router *gin.Engine) {
 	food := router.Group("/food")
 	{
 		food.GET("", getFood)
+		food.POST("/dayID/:did", insertFood)
+		food.PUT("/foodID/:fid", updateFood)
+		food.DELETE("/foodID/:fid", deleteFood)
 
 	}
 
@@ -34,4 +43,105 @@ func getFood(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, course)
 
+}
+func insertFood(ctx *gin.Context) {
+	dayID := ctx.Param("did")
+
+	did, errs := strconv.Atoi(dayID)
+	if errs != nil {
+		panic(errs)
+	}
+
+	err := ctx.ShouldBindJSON(&modelsFood)
+
+	if err != nil {
+		fmt.Print(http.StatusBadRequest)
+	}
+	rowsAffected, err := insertFoodDataService.SeviceInsertFood(did, &modelsFood)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			error400(ctx)
+		}
+
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": rowsAffected,
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
+	}
+
+}
+
+func updateFood(ctx *gin.Context) {
+	foodID := ctx.Param("fid")
+
+	fid, errs := strconv.Atoi(foodID)
+	if errs != nil {
+		panic(errs)
+	}
+	err := ctx.ShouldBindJSON(&modelsFood)
+	// fmt.Printf("%v", cus)
+	if err != nil {
+	} else {
+		rowsAffected, err := updateFoodDataService.ServiceUpdateFood(fid, &modelsFood)
+		if err != nil {
+			error400(ctx)
+
+		} else {
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": rowsAffected,
+				})
+
+			} else {
+				outputSoon(ctx)
+			}
+		}
+
+	}
+
+}
+func deleteFood(ctx *gin.Context) {
+	foodID := ctx.Param("fid")
+
+	fid, errs := strconv.Atoi(foodID)
+
+	if errs != nil {
+	} else {
+		rowsAffected, err := deleteFoodDataService.ServiceDeleteFood(fid)
+		if err != nil {
+			error400(ctx)
+		} else {
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": rowsAffected,
+				})
+
+			} else {
+				outputSoon(ctx)
+			}
+		}
+
+	}
+
+}
+
+func error400(ctx *gin.Context) {
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"code":   "400",
+		"result": nil,
+	})
+}
+func outputSoon(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": 0,
+	})
 }

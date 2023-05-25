@@ -50,7 +50,7 @@ func (f FoodDB) UpdateFood(Fid int, food *models.Food) (int64, error) {
 func (f FoodDB) InsertFood(Did int, Food *models.Food) (int64, error) {
 	result := f.db.Create(&models.Food{
 		Fid:          0,
-		ListFoodID:   int(Food.Fid),
+		ListFoodID:   int(Food.ListFoodID),
 		DayOfCouseID: uint(Did),
 		Time:         Food.Time,
 	})

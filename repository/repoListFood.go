@@ -9,9 +9,9 @@ import (
 
 type ListFoodRepository interface {
 	GetListFoodAll() (*[]models.ListFood, error)
-	GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error)
+
 	GetListFood(Ifid int, Cid int, Name string) (*[]models.ListFood, error)
-	GetListFoodByID(Ifid int) (*models.ListFood, error)
+
 	InsertListFood(Cid int, food *models.ListFood) (int64, error)
 	UpdateListFood(Ifid int, food *models.ListFood) (int64, error)
 	DeleteListFood(Ifid int) (int64, error)
@@ -51,16 +51,6 @@ func (l LisFoodDB) GetListFood(Ifid int, Cid int, Name string) (*[]models.ListFo
 	return &foods, nil
 }
 
-// GetListFoodByID implements ListFoodRepository
-func (l LisFoodDB) GetListFoodByID(Ifid int) (*models.ListFood, error) {
-	listFood := models.ListFood{}
-	result := l.db.Where("ifid = ?", Ifid).Find(&listFood)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &listFood, nil
-}
-
 // UpdateListFood implements ListFoodRepository
 func (l LisFoodDB) UpdateListFood(Ifid int, food *models.ListFood) (int64, error) {
 	result := l.db.Model(models.ListFood{}).Where("ifid = ?", Ifid).Updates(
@@ -73,17 +63,6 @@ func (l LisFoodDB) UpdateListFood(Ifid int, food *models.ListFood) (int64, error
 		fmt.Println("Update completed")
 	}
 	return result.RowsAffected, nil
-}
-
-// GetListFoodAllByIDCoach implements ListFoodRepository
-func (l LisFoodDB) GetListFoodAllByIDCoach(Cid int) (*[]models.ListFood, error) {
-	foods := []models.ListFood{}
-	result := l.db.Preload("listFood").Where("cid = ?", Cid).Find(&foods)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &foods, nil
 }
 
 // InsertListFood implements ListFoodRepository

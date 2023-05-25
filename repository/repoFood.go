@@ -2,40 +2,85 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
 
 type FoodRepository interface {
-	GetFoodByIDDid(Did int) (*[]models.Food, error)
-	GetFoodByIDCourse(CoID int) (*[]models.Food, error)
+	GetFood(Fid int, Ifid int, Did int) (*[]models.Food, error)
+	InsertFood(Did int, Food *models.Food) (int64, error)
+	UpdateFood(Fid int, food *models.Food) (int64, error)
+	DeleteFood(Fid int) (int64, error)
 }
 type FoodDB struct {
 	db *gorm.DB
 }
 
-// GetFoodByIDCourse implements FoodRepository
-func (f FoodDB) GetFoodByIDCourse(CoID int) (*[]models.Food, error) {
-	foods := []models.Food{}
-	//days := []models.DayOfCouse{}
-	// result := f.db.Preload("DayOfCouse").Joins("JOIN  listFood ON  listFood.ifid = Food.ifid ").Preload("ListFood").Joins("JOIN  DayOfCouse ON  DayOfCouse.did = Food.did  JOIN Course ON  DayOfCouse.coID = Course.coID  AND  Course.coID = ?", CoID).Find(&foods)
-	result := f.db.Preload("DayOfCouse").Preload("ListFood").Find(&foods)
+// DeleteFood implements FoodRepository
+func (f FoodDB) DeleteFood(Fid int) (int64, error) {
+	foodID := &models.Food{
+		Fid: uint(Fid),
+	}
+	result := f.db.Delete(foodID)
 	if result.Error != nil {
-		return nil, result.Error
+		return 0, result.Error
+	}
+	return result.RowsAffected, nil
+}
+
+// UpdateFood implements FoodRepository
+func (f FoodDB) UpdateFood(Fid int, food *models.Food) (int64, error) {
+	result := f.db.Model(models.Food{}).Where("fid = ?", Fid).Updates(
+		models.Food{
+			ListFoodID: food.ListFoodID,
+			Time:       food.Time,
+		})
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
+}
+
+// InsertFood implements FoodRepository
+func (f FoodDB) InsertFood(Did int, Food *models.Food) (int64, error) {
+	result := f.db.Create(&models.Food{
+		Fid:          0,
+		ListFoodID:   int(Food.Fid),
+		DayOfCouseID: uint(Did),
+		Time:         Food.Time,
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.Error != nil {
+		panic(result.Error)
 	}
 
-	return &foods, nil
+	return result.RowsAffected, nil
 }
 
 // GetListClipByIDDid implements FoodRepository
-func (f FoodDB) GetFoodByIDDid(Did int) (*[]models.Food, error) {
+func (f FoodDB) GetFood(Fid int, Ifid int, Did int) (*[]models.Food, error) {
 	foods := []models.Food{}
-	//days := []models.DayOfCouse{}
-	result := f.db.Preload("DayOfCouse").Preload("ListFood").Where("did = ?", Did).Find(&foods)
-
+	result := f.db.Where("ifid IS NOT NULL")
+	if Fid != 0 {
+		result.Where("fid=?", Fid)
+	}
+	if Ifid != 0 {
+		result.Where("ifid=?", Ifid)
+	}
+	if Did != 0 {
+		result.Where("did=?", Did)
+	}
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	result.Find(&foods)
 
 	return &foods, nil
 }

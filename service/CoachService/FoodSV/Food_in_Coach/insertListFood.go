@@ -22,7 +22,7 @@ func (InsertListFoodData) SeviceInsertListFoodByID(Cid int, food *models.ListFoo
 	}
 	for _, f := range *getAllFood {
 		if f.Name == food.Name {
-			return 0, nil
+			return 3, nil
 		}
 	}
 	RowsAffected, err := repoLisFood.InsertListFood(Cid, food)

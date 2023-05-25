@@ -13,28 +13,21 @@ var foodSV = foodincourse.NewFoodDataService()
 func NewFoodController(router *gin.Engine) {
 	food := router.Group("/food")
 	{
-		food.GET("/did/:did", getFoodByDid)
-		food.GET("/coID/:coID", getFoodByIDCourse)
+		food.GET("", getFood)
+
 	}
 
 }
-func getFoodByDid(ctx *gin.Context) {
-	daydid := ctx.Param("did")
+func getFood(ctx *gin.Context) {
+	qfid := ctx.Query("fid")
+	qifid := ctx.Query("ifid")
+	qdid := ctx.Query("did")
 
-	did, err := strconv.Atoi(daydid)
-	course, err := foodSV.SeviceGetFoodByDid(did)
-	if err != nil {
-		panic(err)
-	}
+	fid, err := strconv.Atoi(qfid)
+	ifid, err := strconv.Atoi(qifid)
+	did, err := strconv.Atoi(qdid)
 
-	ctx.JSON(http.StatusOK, course)
-
-}
-func getFoodByIDCourse(ctx *gin.Context) {
-	daydid := ctx.Param("coID")
-
-	coID, err := strconv.Atoi(daydid)
-	course, err := foodSV.SeviceGetFoodByIDCourse(coID)
+	course, err := foodSV.SeviceGetFood(fid, ifid, did)
 	if err != nil {
 		panic(err)
 	}

@@ -43,7 +43,7 @@ func (c ClipDB) InsertClip(Did int, Clip *models.Clip) (int64, error) {
 	result := c.db.Create(&models.Clip{
 		CpID:         0,
 		ListClipID:   Clip.ListClipID,
-		DayOfCouseID: Clip.DayOfCouseID,
+		DayOfCouseID: uint(Did),
 		Status:       Clip.Status,
 	})
 	if result.Error != nil {

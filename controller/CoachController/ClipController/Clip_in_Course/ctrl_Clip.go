@@ -73,6 +73,7 @@ func insertClip(ctx *gin.Context) {
 	}
 
 }
+
 func updateClip(ctx *gin.Context) {
 	clipID := ctx.Param("cpID")
 
@@ -105,6 +106,7 @@ func updateClip(ctx *gin.Context) {
 	}
 
 }
+
 func deleteClip(ctx *gin.Context) {
 	clipID := ctx.Param("cpID")
 

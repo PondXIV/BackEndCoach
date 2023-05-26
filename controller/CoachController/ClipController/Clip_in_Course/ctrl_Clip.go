@@ -58,13 +58,16 @@ func insertClip(ctx *gin.Context) {
 	rowsAffected, err := insertClipDataService.SeviceInsertClip(did, &modelsClip)
 	if err != nil {
 		if http.StatusBadRequest == 400 {
-			error400(ctx)
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
 		}
 	} else {
 		if rowsAffected == 1 {
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":   "200",
-				"result": rowsAffected,
+				"result": strconv.Itoa(int(rowsAffected)),
 			})
 
 		} else {
@@ -89,13 +92,16 @@ func updateClip(ctx *gin.Context) {
 	} else {
 		rowsAffected, err := updateClipDataService.ServiceUpdateClip(cpID, &modelsClip)
 		if err != nil {
-			error400(ctx)
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
 
 		} else {
 			if rowsAffected == 1 {
 				ctx.JSON(http.StatusOK, gin.H{
 					"code":   "200",
-					"result": rowsAffected,
+					"result": strconv.Itoa(int(rowsAffected)),
 				})
 
 			} else {
@@ -117,13 +123,16 @@ func deleteClip(ctx *gin.Context) {
 	} else {
 		rowsAffected, err := deleteClipDataService.SeviceDeleteClip(cpID)
 		if err != nil {
-			error400(ctx)
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
 
 		} else {
 			if rowsAffected == 1 {
 				ctx.JSON(http.StatusOK, gin.H{
 					"code":   "200",
-					"result": rowsAffected,
+					"result": strconv.Itoa(int(rowsAffected)),
 				})
 
 			} else {
@@ -133,13 +142,6 @@ func deleteClip(ctx *gin.Context) {
 
 	}
 
-}
-
-func error400(ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"code":   "400",
-		"result": nil,
-	})
 }
 
 func outputSoon(ctx *gin.Context) {

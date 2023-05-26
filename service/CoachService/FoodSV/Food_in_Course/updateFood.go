@@ -22,7 +22,7 @@ func (UpdateFoodData) ServiceUpdateFood(Fid int, food *models.Food) (int64, erro
 	for _, f := range *getAllFood {
 		if f.ListFoodID == food.ListFoodID {
 			if f.Fid != uint(Fid) {
-				return 3, nil
+				return 14, nil
 			}
 
 		}

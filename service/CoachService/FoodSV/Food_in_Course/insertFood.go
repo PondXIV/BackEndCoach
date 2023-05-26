@@ -22,7 +22,7 @@ func (InsertFoodData) SeviceInsertFood(Did int, food *models.Food) (int64, error
 	}
 	for _, f := range *getAllFood {
 		if uint(f.ListFoodID) == uint(food.ListFoodID) {
-			return 3, nil
+			return 14, nil
 		}
 	}
 	RowsAffected, err := repoFood.InsertFood(Did, food)

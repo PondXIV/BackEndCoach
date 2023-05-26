@@ -16,7 +16,7 @@ func (DeleteClipData) SeviceDeleteClip(CpID int) (int64, error) {
 	repo := repository.NewClipRepository()
 	RowsAffected, err := repo.DeleteClip(CpID)
 	if err != nil {
-		return 3, err
+		return -1, err
 	}
 	if RowsAffected > 0 {
 		return 1, nil

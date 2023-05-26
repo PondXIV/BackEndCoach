@@ -22,12 +22,12 @@ func (InsertListClipData) SeviceInsertListClip(Cid int, Clip *models.ListClip) (
 	}
 	for _, c := range *getAllClip {
 		if c.Name == Clip.Name {
-			return 0, nil
+			return 14, nil
 		}
 	}
 	RowsAffected, err := repoListClip.InsertListClip(Cid, Clip)
 	if err != nil {
-		return 3, err
+		return -1, err
 	}
 	if RowsAffected > 0 {
 		return 1, nil

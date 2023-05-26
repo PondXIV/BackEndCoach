@@ -60,14 +60,17 @@ func insertFood(ctx *gin.Context) {
 	rowsAffected, err := insertFoodDataService.SeviceInsertFood(did, &modelsFood)
 	if err != nil {
 		if http.StatusBadRequest == 400 {
-			error400(ctx)
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
 		}
 
 	} else {
 		if rowsAffected >= 1 {
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":   "200",
-				"result": rowsAffected,
+				"result": strconv.Itoa(int(rowsAffected)),
 			})
 
 		} else {
@@ -90,13 +93,16 @@ func updateFood(ctx *gin.Context) {
 	} else {
 		rowsAffected, err := updateFoodDataService.ServiceUpdateFood(fid, &modelsFood)
 		if err != nil {
-			error400(ctx)
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
 
 		} else {
 			if rowsAffected >= 1 {
 				ctx.JSON(http.StatusOK, gin.H{
 					"code":   "200",
-					"result": rowsAffected,
+					"result": strconv.Itoa(int(rowsAffected)),
 				})
 
 			} else {
@@ -116,12 +122,15 @@ func deleteFood(ctx *gin.Context) {
 	} else {
 		rowsAffected, err := deleteFoodDataService.ServiceDeleteFood(fid)
 		if err != nil {
-			error400(ctx)
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
 		} else {
 			if rowsAffected >= 1 {
 				ctx.JSON(http.StatusOK, gin.H{
 					"code":   "200",
-					"result": rowsAffected,
+					"result": strconv.Itoa(int(rowsAffected)),
 				})
 
 			} else {
@@ -133,15 +142,9 @@ func deleteFood(ctx *gin.Context) {
 
 }
 
-func error400(ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"code":   "400",
-		"result": nil,
-	})
-}
 func outputSoon(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":   "200",
-		"result": 0,
+		"result": "0",
 	})
 }

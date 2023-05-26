@@ -16,7 +16,7 @@ func (DeleteListClipData) SeviceDeleteListClip(IcpID int) (int64, error) {
 	repo := repository.NewListClipRepository()
 	RowsAffected, err := repo.DeleteListClip(IcpID)
 	if err != nil {
-		return 3, err
+		return -1, err
 	}
 	if RowsAffected > 0 {
 		return 1, nil

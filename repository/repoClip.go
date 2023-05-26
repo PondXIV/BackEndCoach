@@ -19,7 +19,7 @@ type ClipDB struct {
 // GetClip implements ClipRepository
 func (c ClipDB) GetClip(CpID int, IcpID int, Did int) (*[]models.Clip, error) {
 	clips := []models.Clip{}
-	result := c.db.Where("cpID IS NOT NULL")
+	result := c.db.Where("")
 	if CpID != 0 {
 		result.Where("cpID=?", CpID)
 	}
@@ -58,7 +58,7 @@ func (c ClipDB) InsertClip(Did int, Clip *models.Clip) (int64, error) {
 
 // UpdateClip implements ClipRepository
 func (c ClipDB) UpdateClip(CpID int, Clip *models.Clip) (int64, error) {
-	result := c.db.Model(models.ListClip{}).Where("cpID = ?", CpID).Updates(
+	result := c.db.Model(models.Clip{}).Where("cpID = ?", CpID).Updates(
 		models.Clip{
 			ListClipID: Clip.ListClipID,
 			Status:     Clip.Status,

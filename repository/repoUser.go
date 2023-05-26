@@ -11,9 +11,20 @@ type UserRepository interface {
 	LoginFB(fackbookID string) (*models.Coach, *models.Customer, error)
 	RegisterCus(cus *models.Customer) int64
 	RegisterCoach(coach *models.Coach) int64
+	GetUserID(Uid int) *models.Customer
 }
 type userDB struct {
 	db *gorm.DB
+}
+
+// GetUserID implements UserRepository
+func (u userDB) GetUserID(Uid int) *models.Customer {
+	customer := models.Customer{}
+	result := u.db.Where("uid = ?", Uid).Find(&customer)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	return &customer
 }
 
 // UserByUid implements UserRepository

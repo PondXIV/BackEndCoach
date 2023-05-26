@@ -23,7 +23,7 @@ func (UpdateListClipData) ServiceUpdateListClip(IcpID int, clip *models.ListClip
 
 		if c.Name == clip.Name {
 			if c.IcpID != uint(IcpID) {
-				return 0, nil
+				return 14, nil
 			}
 
 		}
@@ -32,7 +32,7 @@ func (UpdateListClipData) ServiceUpdateListClip(IcpID int, clip *models.ListClip
 
 	RowsAffected, err := repoListClip.UpdateListClip(IcpID, clip)
 	if err != nil {
-		return -1, err
+		return 14, err
 	}
 	if RowsAffected > 0 {
 		return 1, nil

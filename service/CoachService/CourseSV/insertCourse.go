@@ -7,6 +7,7 @@ import (
 
 type InsertCourseDataService interface {
 	ServiceInsertCourse(Cid int, course *models.Course) (int64, error)
+
 }
 type CourseDataInsert struct {
 }
@@ -14,7 +15,6 @@ type CourseDataInsert struct {
 // ServiceInsertCourse implements InsertCourseDataService
 func (CourseDataInsert) ServiceInsertCourse(Cid int, course *models.Course) (int64, error) {
 
-	
 	repoCourse := repository.NewCourseRepository()
 	//repoDayOfCourse := repository.NewDayOfCourseRepository()
 	RowsAffected, err := repoCourse.InsertCourse(Cid, course)

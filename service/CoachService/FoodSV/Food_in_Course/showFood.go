@@ -1,4 +1,4 @@
-package foodsv
+package foodSV
 
 import (
 	"backEndGo/models"
@@ -6,27 +6,15 @@ import (
 )
 
 type ShowFoodDataService interface {
-	SeviceGetFoodByDid(Did int) (*[]models.Food, error)
-	SeviceGetFoodByIDCourse(CoID int) (*[]models.Food, error)
+	SeviceGetFood(Fid int, Ifid int, Did int) (*[]models.Food, error)
 }
 type FoodData struct {
 }
 
-// GetFoodByIDCourse implements ShowFoodDataService
-func (FoodData) SeviceGetFoodByIDCourse(CoID int) (*[]models.Food, error) {
-	repo := repository.NewFoodRepository()
-	foods, err := repo.GetFoodByIDCourse(CoID)
-
-	if err != nil {
-		panic(err)
-	}
-	return foods, nil
-}
-
 // SeviceGetFoodByDid implements ShowFoodDataService
-func (FoodData) SeviceGetFoodByDid(Did int) (*[]models.Food, error) {
+func (FoodData) SeviceGetFood(Fid int, Ifid int, Did int) (*[]models.Food, error) {
 	repo := repository.NewFoodRepository()
-	foods, err := repo.GetFoodByIDDid(Did)
+	foods, err := repo.GetFood(Fid, Ifid, Did)
 
 	//food, err := repository.NewDayOfCourseRepository().DayOfCourseByDid(foods.did)
 	if err != nil {

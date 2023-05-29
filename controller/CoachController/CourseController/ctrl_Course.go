@@ -59,13 +59,24 @@ func updateStatusCourse(ctx *gin.Context) {
 	}
 	// // process
 	rowsAffected := updatecourseDateService.ServiceUpdateStatusCourse(jsonDto.CoID, jsonDto.Status)
-	if rowsAffected == 1 {
-		ctx.JSON(http.StatusOK, models.Course{Status: jsonDto.Status})
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
 
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"Status": "191",
-		})
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
 	}
 }
 func updateCourse(ctx *gin.Context) {
@@ -79,17 +90,27 @@ func updateCourse(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCourse)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		error400(ctx)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 	}
 	// // process
 	rowsAffected, err := updatecourseDateService.ServiceUpdateCourse(coID, &modelsCourse)
-
 	if err != nil {
-		error400(ctx)
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
 
 	} else {
-		if rowsAffected == 1 {
-			outputOne(ctx)
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
 
 		} else {
 			outputSoon(ctx)
@@ -106,34 +127,32 @@ func insertCourse(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCourse)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		error400(ctx)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 	}
 	rowsAffected, err := insertCourseDataService.ServiceInsertCourse(cid, &modelsCourse)
 	if err != nil {
-		error400(ctx)
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
 
 	} else {
-		if rowsAffected == 1 {
-			outputOne(ctx)
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
 
 		} else {
 			outputSoon(ctx)
 		}
 	}
 
-}
-
-func error400(ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"code":   "400",
-		"result": "null",
-	})
-}
-func error500(ctx *gin.Context) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"code":   "500",
-		"result": "null",
-	})
 }
 
 func outputOne(ctx *gin.Context) {

@@ -3,7 +3,6 @@ package foodcontroller
 import (
 	"backEndGo/models"
 	foodsv "backEndGo/service/CoachService/FoodSV/Food_in_Coach"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -54,7 +53,10 @@ func insertListFood(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsListFood)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		fmt.Print(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 
 	}
 	rowsAffected, err := insertListFoodDataService.SeviceInsertListFoodByID(cid, &modelsListFood)
@@ -87,6 +89,10 @@ func updateListFood(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsListFood)
 	// fmt.Printf("%v", cus)
 	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 	} else {
 		rowsAffected, err := updateListFoodDataService.ServiceUpdateListFood(ifid, &modelsListFood)
 		if err != nil {

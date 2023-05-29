@@ -53,7 +53,10 @@ func insertClip(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsClip)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		fmt.Print(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 	}
 	rowsAffected, err := insertClipDataService.SeviceInsertClip(did, &modelsClip)
 	if err != nil {
@@ -87,8 +90,10 @@ func updateClip(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsClip)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		fmt.Print(http.StatusBadRequest)
-
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 	} else {
 		rowsAffected, err := updateClipDataService.ServiceUpdateClip(cpID, &modelsClip)
 		if err != nil {

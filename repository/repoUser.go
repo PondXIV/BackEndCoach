@@ -9,8 +9,8 @@ import (
 type UserRepository interface {
 	Login(Email string, Password string) (*models.Coach, *models.Customer, error)
 	LoginFB(fackbookID string) (*models.Coach, *models.Customer, error)
-	RegisterCus(cus *models.Customer) int64
-	RegisterCoach(coach *models.Coach) int64
+	RegisterCus(cus *models.Customer) (int64, error)
+	RegisterCoach(coach *models.Coach) (int64, error)
 	GetUserID(Uid int) *models.Customer
 }
 type userDB struct {
@@ -48,17 +48,36 @@ func (u userDB) LoginFB(fackbookID string) (*models.Coach, *models.Customer, err
 }
 
 // registerCoach implements UserRepository
-func (u userDB) RegisterCoach(coach *models.Coach) int64 {
-	coach.Cid = 0
-	result := u.db.Create(&coach)
+func (u userDB) RegisterCoach(coach *models.Coach) (int64, error) {
+	result := u.db.Create(models.Coach{
+		Cid:           0,
+		Username:      coach.Username,
+		Password:      coach.Password,
+		Email:         coach.Email,
+		FullName:      coach.FullName,
+		Birthday:      coach.Birthday,
+		Gender:        coach.Gender,
+		Phone:         coach.Phone,
+		Image:         coach.Image,
+		Qualification: coach.Qualification,
+		Property:      coach.Property,
+		FacebookID:    "",
+		Price:         100,
+		Buyings:       []models.Buying{},
+		Chats:         []models.Chat{},
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
 	if result.Error != nil {
 		panic(result.Error)
 	}
-	return result.RowsAffected
+
+	return result.RowsAffected, nil
 }
 
 // register implements UserRepository
-func (u userDB) RegisterCus(cus *models.Customer) int64 {
+func (u userDB) RegisterCus(cus *models.Customer) (int64, error) {
 
 	cus.Uid = 0
 	result := u.db.Create(&cus)
@@ -66,7 +85,7 @@ func (u userDB) RegisterCus(cus *models.Customer) int64 {
 		panic(result.Error)
 	}
 
-	return result.RowsAffected
+	return result.RowsAffected, nil
 }
 
 // LoginTwo implements UserRepository

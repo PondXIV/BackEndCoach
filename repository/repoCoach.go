@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -11,10 +12,24 @@ type CoachRepository interface {
 	GetCoachByID(Id int) (*[]models.Coach, error)
 	GetCoachByName(Name string) (*[]models.Coach, error)
 	Getcoach(Id int, Name string) (*[]models.Coach, error)
+	UpdateCoach(Cid int, coach *models.Coach) (int64, error)
 }
 
 type coachDB struct {
 	db *gorm.DB
+}
+
+// UpdateCoach implements CoachRepository.
+func (c coachDB) UpdateCoach(Cid int, coach *models.Coach) (int64, error) {
+	result := c.db.Model(models.Coach{}).Where("cid = ?", Cid).Updates(&coach)
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
 }
 
 // Getcoach implements CoachRepository

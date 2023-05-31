@@ -4,6 +4,7 @@ import (
 	dto "backEndGo/DTO"
 	"backEndGo/models"
 	"backEndGo/service"
+	coachsv "backEndGo/service/CoachService/CoachSV"
 	"fmt"
 	"strconv"
 
@@ -13,6 +14,7 @@ import (
 )
 
 var userDateService = service.NewUserDataService()
+var updateCoachService = coachsv.NewUpdateCoachDataService()
 var modelsCus = models.Customer{}
 var modelsCoach = models.Coach{}
 
@@ -21,8 +23,9 @@ func NewAuthController(router *gin.Engine) {
 	{
 		auth.POST("/login", loginPostBody)
 		auth.POST("/loginfb", loginFBPostBody)
-		auth.POST("/registerCus", registerCus)
-		auth.POST("/registerCoach", registerCoach)
+		auth.POST("/Cus", registerCus)
+		auth.POST("/Coach", registerCoach)
+		auth.PUT("/Coach/:cid", updateCoach)
 	}
 
 }
@@ -189,4 +192,48 @@ func registerCoach(ctx *gin.Context) {
 			"uid":  "0",
 		})
 	}
+}
+
+func updateCoach(ctx *gin.Context) {
+	coachID := ctx.Param("cid")
+
+	cid, errs := strconv.Atoi(coachID)
+	if errs != nil {
+		panic(errs)
+	}
+	err := ctx.ShouldBindJSON(&modelsCoach)
+	// fmt.Printf("%v", cus)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
+	} else {
+		rowsAffected, err := updateCoachService.ServiceUpdateCoach(cid, &modelsCoach)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+
+		} else {
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
+
+			} else {
+				outputSoon(ctx)
+			}
+		}
+
+	}
+
+}
+func outputSoon(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "0",
+	})
 }

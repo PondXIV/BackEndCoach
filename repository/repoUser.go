@@ -49,23 +49,8 @@ func (u userDB) LoginFB(fackbookID string) (*models.Coach, *models.Customer, err
 
 // registerCoach implements UserRepository
 func (u userDB) RegisterCoach(coach *models.Coach) (int64, error) {
-	result := u.db.Create(models.Coach{
-		Cid:           0,
-		Username:      coach.Username,
-		Password:      coach.Password,
-		Email:         coach.Email,
-		FullName:      coach.FullName,
-		Birthday:      coach.Birthday,
-		Gender:        coach.Gender,
-		Phone:         coach.Phone,
-		Image:         coach.Image,
-		Qualification: coach.Qualification,
-		Property:      coach.Property,
-		FacebookID:    "",
-		Price:         100,
-		Buyings:       []models.Buying{},
-		Chats:         []models.Chat{},
-	})
+	coach.Cid = 0
+	result := u.db.Create(&coach)
 	if result.Error != nil {
 		return -1, result.Error
 	}
@@ -81,6 +66,9 @@ func (u userDB) RegisterCus(cus *models.Customer) (int64, error) {
 
 	cus.Uid = 0
 	result := u.db.Create(&cus)
+	if result.Error != nil {
+		return -1, result.Error
+	}
 	if result.Error != nil {
 		panic(result.Error)
 	}

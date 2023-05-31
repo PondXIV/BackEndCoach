@@ -67,9 +67,9 @@ func (UserData) ServiceRegisterCus(cus *models.Customer) (int64, error) {
 	}
 	for _, c := range *getAllCus {
 		if c.Email == cus.Email {
-			return 0, nil
-		} else if c.Phone == cus.Phone {
-			return 0, nil
+			if c.Phone == cus.Phone {
+				return 0, nil
+			}
 		}
 	}
 	RowsAffected, err := repoRegister.RegisterCus(cus)

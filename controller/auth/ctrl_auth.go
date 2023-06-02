@@ -4,7 +4,9 @@ import (
 	dto "backEndGo/DTO"
 	"backEndGo/models"
 	"backEndGo/service"
+	coachsv "backEndGo/service/CoachService/CoachSV"
 	"fmt"
+	"strconv"
 
 	"net/http"
 
@@ -12,6 +14,7 @@ import (
 )
 
 var userDateService = service.NewUserDataService()
+var updateCoachService = coachsv.NewUpdateCoachDataService()
 var modelsCus = models.Customer{}
 var modelsCoach = models.Coach{}
 
@@ -20,8 +23,9 @@ func NewAuthController(router *gin.Engine) {
 	{
 		auth.POST("/login", loginPostBody)
 		auth.POST("/loginfb", loginFBPostBody)
-		auth.POST("/registerCus", registerCus)
-		auth.POST("/registerCoach", registerCoach)
+		auth.POST("/Cus", registerCus)
+		auth.POST("/Coach", registerCoach)
+		auth.PUT("/Coach/:cid", updateCoach)
 	}
 
 }
@@ -36,30 +40,37 @@ func loginFBPostBody(ctx *gin.Context) {
 
 	coach, cus, err := userDateService.ServiceLoginFB(jsonDto.FacebookID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"cid": nil,
-			"uid": nil,
-		})
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code": err.Error(),
+				"cid":  "0",
+				"uid":  "0",
+			})
+		}
 	}
 	if coach.Cid > 0 && cus.Uid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": coach.Cid,
-			"uid": cus.Uid,
+			"code": "พบสมาชิก",
+			"cid":  strconv.Itoa(int(coach.Cid)),
+			"uid":  strconv.Itoa(int(cus.Uid)),
 		})
 	} else if coach.Cid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": coach.Cid,
-			"uid": nil,
+			"code": "พบสมาชิก",
+			"cid":  strconv.Itoa(int(coach.Cid)),
+			"uid":  "0",
 		})
 	} else if cus.Uid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": cus.Uid,
+			"code": "พบสมาชิก",
+			"cid":  "0",
+			"uid":  strconv.Itoa(int(cus.Uid)),
 		})
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": nil,
+			"code": "ไม่พบสมาชิก",
+			"cid":  "0",
+			"uid":  "0",
 		})
 	}
 }
@@ -76,30 +87,37 @@ func loginPostBody(ctx *gin.Context) {
 	//coach, cus, err := userDateService.ServiceLogin(jsonDto.Email, jsonDto.Password, jsonDto.Type)
 	coach, cus, err := userDateService.ServiceLogin(jsonDto.Email, jsonDto.Password)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"cid": 0,
-			"uid": 0,
-		})
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code": err.Error(),
+				"cid":  "0",
+				"uid":  "0",
+			})
+		}
 	}
 	if coach.Cid > 0 && cus.Uid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": coach.Cid,
-			"uid": cus.Uid,
+			"code": "พบสมาชิก",
+			"cid":  strconv.Itoa(int(coach.Cid)),
+			"uid":  strconv.Itoa(int(cus.Uid)),
 		})
 	} else if coach.Cid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": coach.Cid,
-			"uid": 0,
+			"code": "พบสมาชิก",
+			"cid":  strconv.Itoa(int(coach.Cid)),
+			"uid":  "0",
 		})
 	} else if cus.Uid > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": 0,
-			"uid": cus.Uid,
+			"code": "พบสมาชิก",
+			"cid":  "0",
+			"uid":  strconv.Itoa(int(cus.Uid)),
 		})
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": 0,
-			"uid": 0,
+			"code": "ไม่พบสมาชิก",
+			"cid":  "0",
+			"uid":  "0",
 		})
 	}
 }
@@ -108,37 +126,114 @@ func registerCus(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCus)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code": err.Error(),
+				"cid":  "0",
+				"uid":  "0",
+			})
+		}
 	}
-	RowsAffected := userDateService.ServiceRegisterCus(&modelsCus)
-
+	RowsAffected, err := userDateService.ServiceRegisterCus(&modelsCus)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code": err.Error(),
+				"cid":  "0",
+				"uid":  "0",
+			})
+		}
+	}
 	if RowsAffected > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": modelsCus.Uid,
+			"code": "สมัครสมาชิกสำเร็จ",
+			"cid":  "0",
+			"uid":  strconv.Itoa(int(modelsCus.Uid)),
 		})
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": nil,
+			"code": "สมัครสมาชิกไม่สำเร็จ",
+			"cid":  "0",
+			"uid":  "0",
 		})
 	}
 }
 func registerCoach(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsCoach)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code": err.Error(),
+				"cid":  "0",
+				"uid":  "0",
+			})
+		}
 	}
-	RowsAffected := userDateService.ServiceRegisterCoach(&modelsCoach)
+	RowsAffected, err := userDateService.ServiceRegisterCoach(&modelsCoach)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code": err.Error(),
+				"cid":  "0",
+				"uid":  "0",
+			})
+		}
+	}
 	if RowsAffected > 0 {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": modelsCus.Uid,
+			"code": "สมัครสมาชิกสำเร็จ",
+			"cid":  strconv.Itoa(int(modelsCoach.Cid)),
+			"uid":  "0",
 		})
 	} else {
 		ctx.JSON(http.StatusOK, gin.H{
-			"cid": nil,
-			"uid": nil,
+			"code": "สมัครสมาชิกไม่สำเร็จ",
+			"cid":  "0",
+			"uid":  "0",
 		})
 	}
+}
+
+func updateCoach(ctx *gin.Context) {
+	coachID := ctx.Param("cid")
+
+	cid, errs := strconv.Atoi(coachID)
+	if errs != nil {
+		panic(errs)
+	}
+	err := ctx.ShouldBindJSON(&modelsCoach)
+	// fmt.Printf("%v", cus)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
+	} else {
+		rowsAffected, err := updateCoachService.ServiceUpdateCoach(cid, &modelsCoach)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+
+		} else {
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
+
+			} else {
+				outputSoon(ctx)
+			}
+		}
+
+	}
+
+}
+func outputSoon(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "0",
+	})
 }

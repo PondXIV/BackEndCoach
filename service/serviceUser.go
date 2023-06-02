@@ -9,8 +9,8 @@ import (
 type UserDataService interface {
 	ServiceLogin(Email string, Password string) (*models.Coach, *models.Customer, error)
 	ServiceLoginFB(FackbookID string) (*models.Coach, *models.Customer, error)
-	ServiceRegisterCus(cus *models.Customer) int64
-	ServiceRegisterCoach(coach *models.Coach) int64
+	ServiceRegisterCus(cus *models.Customer) (int64, error)
+	ServiceRegisterCoach(coach *models.Coach) (int64, error)
 }
 type UserData struct {
 }
@@ -28,7 +28,7 @@ func (UserData) ServiceLoginFB(FackbookID string) (*models.Coach, *models.Custom
 var repoCus = repository.NewCustomerRepository()
 
 // ServiceRegisterCoach implements UserDataService
-func (UserData) ServiceRegisterCoach(coach *models.Coach) int64 {
+func (UserData) ServiceRegisterCoach(coach *models.Coach) (int64, error) {
 	repoCoach := repository.NewCoachRepository()
 	repoRegister := repository.NewUserRepository()
 	getAllCoach, err := repoCoach.GetCoachAll()
@@ -38,44 +38,50 @@ func (UserData) ServiceRegisterCoach(coach *models.Coach) int64 {
 	}
 	for _, c := range *getAllCoach {
 		if c.Email == coach.Email {
-			return 0
-		} else if c.Phone == coach.Phone {
-			return 0
+			if c.Phone == coach.Phone {
+				return 0, nil
+			}
 		}
 	}
 
-	RowsAffected := repoRegister.RegisterCoach(coach)
+	RowsAffected, err := repoRegister.RegisterCoach(coach)
+	if err != nil {
+		return 0, err
+	}
 	if RowsAffected > 0 {
-		return 1
+		return 1, nil
 	} else if RowsAffected == 0 {
-		return 0
+		return 0, nil
 	} else {
-		return -1
+		return -1, nil
 	}
 }
 
 // ServiceRegisterCus implements UserDataService
-func (UserData) ServiceRegisterCus(cus *models.Customer) int64 {
+func (UserData) ServiceRegisterCus(cus *models.Customer) (int64, error) {
 	repoRegister := repository.NewUserRepository()
 	getAllCus, err := repoCus.GetCustomerAll()
 
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 	for _, c := range *getAllCus {
 		if c.Email == cus.Email {
-			return 0
-		} else if c.Phone == cus.Phone {
-			return 0
+			if c.Phone == cus.Phone {
+				return 0, nil
+			}
 		}
 	}
-	RowsAffected := repoRegister.RegisterCus(cus)
+	RowsAffected, err := repoRegister.RegisterCus(cus)
+	if err != nil {
+		return 0, err
+	}
 	if RowsAffected > 0 {
-		return 1
+		return 1, nil
 	} else if RowsAffected == 0 {
-		return 0
+		return 0, nil
 	} else {
-		return -1
+		return -1, nil
 	}
 }
 

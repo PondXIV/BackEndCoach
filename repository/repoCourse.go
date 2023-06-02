@@ -17,9 +17,22 @@ type CourseRepository interface {
 	InsertCourse(Cid int, course *models.Course) (int64, error)
 	GetCourseByIDCus(Uid int) (*[]models.Course, error)
 	InsertCourseByID(CoID int, Bid int) (int, int, int, error)
+	DeleteCourse(CoID int) (int64, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// DeleteCourse implements CourseRepository.
+func (c courseDB) DeleteCourse(CoID int) (int64, error) {
+	coID := &models.Course{
+		CoID: uint(CoID),
+	}
+	result := c.db.Delete(coID)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return result.RowsAffected, nil
 }
 
 // InsertCourseByID implements CourseRepository

@@ -51,7 +51,10 @@ func insertListClip(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsListClip)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		fmt.Print(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 	}
 	rowsAffected, err := insertListClipDataService.SeviceInsertListClip(cid, &modelsListClip)
 	if err != nil {
@@ -85,7 +88,10 @@ func updateListClip(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&modelsListClip)
 	// fmt.Printf("%v", cus)
 	if err != nil {
-		fmt.Print(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
 
 	} else {
 		rowsAffected, err := clipsv.NewUpdateListClipDataService().ServiceUpdateListClip(icpID, &modelsListClip)

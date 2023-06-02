@@ -17,6 +17,8 @@ import (
 var courseDateService = coursesv.NewCourseDataService()
 var updatecourseDateService = coursesv.NewUpdateCourseDataService()
 var insertCourseDataService = coursesv.NewInsertCourseDataService()
+var deleteCourseDataService = coursesv.NewDeleteCourseDataService()
+
 var modelsCourse = models.Course{}
 
 func NewCourseController(router *gin.Engine) {
@@ -26,7 +28,7 @@ func NewCourseController(router *gin.Engine) {
 		// course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/courseID/:coID", updateCourse)
 		course.POST("/coachID/:cid", insertCourse)
-
+		course.DELETE("/courseID/:coID", deleteCourse)
 	}
 
 }
@@ -151,6 +153,34 @@ func insertCourse(ctx *gin.Context) {
 		} else {
 			outputSoon(ctx)
 		}
+	}
+
+}
+func deleteCourse(ctx *gin.Context) {
+	courseID := ctx.Param("coID")
+
+	coID, errs := strconv.Atoi(courseID)
+
+	if errs != nil {
+	} else {
+		rowsAffected, err := deleteCourseDataService.SeviceDeleteCourse(coID)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		} else {
+			if rowsAffected >= 1 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
+
+			} else {
+				outputSoon(ctx)
+			}
+		}
+
 	}
 
 }

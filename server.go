@@ -1,19 +1,32 @@
 package main
 
 import (
-	ctrlBuycourse "backEndGo/controller/BuyCourseController"
-	ctrlListClip "backEndGo/controller/CoachController/ClipController/Clip_in_Coach"
+
+	//Course
 	ctrlClip "backEndGo/controller/CoachController/ClipController/Clip_in_Course"
 	ctrlCourse "backEndGo/controller/CoachController/CourseController"
 	ctrlDays "backEndGo/controller/CoachController/DaysController"
-	ctrlListFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Coach"
 	ctrlFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Course"
 
+	//Coach
+	ctrlListClip "backEndGo/controller/CoachController/ClipController/Clip_in_Coach"
+	ctrlListFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Coach"
+
+	//User
 	usercontroller "backEndGo/controller/UserController"
 	coachctl "backEndGo/controller/UserController/Coach_CTL"
 	coursectl "backEndGo/controller/UserController/Course_CTL"
 	reviewctl "backEndGo/controller/UserController/Review_CTL"
+
+	//Request
+	ctrlRequest "backEndGo/controller/RequestController"
+
+	//Auth
 	auth "backEndGo/controller/auth"
+
+	//Buying
+	ctrlBuycourse "backEndGo/controller/BuyCourseController"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,6 +49,7 @@ func StartServer() {
 	ctrlFood.NewFoodController(router)
 	ctrlDays.NewDayController(router)
 	ctrlClip.NewClipController(router)
+
 	//User
 	auth.NewAuthController(router)
 	usercontroller.NewUserController(router)
@@ -44,6 +58,9 @@ func StartServer() {
 
 	//Buy
 	ctrlBuycourse.NewBuyCourseController(router)
+
+	//Request
+	ctrlRequest.NewBuyCourseController(router)
 
 	router.Run()
 }

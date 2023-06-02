@@ -10,9 +10,11 @@ import (
 	ctrlFood "backEndGo/controller/CoachController/FoodContoller/Food_in_Course"
 
 	usercontroller "backEndGo/controller/UserController"
+	buyctl "backEndGo/controller/UserController/Buy_CTL"
 	coachctl "backEndGo/controller/UserController/Coach_CTL"
 	coursectl "backEndGo/controller/UserController/Course_CTL"
 	reviewctl "backEndGo/controller/UserController/Review_CTL"
+
 	auth "backEndGo/controller/auth"
 	"net/http"
 
@@ -44,6 +46,7 @@ func StartServer() {
 
 	//Buy
 	ctrlBuycourse.NewBuyCourseController(router)
+	buyctl.NewBuyingCourseController(router)
 
 	router.Run()
 }

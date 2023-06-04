@@ -21,7 +21,7 @@ import (
 	auth "backEndGo/controller/auth"
 
 	//Buying
-	ctrlBuycourse "backEndGo/controller/BuyCourseController"
+	buyctl "backEndGo/controller/UserController/Buy_CTL"
 
 	"net/http"
 
@@ -53,7 +53,7 @@ func StartServer() {
 	coursectl.NewCourseController(router)
 
 	//Buy
-	ctrlBuycourse.NewBuyCourseController(router)
+	buyctl.NewBuyingCourseController(router)
 
 	router.Run()
 }

@@ -18,7 +18,7 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	repoUser := repository.NewUserRepository()
 	repoCourse := repository.NewCourseRepository()
 	repoDay := repository.NewDayOfCourseRepository()
-	// repoClip := repository.NewClipRepository()
+	repoClip := repository.NewClipRepository()
 	repoFood := repository.NewFoodRepository()
 	bid, err := repoBuycourse.BuyCourse(BuyCourse)
 	//fid, err := repoFood.InsertFood(foods,&foodMD)
@@ -36,15 +36,25 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 		fmt.Printf("dayID = %d \t", dayID, "\n")
 		fmt.Println("SUM", sum)
 	}
-	//dayID,err := repoDay.DayOfCourseByCoid(courseID)
-	//did  := dayID
+	/////Insert Food ต้องใช้ coIDเดิมเพื่อที่ food จะได้มี่ค่าในmodel
+	getDid, _ := repoDay.DayOfCourse(0, CoID, 0)
+	for _, value := range *getDid {
+		getFood, _ := repoFood.GetFood(0, 0, int(value.Did))
+		getCilp, _ := repoClip.GetClip(0, 0, int(value.Did))
 
-	rowsAffectedFood, err := repoFood.InsertBuyFood(dayID, &models.Food{})
-	if rowsAffectedFood != 0 {
-
-		fmt.Println(rowsAffectedFood)
-
+		fmt.Println("MyGetFood", getFood)
+		for _, valuefood := range *getFood {
+			food, _ := repoFood.InsertBuyFood(int(valuefood.DayOfCouseID), valuefood.ListFoodID, valuefood.Time)
+			fmt.Printf("MyFood", food)
+		}
+		for _, valueClip := range *getCilp {
+			clip, _ := repoClip.InsertBuyClip(int(valueClip.DayOfCouseID), int(valueClip.ListClipID), int(valueClip.Status))
+			fmt.Printf("Myclip", clip)
+		}
 	}
+	/////Insert Clip ต้องใช้ coIDเดิมเพื่อที่ clip จะได้มี่ค่าในmodel
+
+	//rowsAffectedFood, err := repoFood.InsertBuyFood(dayID, getFood)
 
 	// days := models.DayOfCouse{}
 	// getday := repoDay.InsertDayOfCourse(uint(CoID))
@@ -52,9 +62,9 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	// food := models.Food{}
 	// fid, err := repoFood.InsertFood(int(days.Did), &food)
 	// rowsAffectedFood := &fid
-	// if rowsAffectedFood != nil {
+	// if rowsAffectedFood > 0 {
 
-	// 	fmt.Println(fid)
+	// 	panic("Success")
 
 	// }
 	//row := repoFood.InsertFood(int(days.Did),&food)

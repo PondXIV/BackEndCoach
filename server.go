@@ -18,10 +18,6 @@ import (
 	coursectl "backEndGo/controller/UserController/Course_CTL"
 	reviewctl "backEndGo/controller/UserController/Review_CTL"
 
-	//Request
-	ctrlRequest "backEndGo/controller/RequestController"
-
-	//Auth
 	auth "backEndGo/controller/auth"
 
 	//Buying
@@ -58,9 +54,6 @@ func StartServer() {
 
 	//Buy
 	ctrlBuycourse.NewBuyCourseController(router)
-
-	//Request
-	ctrlRequest.NewBuyCourseController(router)
 
 	router.Run()
 }

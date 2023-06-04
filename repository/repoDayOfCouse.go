@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ type DayOfCourseRepository interface {
 	DayOfCourseByDid(Did int) (*models.DayOfCouse, error)
 	DayOfCourse(Did int, CoID int, Sequence int) (*[]models.DayOfCouse, error)
 	InsertDayOfCourse(CourseID uint, Days int) int
+	BuyInsertDayOfCourse(CourseID uint, Days int) (*[]models.DayOfCouse, int)
 }
 type DayOfCourseDB struct {
 	db *gorm.DB
@@ -89,6 +91,29 @@ func (d DayOfCourseDB) InsertDayOfCourse(CourseID uint, Days int) int {
 	// 	panic(result.Error)
 	// }
 	return num
+}
+func (d DayOfCourseDB) BuyInsertDayOfCourse(CourseID uint, Days int) (*[]models.DayOfCouse, int) {
+	num := 0
+	//dayslist := []uint{}
+
+	//var daysID uint = 0
+	for i := 1; i <= Days; i++ {
+		dayOfCourse := models.DayOfCouse{
+			CourseID: CourseID,
+			Sequence: i,
+		}
+		result := d.db.Create(&dayOfCourse)
+		num += int(result.RowsAffected)
+	}
+	day := []models.DayOfCouse{}
+	//fmt.Printf("DIDDay = %d \t", dayslist, "\n")
+	result := d.db.Where("coID = ?", CourseID).Find(&day)
+	fmt.Println(&day)
+	if result.Error != nil {
+		panic("error")
+	}
+
+	return &day, num
 }
 
 func NewDayOfCourseRepository() DayOfCourseRepository {

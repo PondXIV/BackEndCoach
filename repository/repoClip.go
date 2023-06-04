@@ -11,9 +11,27 @@ type ClipRepository interface {
 	InsertClip(Did int, Clip *models.Clip) (int64, error)
 	UpdateClip(CpID int, Clip *models.Clip) (int64, error)
 	DeleteClip(CpID int) (int64, error)
+	InsertBuyClip(Did int, IcpID int, Status int) (int64, error)
 }
 type ClipDB struct {
 	db *gorm.DB
+}
+
+// InsertBuyClip implements ClipRepository.
+func (c ClipDB) InsertBuyClip(Did int, IcpID int, Status int) (int64, error) {
+	result := c.db.Create(&models.Clip{
+		CpID:         0,
+		ListClipID:   uint(IcpID),
+		DayOfCouseID: uint(Did),
+		Status:       uint(Status),
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	return result.RowsAffected, nil
 }
 
 // GetClip implements ClipRepository

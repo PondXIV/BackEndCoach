@@ -12,9 +12,28 @@ type FoodRepository interface {
 	InsertFood(Did int, Food *models.Food) (int64, error)
 	UpdateFood(Fid int, food *models.Food) (int64, error)
 	DeleteFood(Fid int) (int64, error)
+	InsertBuyFood(Did int, Ifid int, Time string) (int64, error)
 }
 type FoodDB struct {
 	db *gorm.DB
+}
+
+// InsertNewFood implements FoodRepository.
+func (f FoodDB) InsertBuyFood(Did int, Ifid int, Time string) (int64, error) {
+	result := f.db.Create(&models.Food{
+		Fid:          0,
+		ListFoodID:   int(Ifid),
+		DayOfCouseID: uint(Did),
+		Time:         Time,
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.Error != nil {
+		panic(result.Error)
+	}
+
+	return result.RowsAffected, nil
 }
 
 // DeleteFood implements FoodRepository

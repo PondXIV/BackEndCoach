@@ -14,7 +14,7 @@ func NewCourseController(router *gin.Engine) {
 	courses := router.Group("/courses")
 	{
 
-		courses.GET("/customer", GetCourseByUid)
+		courses.GET("", GetCourseByUid)
 	}
 
 }

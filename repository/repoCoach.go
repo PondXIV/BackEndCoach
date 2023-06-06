@@ -37,8 +37,8 @@ func (c coachDB) Getcoach(Id int, Name string) (*[]models.Coach, error) {
 	coachs := []models.Coach{}
 	var result *gorm.DB = c.db.Find(&coachs)
 	if Id != 0 {
-		result.Joins("Course").Where("cid = ?", Id).Find(&coachs)
-		//result.Where("cid = ?", Id).Find(&coachs)
+		//result.Joins("Course").Where("cid = ?", Id).Find(&coachs)
+		result.Where("cid = ?", Id).Find(&coachs)
 	}
 	if Name != "" {
 		result.Where("username  like ?", "%"+Name+"%").Find(&coachs)

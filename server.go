@@ -23,6 +23,8 @@ import (
 	//Buying
 	buyctl "backEndGo/controller/UserController/Buy_CTL"
 
+	//Request
+	requestcontroller "backEndGo/controller/RequestController"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -55,5 +57,7 @@ func StartServer() {
 	//Buy
 	buyctl.NewBuyingCourseController(router)
 
+	//Request
+	requestcontroller.NewBuyCourseController(router)
 	router.Run()
 }

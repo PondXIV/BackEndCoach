@@ -126,8 +126,12 @@ func (c courseDB) InsertCourse(Cid int, course *models.Course) (int64, error) {
 	if result.Error != nil {
 		return -1, result.Error
 	}
-
-	return result.RowsAffected, nil
+	mdcourse := models.Course{}
+	getCourseLast := c.db.Order("coID DESC").Find(&mdcourse)
+	if getCourseLast.Error != nil {
+		panic(getCourseLast.Error)
+	}
+	return int64(mdcourse.CoID), nil
 }
 
 // UpdateCourse implements CourseRepository

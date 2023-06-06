@@ -7,7 +7,6 @@ import (
 
 type InsertCourseDataService interface {
 	ServiceInsertCourse(Cid int, course *models.Course) (int64, error)
-
 }
 type CourseDataInsert struct {
 }
@@ -16,20 +15,14 @@ type CourseDataInsert struct {
 func (CourseDataInsert) ServiceInsertCourse(Cid int, course *models.Course) (int64, error) {
 
 	repoCourse := repository.NewCourseRepository()
-	//repoDayOfCourse := repository.NewDayOfCourseRepository()
-	RowsAffected, err := repoCourse.InsertCourse(Cid, course)
+	repoDayOfCourse := repository.NewDayOfCourseRepository()
+	coID, err := repoCourse.InsertCourse(Cid, course)
 	if err != nil {
-		return -1, err
+		panic(err)
 	}
-	//rowsAffecteds := repoDayOfCourse.InsertDayOfCourse(course.CoID, course.Days)
+	rowsAffecteds := repoDayOfCourse.InsertDayOfCourse(uint(coID), course.Days)
 
-	if RowsAffected > 0 {
-		return 1, nil
-	} else if RowsAffected == 0 {
-		return 0, nil
-	} else {
-		return -1, nil
-	}
+	return int64(rowsAffecteds), nil
 }
 
 func NewInsertCourseDataService() InsertCourseDataService {

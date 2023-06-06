@@ -72,12 +72,13 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 // GetCourseAll implements CourseRepository
 func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Where("bid IS NULL")
+
+	result := c.db.Where("bid IS NULL").Preload("Coach")
 	if CoID != 0 {
 		result.Where("coID=?", CoID)
 	}
 	if Cid != 0 {
-		result.Where("cid=?", Cid)
+		result.Where("cid = ?", Cid).Find(&courses)
 	}
 	if Name != "" {
 		result.Where("name like ?", "%"+Name+"%")
@@ -94,7 +95,7 @@ func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, e
 // GetCourseByIDCus implements CourseRepository
 func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
 	courses := []models.Course{}
-	result := c.db.Joins("Buying").Where("uid=?", Uid).Find(&courses)
+	result := c.db.Joins("Coach").Joins("Buying").Where("uid=?", Uid).Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

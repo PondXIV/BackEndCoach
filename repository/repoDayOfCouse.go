@@ -14,9 +14,28 @@ type DayOfCourseRepository interface {
 	DayOfCourse(Did int, CoID int, Sequence int) (*[]models.DayOfCouse, error)
 	InsertDayOfCourse(CourseID uint, Days int) int
 	BuyInsertDayOfCourse(CourseID uint, Days int) (*[]models.DayOfCouse, int)
+	UpdateDay(Did int, Day *models.DayOfCouse) (int64, error)
 }
 type DayOfCourseDB struct {
 	db *gorm.DB
+}
+
+// UpdateDay implements DayOfCourseRepository.
+func (d DayOfCourseDB) UpdateDay(Did int, Day *models.DayOfCouse) (int64, error) {
+	result := d.db.Model(models.DayOfCouse{}).Where("did = ?", Did).Updates(
+		models.DayOfCouse{
+			Sequence: Day.Sequence,
+			Foods:    []models.Food{},
+			Clips:    []models.Clip{},
+		})
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
 }
 
 // DayOfCourse implements DayOfCourseRepository

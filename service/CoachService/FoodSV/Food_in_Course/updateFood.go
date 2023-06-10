@@ -20,10 +20,12 @@ func (UpdateFoodData) ServiceUpdateFood(Fid int, food *models.Food) (int64, erro
 		panic(err)
 	}
 	for _, f := range *getAllFood {
-		if f.ListFoodID == food.ListFoodID {
-			if f.Time == food.Time {
-				if f.Fid != uint(Fid) {
-					return 14, nil
+		if int(f.DayOfCouseID) == int(food.DayOfCouseID) {
+			if f.ListFoodID == food.ListFoodID {
+				if f.Time == food.Time {
+					if f.Fid != uint(Fid) {
+						return 14, nil
+					}
 				}
 			}
 		}

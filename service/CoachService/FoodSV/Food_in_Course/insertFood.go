@@ -15,16 +15,16 @@ type InsertFoodData struct {
 func (InsertFoodData) SeviceInsertFood(Did int, food *models.Food) (int64, error) {
 	repoFood := repository.NewFoodRepository()
 
-	getAllFood, err := repoFood.GetFood(0, 0, Did)
+	// getAllFood, err := repoFood.GetFood(0, 0, Did)
 
-	if err != nil {
-		panic(err)
-	}
-	for _, f := range *getAllFood {
-		if uint(f.ListFoodID) == uint(food.ListFoodID) {
-			return 14, nil
-		}
-	}
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, f := range *getAllFood {
+	// 	if uint(f.ListFoodID) == uint(food.ListFoodID) {
+	// 		return 14, nil
+	// 	}
+	// }
 	RowsAffected, err := repoFood.InsertFood(Did, food)
 	if err != nil {
 		return -1, err

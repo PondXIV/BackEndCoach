@@ -13,6 +13,8 @@ import (
 // var buycourseService = userservice.NewBuyCourseDataService()
 var modelsBuying = models.Buying{}
 var modelGBprime = models.Gbprimpay{}
+var modelWallet = models.Wallet{}
+var updateWallet = userservice.NewGbprimeDataService()
 
 func NewBuyingCourseController(router *gin.Engine) {
 	buy := router.Group("/buycourse")
@@ -31,12 +33,21 @@ func getgbprime(ctx *gin.Context) {
 
 		panic(err)
 	}
-	ctx.JSON(http.StatusOK, gin.H{
+	// ctx.JSON(http.StatusOK, gin.H{
 
-		"ResultCode":     jsonDto.ResultCode,
-		"ReferenceNo":    jsonDto.ReferenceNo,
-		"GbpReferenceNo": jsonDto.GbpReferenceNo,
-	})
+	// 	"ResultCode":     jsonDto.ResultCode,
+	// 	"ReferenceNo":    jsonDto.ReferenceNo,
+	// 	"GbpReferenceNo": jsonDto.GbpReferenceNo,
+	// })
+	if jsonDto.ResultCode == "00" {
+		rowsAffected, _ := updateWallet.ServiceWallet(jsonDto.ReferenceNo)
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":   "200",
+			"result": strconv.Itoa(int(rowsAffected)),
+		})
+
+	}
+
 }
 
 func buycourse(ctx *gin.Context) {

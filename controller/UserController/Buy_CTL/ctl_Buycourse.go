@@ -12,14 +12,33 @@ import (
 
 // var buycourseService = userservice.NewBuyCourseDataService()
 var modelsBuying = models.Buying{}
+var modelGBprime = models.Gbprimpay{}
 
 func NewBuyingCourseController(router *gin.Engine) {
 	buy := router.Group("/buycourse")
 	{
 		buy.POST("/:coID", buycourse)
+		buy.POST("", getgbprime)
 	}
 
 }
+
+func getgbprime(ctx *gin.Context) {
+	jsonDto := modelGBprime
+	err := ctx.ShouldBindJSON(&jsonDto)
+
+	if err != nil {
+
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+
+		"ResultCode":     jsonDto.ResultCode,
+		"ReferenceNo":    jsonDto.ReferenceNo,
+		"GbpReferenceNo": jsonDto.GbpReferenceNo,
+	})
+}
+
 func buycourse(ctx *gin.Context) {
 	courseID := ctx.Param("coID")
 	coID, errs := strconv.Atoi(courseID)

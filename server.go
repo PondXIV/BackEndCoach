@@ -59,6 +59,6 @@ func StartServer() {
 
 	//Request
 	requestcontroller.NewBuyCourseController(router)
-	router.RunTLS(":8080", "./SSL/cssslcert.pem", "./SSL/private-key.key")
-	// router.Run()
+	// router.RunTLS(":8080", "./SSL/cssslcert.crt", "./SSL/private-key.key")
+	router.Run()
 }

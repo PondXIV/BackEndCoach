@@ -22,4 +22,4 @@ COPY ./ ./
 EXPOSE 8080
 
 #CMD ["air"]
-CMD ["go","run","."]
+CMD ["go","run","main.go"]

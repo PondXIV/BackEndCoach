@@ -49,10 +49,11 @@ func (g GbprimeData) ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) 
 			return -1, err
 		}
 		if modelwallet.CustomerID != 0 {
-			User, _ := repoCus.UserByUid(modelwallet.CustomerID)
+			User, _ := repoCus.GetCustomerByID(modelwallet.CustomerID)
+
 			sum := User.Price + (modelwallet.Money * 1000.00)
 			rowsAffected, errs := repoWallet.UpdateWalletUid(int(User.Uid), sum)
-			fmt.Println("Price", User.Price, "///", ResGb.Amount, "///", modelwallet.Money)
+			fmt.Println("CustomerID", modelwallet.CustomerID, "///", ReferenceNo, "///", User.Uid)
 			if errs != nil {
 				return -1, err
 			}

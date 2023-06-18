@@ -21,7 +21,7 @@ type WalletDB struct {
 func (w WalletDB) GetUser(ReferenceNo string) (*models.Wallet, error) {
 	wallet := models.Wallet{}
 	result := w.db.Where("referenceNo = ?", ReferenceNo).Find(&wallet)
-	fmt.Println(result)
+	fmt.Println(result, "///", ReferenceNo)
 	return &wallet, nil
 }
 
@@ -33,6 +33,7 @@ func (w WalletDB) UpdateWalletUid(CusID int, price float64) (int64, error) {
 		panic(result.Error)
 	}
 	if result.RowsAffected > 0 {
+		fmt.Println("CusID", CusID)
 		fmt.Println("Update completed")
 	}
 	if result.RowsAffected == 0 {

@@ -3,7 +3,7 @@ package models
 type Wallet struct {
 	Wid            uint    `gorm:"column:wid;primaryKey"`
 	CustomerID     int     `gorm:"column:uid"`
-	Money          int     `gorm:"column:money"`
+	Money          float64 `gorm:"column:money"`
 	Status         string  `gorm:"column:status;size:1"`
 	Amount         float64 `gorm:"column:amount"`
 	RetryFlag      string  `gorm:"column:retryFlag;size:20"`

@@ -23,7 +23,7 @@ func (w WalletDB) InsertWallet(CusID int, wallet *models.Wallet) (int64, error) 
 		Status:         "0",
 		Amount:         0,
 		RetryFlag:      "",
-		ReferenceNo:    "",
+		ReferenceNo:    wallet.ReferenceNo,
 		GbpReferenceNo: "",
 		CurrencyCode:   "",
 		ResultCode:     "",

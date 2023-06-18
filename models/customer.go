@@ -19,7 +19,7 @@ type Customer struct {
 	Weight     uint      `gorm:"column:weight"`
 	Height     uint      `gorm:"column:height"`
 	FacebookID string    `gorm:"default:null;column:facebookId;size:100"`
-	Price      uint      `gorm:"default:null;column:price"`
+	Price      float64   `gorm:"default:null;column:price"`
 
 	Chats  []Chat   `gorm:"foreignKey:uid"`
 	Buying []Buying `gorm:"foreignKey:uid"`

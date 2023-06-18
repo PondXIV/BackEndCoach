@@ -8,9 +8,38 @@ import (
 
 type WalletRepository interface {
 	UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
+	InsertWallet(CusID int, wallet *models.Wallet) (int64, error)
 }
 type WalletDB struct {
 	db *gorm.DB
+}
+
+// InsertWallet implements WalletRepository.
+func (w WalletDB) InsertWallet(CusID int, wallet *models.Wallet) (int64, error) {
+	result := w.db.Create(&models.Wallet{
+		Wid:            0,
+		CustomerID:     CusID,
+		Money:          wallet.Money,
+		Status:         "0",
+		Amount:         0,
+		RetryFlag:      "",
+		ReferenceNo:    "",
+		GbpReferenceNo: "",
+		CurrencyCode:   "",
+		ResultCode:     "",
+		TotalAmount:    0,
+		Fee:            0,
+		Vat:            0,
+		ThbAmount:      0,
+		CustomerName:   "",
+		Date:           "",
+		Time:           "",
+		PaymentType:    "",
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return int64(wallet.Wid), nil
 }
 
 // UpdateWallet implements WalletRepository.

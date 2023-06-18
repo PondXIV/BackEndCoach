@@ -1,4 +1,4 @@
-package walletctl
+package walletgbctl
 
 import (
 	"backEndGo/models"

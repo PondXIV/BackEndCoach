@@ -5,17 +5,30 @@ import (
 	"backEndGo/repository"
 )
 
+var repoWallet = repository.NewWalletRepository()
+
 type GbprimeService interface {
 	ServiceGbprime(Gbprime *models.Gbprimpay)
 	ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
+	ServiceInsertWallet(CusID int, wallet *models.Wallet) (int64, error)
 }
 
 type GbprimeData struct {
 }
 
+// ServiceInsertWallet implements GbprimeService.
+func (g GbprimeData) ServiceInsertWallet(CusID int, wallet *models.Wallet) (int64, error) {
+	rowsAffecteds, err := repoWallet.InsertWallet(CusID, wallet)
+	if err != nil {
+		panic(err)
+	}
+	return int64(rowsAffecteds), nil
+
+}
+
 // ServiceWallet implements GbprimeService.
-func (GbprimeData) ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error) {
-	repoWallet := repository.NewWalletRepository()
+func (g GbprimeData) ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error) {
+
 	RowsAffected, err := repoWallet.UpdateWallet(ReferenceNo, ResGb)
 	if err != nil {
 		return -1, err

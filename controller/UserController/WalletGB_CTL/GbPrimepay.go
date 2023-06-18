@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var ServiceMoney = userservice.NewGbprimeDataService()
+
 func NewWalletGBController(router *gin.Engine) {
 	walletgb := router.Group("/gbcallback")
 	{
@@ -27,7 +29,8 @@ func getgbprime(ctx *gin.Context) {
 	}
 
 	if jsonDto.ResultCode == "00" {
-		rowsAffected, _ := userservice.NewGbprimeDataService().ServiceWallet(jsonDto.ReferenceNo, &jsonDto)
+		rowsAffected, _ := ServiceMoney.ServiceWallet(jsonDto.ReferenceNo, &jsonDto)
+		//rowAff,_ := ServiceMoney.
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":   "200",
 			"result": strconv.Itoa(int(rowsAffected)),

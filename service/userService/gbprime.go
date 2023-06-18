@@ -7,16 +7,16 @@ import (
 
 type GbprimeService interface {
 	ServiceGbprime(Gbprime *models.Gbprimpay)
-	ServiceWallet(ReferenceNo string, GbpRefNo string) (int64, error)
+	ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
 }
 
 type GbprimeData struct {
 }
 
 // ServiceWallet implements GbprimeService.
-func (GbprimeData) ServiceWallet(ReferenceNo string, GbpRefNo string) (int64, error) {
+func (GbprimeData) ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error) {
 	repoWallet := repository.NewWalletRepository()
-	RowsAffected, err := repoWallet.UpdateWallet(ReferenceNo, GbpRefNo)
+	RowsAffected, err := repoWallet.UpdateWallet(ReferenceNo, ResGb)
 	if err != nil {
 		return -1, err
 	}

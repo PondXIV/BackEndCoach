@@ -7,20 +7,30 @@ import (
 )
 
 type WalletRepository interface {
-	UpdateWallet(ReferenceNo string, GbpRefNo string) (int64, error)
+	UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
 }
 type WalletDB struct {
 	db *gorm.DB
 }
 
 // UpdateWallet implements WalletRepository.
-func (w WalletDB) UpdateWallet(ReferenceNo string, GbpRefNo string) (int64, error) {
+func (w WalletDB) UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error) {
 
 	result := w.db.Model(models.Wallet{}).Where("referenceNo = ?", ReferenceNo).Updates(
 		models.Wallet{
 			Status:         "1",
-			GbpReferenceNo: GbpRefNo,
-			//Customer: models.Customer{},
+			GbpReferenceNo: ResGb.GbpReferenceNo,
+			Amount:         int(ResGb.Amount),
+			RetryFlag:      ResGb.RetryFlag,
+			CurrencyCode:   ResGb.CurrencyCode,
+			TotalAmount:    int(ResGb.TotalAmount),
+			Fee:            ResGb.Fee,
+			Vat:            ResGb.Vat,
+			ThbAmount:      int(ResGb.ThbAmount),
+			CustomerName:   ResGb.CustomerName,
+			Date:           ResGb.Date,
+			Time:           ResGb.Time,
+			PaymentType:    ResGb.PaymentType,
 		})
 	return result.RowsAffected, nil
 }

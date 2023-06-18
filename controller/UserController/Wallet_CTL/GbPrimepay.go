@@ -27,7 +27,7 @@ func getgbprime(ctx *gin.Context) {
 	}
 
 	if jsonDto.ResultCode == "00" {
-		rowsAffected, _ := userservice.NewGbprimeDataService().ServiceWallet(jsonDto.ReferenceNo, jsonDto.GbpReferenceNo)
+		rowsAffected, _ := userservice.NewGbprimeDataService().ServiceWallet(jsonDto.ReferenceNo, &jsonDto)
 		ctx.JSON(http.StatusOK, gin.H{
 			"code":   "200",
 			"result": strconv.Itoa(int(rowsAffected)),

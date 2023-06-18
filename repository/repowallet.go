@@ -11,9 +11,18 @@ type WalletRepository interface {
 	UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
 	InsertWallet(CusID int, wallet *models.Wallet) (int64, error)
 	UpdateWalletUid(CusID int, price float64) (int64, error)
+	GetUser(ReferenceNo string) (*models.Wallet, error)
 }
 type WalletDB struct {
 	db *gorm.DB
+}
+
+// getUser implements WalletRepository.
+func (w WalletDB) GetUser(ReferenceNo string) (*models.Wallet, error) {
+	wallet := models.Wallet{}
+	result := w.db.Where("referenceNo = ?", ReferenceNo).Find(&wallet)
+	fmt.Println(result)
+	return &wallet, nil
 }
 
 // UpdateWalletUid implements WalletRepository.

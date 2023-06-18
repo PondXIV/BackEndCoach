@@ -3,6 +3,7 @@ package userservice
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
+	"fmt"
 )
 
 var repoWallet = repository.NewWalletRepository()
@@ -40,6 +41,8 @@ func (g GbprimeData) ServiceInsertWallet(CusID int, wallet *models.Wallet) (int6
 	}
 	User, _ := repoCus.GetCustomerByID(CusID)
 	rowsAffected, errs := repoWallet.UpdateWalletUid(CusID, (int(wallet.Amount)*500)+int(User.Price))
+	fmt.Println("Price", User.Price, "///", wallet.Amount)
+
 	if errs != nil {
 		return -1, err
 	}

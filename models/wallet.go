@@ -5,11 +5,12 @@ type Wallet struct {
 	CustomerID     uint    `gorm:"column:uid"`
 	Money          int     `gorm:"column:money"`
 	Status         string  `gorm:"column:status;size:1"`
-	ReferenceNo    string  `gorm:"column:referenceNo;size:20"`
-	GbpReferenceNo string  `gorm:"column:gbpReferenceNo;size:40"`
 	Amount         int     `gorm:"column:amount"`
 	RetryFlag      string  `gorm:"column:retryFlag;size:20"`
+	ReferenceNo    string  `gorm:"column:referenceNo;size:20"`
+	GbpReferenceNo string  `gorm:"column:gbpReferenceNo;size:40"`
 	CurrencyCode   string  `gorm:"column:CurrencyCode;size:20"`
+	ResultCode     string  `gorm:"column:resultCode;size:20"`
 	TotalAmount    int     `gorm:"column:totalAmount"`
 	Fee            float64 `gorm:"column:fee"`
 	Vat            float64 `gorm:"column:vat"`

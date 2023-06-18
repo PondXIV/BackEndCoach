@@ -20,11 +20,11 @@ func (w WalletDB) UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int
 		models.Wallet{
 			Status:         "1",
 			GbpReferenceNo: ResGb.GbpReferenceNo,
-			Amount:         int(ResGb.Amount),
+			Amount:         ResGb.Amount,
 			RetryFlag:      ResGb.RetryFlag,
 			CurrencyCode:   ResGb.CurrencyCode,
 			ResultCode:     ResGb.ResultCode,
-			TotalAmount:    int(ResGb.TotalAmount),
+			TotalAmount:    ResGb.TotalAmount,
 			Fee:            ResGb.Fee,
 			Vat:            ResGb.Vat,
 			ThbAmount:      int(ResGb.ThbAmount),

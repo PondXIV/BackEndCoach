@@ -22,3 +22,4 @@ RUN air init
 EXPOSE 8080
 
 CMD ["air"]
+

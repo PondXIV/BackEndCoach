@@ -1,4 +1,4 @@
-package usercontroller
+package walletctl
 
 import (
 	"backEndGo/models"

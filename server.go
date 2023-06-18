@@ -23,6 +23,9 @@ import (
 	//Buying
 	buyctl "backEndGo/controller/UserController/Buy_CTL"
 
+	//WalletGB
+	walletctl "backEndGo/controller/UserController/Wallet_CTL"
+
 	//Request
 	requestcontroller "backEndGo/controller/RequestController"
 	"net/http"
@@ -56,6 +59,9 @@ func StartServer() {
 
 	//Buy
 	buyctl.NewBuyingCourseController(router)
+
+	//WalletGB
+	walletctl.NewWalletGBController(router)
 
 	//Request
 	requestcontroller.NewBuyCourseController(router)

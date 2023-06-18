@@ -14,7 +14,7 @@ type Wallet struct {
 	TotalAmount    float64 `gorm:"column:totalAmount"`
 	Fee            float64 `gorm:"column:fee"`
 	Vat            float64 `gorm:"column:vat"`
-	ThbAmount      int     `gorm:"column:thbAmount"`
+	ThbAmount      float64 `gorm:"column:thbAmount"`
 	CustomerName   string  `gorm:"column:customerName;size:250"`
 	Date           string  `gorm:"column:date;size:30"`
 	Time           string  `gorm:"column:time;size:30"`

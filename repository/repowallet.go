@@ -10,14 +10,14 @@ import (
 type WalletRepository interface {
 	UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
 	InsertWallet(CusID int, wallet *models.Wallet) (int64, error)
-	UpdateWalletUid(CusID int, price int) (int64, error)
+	UpdateWalletUid(CusID int, price float64) (int64, error)
 }
 type WalletDB struct {
 	db *gorm.DB
 }
 
 // UpdateWalletUid implements WalletRepository.
-func (w WalletDB) UpdateWalletUid(CusID int, price int) (int64, error) {
+func (w WalletDB) UpdateWalletUid(CusID int, price float64) (int64, error) {
 	//mdcus := *&models.Customer{}
 	result := w.db.Model(models.Customer{}).Where("uid = ?", CusID).Update("price", price)
 	if result.Error != nil {

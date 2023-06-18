@@ -39,8 +39,8 @@ func (g GbprimeData) ServiceInsertWallet(CusID int, wallet *models.Wallet) (int6
 	} else if RowsAffected == 0 {
 		return 0, nil
 	}
-	User, _ := repoCus.GetCustomerByID(CusID)
-	rowsAffected, errs := repoWallet.UpdateWalletUid(CusID, (int(wallet.Amount)*500)+int(User.Price))
+	User, _ := repoCus.UserByUid(CusID)
+	rowsAffected, errs := repoWallet.UpdateWalletUid(CusID, (wallet.Amount)*5000)
 	fmt.Println("Price", User.Price, "///", wallet.Amount)
 
 	if errs != nil {

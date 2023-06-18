@@ -27,7 +27,7 @@ func (w WalletDB) UpdateWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int
 			TotalAmount:    ResGb.TotalAmount,
 			Fee:            ResGb.Fee,
 			Vat:            ResGb.Vat,
-			ThbAmount:      int(ResGb.ThbAmount),
+			ThbAmount:      ResGb.ThbAmount,
 			CustomerName:   ResGb.CustomerName,
 			Date:           ResGb.Date,
 			Time:           ResGb.Time,

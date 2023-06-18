@@ -11,18 +11,39 @@ type GbprimeService interface {
 	ServiceGbprime(Gbprime *models.Gbprimpay)
 	ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
 	ServiceInsertWallet(CusID int, wallet *models.Wallet) (int64, error)
+	//ServiceInsertWalletUid(CusID int, price int) (int64, error)
 }
 
 type GbprimeData struct {
 }
 
+// ServiceInsertWalletUid implements GbprimeService.
+// func (g GbprimeData) ServiceInsertWalletUid(CusID int, price int) (int64, error) {
+// 	rowsAffecteds, err := repoWallet.UpdateWalletUid(CusID, price)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	return int64(rowsAffecteds), nil
+// }
+
 // ServiceInsertWallet implements GbprimeService.
 func (g GbprimeData) ServiceInsertWallet(CusID int, wallet *models.Wallet) (int64, error) {
-	rowsAffecteds, err := repoWallet.InsertWallet(CusID, wallet)
+	repoCus := repository.NewCustomerRepository()
+	RowsAffected, err := repoWallet.InsertWallet(CusID, wallet)
 	if err != nil {
-		panic(err)
+		return -1, err
 	}
-	return int64(rowsAffecteds), nil
+	if RowsAffected > 0 {
+		return 1, nil
+	} else if RowsAffected == 0 {
+		return 0, nil
+	}
+	User, _ := repoCus.GetCustomerByID(CusID)
+	rowsAffected, errs := repoWallet.UpdateWalletUid(CusID, (int(wallet.Amount)*500)+int(User.Price))
+	if errs != nil {
+		return -1, err
+	}
+	return rowsAffected, nil
 
 }
 

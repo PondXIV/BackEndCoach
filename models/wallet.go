@@ -1,11 +1,12 @@
 package models
 
 type Wallet struct {
-	Wid         uint   `gorm:"column:wid;primaryKey"`
-	CustomerID  uint   `gorm:"column:uid"`
-	Money       int    `gorm:"column:money"`
-	Status      string `gorm:"column:status;size:1"`
-	ReferenceNo string `gorm:"column:referenceNo;size:20"`
+	Wid            uint   `gorm:"column:wid;primaryKey"`
+	CustomerID     uint   `gorm:"column:uid"`
+	Money          int    `gorm:"column:money"`
+	Status         string `gorm:"column:status;size:1"`
+	ReferenceNo    string `gorm:"column:referenceNo;size:20"`
+	GbpReferenceNo string `gorm:"column:referenceNo;size:40"`
 
 	Customer Customer `gorm:"foreignKey:CustomerID"`
 }

@@ -3,6 +3,7 @@ package coursesv
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
+	"fmt"
 )
 
 type InsertCourseDataService interface {
@@ -21,8 +22,9 @@ func (CourseDataInsert) ServiceInsertCourse(Cid int, course *models.Course) (int
 		panic(err)
 	}
 	rowsAffecteds := repoDayOfCourse.InsertDayOfCourse(uint(coID), course.Days)
+	fmt.Printf("RowAffecteds %d", rowsAffecteds)
 
-	return int64(rowsAffecteds), nil
+	return coID, nil
 }
 
 func NewInsertCourseDataService() InsertCourseDataService {

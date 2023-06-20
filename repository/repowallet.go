@@ -67,7 +67,7 @@ func (w WalletDB) InsertWallet(CusID int, wallet *models.Wallet) (int64, error) 
 	if result.Error != nil {
 		return -1, result.Error
 	}
-	return int64(wallet.Wid), nil
+	return result.RowsAffected, nil
 }
 
 // UpdateWallet implements WalletRepository.

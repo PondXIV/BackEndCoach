@@ -80,7 +80,7 @@ func (c ClipDB) InsertClip(Did int, Clip *models.Clip) (int64, error) {
 		CpID:         0,
 		ListClipID:   Clip.ListClipID,
 		DayOfCouseID: uint(Did),
-		Status:       Clip.Status,
+		Status:       "0",
 	})
 	if result.Error != nil {
 		return -1, result.Error

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -11,19 +12,36 @@ type ClipRepository interface {
 	InsertClip(Did int, Clip *models.Clip) (int64, error)
 	UpdateClip(CpID int, Clip *models.Clip) (int64, error)
 	DeleteClip(CpID int) (int64, error)
-	InsertBuyClip(Did int, IcpID int, Status int) (int64, error)
+	InsertBuyClip(Did int, IcpID int, Status string) (int64, error)
+	UpdateStatusClip(CpID int, Status string) (int64, error)
 }
 type ClipDB struct {
 	db *gorm.DB
 }
 
+// updateStatusClip implements ClipRepository.
+func (c ClipDB) UpdateStatusClip(CpID int, Status string) (int64, error) {
+	fmt.Println("ID1", CpID, "\t", "St1", Status)
+	result := c.db.Model(models.Clip{}).Where("cpID = ?", CpID).Update("status", Status)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
+}
+
 // InsertBuyClip implements ClipRepository.
-func (c ClipDB) InsertBuyClip(Did int, IcpID int, Status int) (int64, error) {
+func (c ClipDB) InsertBuyClip(Did int, IcpID int, Status string) (int64, error) {
 	result := c.db.Create(&models.Clip{
 		CpID:         0,
 		ListClipID:   uint(IcpID),
 		DayOfCouseID: uint(Did),
-		Status:       uint(Status),
+		Status:       Status,
 	})
 	if result.Error != nil {
 		return -1, result.Error

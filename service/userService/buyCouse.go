@@ -48,7 +48,7 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 			fmt.Printf("MyFood", food)
 		}
 		for _, valueClip := range *getCilp {
-			clip, _ := repoClip.InsertBuyClip(int(valueClip.DayOfCouseID), int(valueClip.ListClipID), int(valueClip.Status))
+			clip, _ := repoClip.InsertBuyClip(int(valueClip.DayOfCouseID), int(valueClip.ListClipID), valueClip.Status)
 			fmt.Printf("Myclip", clip)
 		}
 	}

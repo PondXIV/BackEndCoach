@@ -34,7 +34,7 @@ func UpdateStatus(ctx *gin.Context) {
 	clipID := ctx.Param("cpID")
 	cpID, _ := strconv.Atoi(clipID)
 	jsonDto := models.Clip{}
-	err := ctx.ShouldBindJSON(jsonDto)
+	err := ctx.ShouldBindJSON(&jsonDto)
 	fmt.Printf("ID3", "%f", cpID)
 	rowsAffected, err := userservice.NewClipUpdateStatusDataService().ServiceUpdateStatus(cpID, jsonDto.Status)
 	if err != nil {

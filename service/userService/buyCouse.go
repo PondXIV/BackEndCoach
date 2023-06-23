@@ -39,7 +39,7 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	/////Insert Food ต้องใช้ coIDเดิมเพื่อที่ food จะได้มี่ค่าในmodel
 	getDid, _ := repoDay.DayOfCourse(0, CoID, 0)
 	for _, value := range *getDid {
-		getFood, _ := repoFood.GetFood(0, 0, int(value.Did))
+		getFood, _ := repoFood.GetFood(0, 0, int(value.Did), "")
 		getCilp, _ := repoClip.GetClip(0, 0, int(value.Did))
 
 		fmt.Println("MyGetFood", getFood)

@@ -8,7 +8,7 @@ import (
 )
 
 type FoodRepository interface {
-	GetFood(Fid int, Ifid int, Did int) (*[]models.Food, error)
+	GetFood(Fid int, Ifid int, Did int, Name string) (*[]models.Food, error)
 	InsertFood(Did int, Food *models.Food) (int64, error)
 	UpdateFood(Fid int, food *models.Food) (int64, error)
 	DeleteFood(Fid int) (int64, error)
@@ -84,7 +84,7 @@ func (f FoodDB) InsertFood(Did int, Food *models.Food) (int64, error) {
 }
 
 // GetListClipByIDDid implements FoodRepository
-func (f FoodDB) GetFood(Fid int, Ifid int, Did int) (*[]models.Food, error) {
+func (f FoodDB) GetFood(Fid int, Ifid int, Did int, Name string) (*[]models.Food, error) {
 	foods := []models.Food{}
 	result := f.db.Preload("ListFood")
 	if Fid != 0 {
@@ -95,6 +95,9 @@ func (f FoodDB) GetFood(Fid int, Ifid int, Did int) (*[]models.Food, error) {
 	}
 	if Did != 0 {
 		result.Where("did=?", Did)
+	}
+	if Name != "" {
+		result.Joins("ListFood").Where("name like ?", "%"+Name+"%")
 	}
 	if result.Error != nil {
 		return nil, result.Error

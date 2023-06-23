@@ -30,12 +30,13 @@ func getFood(ctx *gin.Context) {
 	qfid := ctx.Query("fid")
 	qifid := ctx.Query("ifid")
 	qdid := ctx.Query("did")
+	qname := ctx.Query("name")
 
 	fid, err := strconv.Atoi(qfid)
 	ifid, err := strconv.Atoi(qifid)
 	did, err := strconv.Atoi(qdid)
 
-	course, err := foodSV.SeviceGetFood(fid, ifid, did)
+	course, err := foodSV.SeviceGetFood(fid, ifid, did, qname)
 	if err != nil {
 		panic(err)
 	}

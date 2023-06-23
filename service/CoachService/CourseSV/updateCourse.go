@@ -10,24 +10,43 @@ import (
 
 type UpdateCourseDataService interface {
 	ServiceUpdateStatusCourse(Id int, Status string) int64
-	ServiceUpdateCourse(CoID int, course *models.Course) (int64,error)
+	ServiceUpdateCourse(CoID int, course *models.Course) (int64, error)
+	ServiceUpdateExpiration(CoID int, Days int) (int64, error)
 }
+
+var repo = repository.NewCourseRepository()
+
 type CourseDataUpdate struct {
 }
 
-// ServiceUpdateCourse implements UpdateCourseDataService
-func (CourseDataUpdate) ServiceUpdateCourse(CoID int,course *models.Course) (int64,error) {
-	repo := repository.NewCourseRepository()
-	RowsAffected, err := repo.UpdateCourse(CoID,course)
+// ServiceUpdateExpiration implements UpdateCourseDataService.
+func (c CourseDataUpdate) ServiceUpdateExpiration(CoID int, Days int) (int64, error) {
+	RowsAffected, err := repo.UpdateExpiration(CoID, Days)
 	if err != nil {
 		return -1, err
 	}
 	if RowsAffected > 0 {
-		return 1,nil
+		return 1, nil
 	} else if RowsAffected == 0 {
-		return 0,nil
+		return 0, nil
 	} else {
-		return -1,nil
+		return -1, nil
+	}
+}
+
+// ServiceUpdateCourse implements UpdateCourseDataService
+func (CourseDataUpdate) ServiceUpdateCourse(CoID int, course *models.Course) (int64, error) {
+
+	RowsAffected, err := repo.UpdateCourse(CoID, course)
+	if err != nil {
+		return -1, err
+	}
+	if RowsAffected > 0 {
+		return 1, nil
+	} else if RowsAffected == 0 {
+		return 0, nil
+	} else {
+		return -1, nil
 	}
 }
 

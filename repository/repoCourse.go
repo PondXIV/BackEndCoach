@@ -3,6 +3,7 @@ package repository
 import (
 	"backEndGo/models"
 	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -18,9 +19,35 @@ type CourseRepository interface {
 	GetCourseByIDCus(Uid int) (*[]models.Course, error)
 	InsertCourseByID(CoID int, Bid int) (int, int, int, error)
 	DeleteCourse(CoID int) (int64, error)
+	UpdateExpiration(CoID int, Days int) (int64, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// UpdateExpiration implements CourseRepository.
+func (c courseDB) UpdateExpiration(CoID int, Days int) (int64, error) {
+	dt := time.Now()
+
+	day := dt.AddDate(0, 0, Days-1)
+
+	//ex_date := day.Format("01-02-2006")
+	// days := strconv.ParseInt(Days)
+	// tm := time.Unix(days)
+	fmt.Println(CoID)
+
+	result := c.db.Model(models.Course{}).Where("coID = ?", CoID).Update("expiration_date", day)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
+
 }
 
 // DeleteCourse implements CourseRepository.

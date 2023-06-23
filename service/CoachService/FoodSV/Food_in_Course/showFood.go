@@ -6,15 +6,15 @@ import (
 )
 
 type ShowFoodDataService interface {
-	SeviceGetFood(Fid int, Ifid int, Did int) (*[]models.Food, error)
+	SeviceGetFood(Fid int, Ifid int, Did int, Name string) (*[]models.Food, error)
 }
 type FoodData struct {
 }
 
 // SeviceGetFoodByDid implements ShowFoodDataService
-func (FoodData) SeviceGetFood(Fid int, Ifid int, Did int) (*[]models.Food, error) {
+func (FoodData) SeviceGetFood(Fid int, Ifid int, Did int, Name string) (*[]models.Food, error) {
 	repo := repository.NewFoodRepository()
-	foods, err := repo.GetFood(Fid, Ifid, Did)
+	foods, err := repo.GetFood(Fid, Ifid, Did, Name)
 
 	//food, err := repository.NewDayOfCourseRepository().DayOfCourseByDid(foods.did)
 	if err != nil {

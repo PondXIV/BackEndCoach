@@ -29,6 +29,41 @@ func NewCourseController(router *gin.Engine) {
 		course.PUT("/courseID/:coID", updateCourse)
 		course.POST("/coachID/:cid", insertCourse)
 		course.DELETE("/courseID/:coID", deleteCourse)
+		course.PUT("/expiration/:coID", updateExpiration)
+	}
+
+}
+func updateExpiration(ctx *gin.Context) {
+	courseID := ctx.Param("coID")
+
+	coID, errs := strconv.Atoi(courseID)
+	if errs != nil {
+		panic(errs)
+	}
+	jsonDto := models.Course{}
+	err := ctx.ShouldBindJSON(&jsonDto)
+	if err != nil {
+		panic(err)
+	}
+	rowsAffected, err := updatecourseDateService.ServiceUpdateExpiration(coID, jsonDto.Days)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
+
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
 	}
 
 }

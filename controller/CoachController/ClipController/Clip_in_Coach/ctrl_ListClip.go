@@ -129,8 +129,11 @@ func deleteListClip(ctx *gin.Context) {
 			})
 
 		} else {
-			if rowsAffected == 1 {
-				strconv.Itoa(int(rowsAffected))
+			if rowsAffected > 0 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
 			} else {
 				outputSoon(ctx)
 			}

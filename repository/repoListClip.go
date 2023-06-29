@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -9,7 +10,7 @@ import (
 type ListClipRepository interface {
 	GetListClip(IcpID int, Cid int, Name string) (*[]models.ListClip, error)
 	InsertListClip(Cid int, Clip *models.ListClip) (int64, error)
-	UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error)
+	UpdateListClip(IcpID int, clip *models.ListClip) (int64, error)
 	DeleteListClip(IcpID int) (int64, error)
 }
 type ListClipDB struct {
@@ -27,14 +28,20 @@ func (l ListClipDB) DeleteListClip(IcpID int) (int64, error) {
 }
 
 // UpdateListClip implements ListClipRepository
-func (l ListClipDB) UpdateListClip(IcpID int, Clip *models.ListClip) (int64, error) {
+func (l ListClipDB) UpdateListClip(IcpID int, clip *models.ListClip) (int64, error) {
 	result := l.db.Model(models.ListClip{}).Where("icpID = ?", IcpID).Updates(
 		models.ListClip{
-			Name:         Clip.Name,
-			AmountPerSet: Clip.AmountPerSet,
-			Video:        Clip.Video,
-			Details:      Clip.Details,
+			Name:         clip.Name,
+			AmountPerSet: clip.AmountPerSet,
+			Video:        clip.Video,
+			Details:      clip.Details,
 		})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
 	return result.RowsAffected, nil
 }
 

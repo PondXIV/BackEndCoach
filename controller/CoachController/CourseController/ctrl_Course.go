@@ -25,6 +25,7 @@ func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
 		course.GET("", getCourse)
+		course.GET("/sell/:coID", getCoursebidnotnull)
 		// course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/courseID/:coID", updateCourse)
 		course.POST("/coachID/:cid", insertCourse)
@@ -65,6 +66,20 @@ func updateExpiration(ctx *gin.Context) {
 			outputSoon(ctx)
 		}
 	}
+
+}
+func getCoursebidnotnull(ctx *gin.Context) {
+	courseID := ctx.Param("coID")
+	coid, err := strconv.Atoi(courseID)
+
+	// If params not exist string = "", int = 0
+
+	course, err := courseDateService.SeviceGetCourseByCoID(coid)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, course)
 
 }
 func getCourse(ctx *gin.Context) {

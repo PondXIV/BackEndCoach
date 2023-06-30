@@ -179,7 +179,7 @@ func (c courseDB) UpdateCourse(CoID int, course *models.Course) (int64, error) {
 // GetCoachByCoID implements CourseRepository
 func (c courseDB) GetCouseByCoID(CoID int) (*models.Course, error) {
 	course := models.Course{}
-	result := c.db.Where("coID = ?", CoID).Find(&course)
+	result := c.db.Where("coID = ?", CoID).Where("bid IS NOT NULL").Find(&course)
 	if result.Error != nil {
 		return nil, result.Error
 	}

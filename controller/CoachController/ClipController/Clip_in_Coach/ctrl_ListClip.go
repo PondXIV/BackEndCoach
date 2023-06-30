@@ -103,10 +103,16 @@ func updateListClip(ctx *gin.Context) {
 
 		} else {
 			if rowsAffected == 1 {
-				strconv.Itoa(int(rowsAffected))
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
 
 			} else {
-				outputSoon(ctx)
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
 			}
 		}
 
@@ -135,7 +141,10 @@ func deleteListClip(ctx *gin.Context) {
 					"result": strconv.Itoa(int(rowsAffected)),
 				})
 			} else {
-				outputSoon(ctx)
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
 			}
 		}
 

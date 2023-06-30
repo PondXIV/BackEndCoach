@@ -3,6 +3,7 @@ package dayscontroller
 import (
 	"backEndGo/models"
 	daysv "backEndGo/service/CoachService/DaySV"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,6 +12,7 @@ import (
 
 var modelsDay = models.DayOfCouse{}
 var updaterDayDataService = daysv.NewUpdateDayDataService()
+var deleteDayDataService = daysv.NewDeleteDayDataService()
 var getDayDataService = daysv.NewDayDataService()
 
 func NewDayController(router *gin.Engine) {
@@ -18,6 +20,7 @@ func NewDayController(router *gin.Engine) {
 	{
 		day.GET("", getDay)
 		day.PUT("/dayID/:did", updateDay)
+		day.DELETE("/dayID/:did", deleteDay)
 	}
 
 }
@@ -71,6 +74,40 @@ func updateDay(ctx *gin.Context) {
 
 			} else {
 				outputSoon(ctx)
+			}
+		}
+
+	}
+
+}
+
+func deleteDay(ctx *gin.Context) {
+
+	dayID := ctx.Param("did")
+
+	did, errs := strconv.Atoi(dayID)
+
+	if errs != nil {
+		fmt.Print(http.StatusBadRequest)
+	} else {
+		rowsAffected, err := deleteDayDataService.SeviceDeleteDay(did)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+
+		} else {
+			if rowsAffected > 0 {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
+			} else {
+				ctx.JSON(http.StatusOK, gin.H{
+					"code":   "200",
+					"result": strconv.Itoa(int(rowsAffected)),
+				})
 			}
 		}
 

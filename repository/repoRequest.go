@@ -8,9 +8,26 @@ import (
 
 type RequestRepository interface {
 	GetRequest(RqID int, Uid int, Cid int) (*[]models.Request, error)
+	InsertRequest(CusID int, request *models.Request) (int64, error)
 }
 type RequestDB struct {
 	db *gorm.DB
+}
+
+// InsertRequest implements RequestRepository.
+func (r RequestDB) InsertRequest(CusID int, request *models.Request) (int64, error) {
+	result := r.db.Create(&models.Request{
+		RpID:       0,
+		CoachID:    request.CoachID,
+		CustomerID: CusID,
+		ClipID:     request.ClipID,
+		Status:     "0",
+		Details:    request.Details,
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return result.RowsAffected, nil
 }
 
 // GetRequest implements RequestRepository.

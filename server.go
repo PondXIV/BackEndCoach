@@ -66,7 +66,7 @@ func StartServer() {
 	wallbill.NewWalletController(router)
 
 	//Request
-	requestcontroller.NewBuyCourseController(router)
+	requestcontroller.NewRequestController(router)
 	router.RunTLS(":8080", "./SSL/cssslcert.pem", "./SSL/private-key.key")
 	// router.Run()
 }

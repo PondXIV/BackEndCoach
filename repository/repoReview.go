@@ -16,7 +16,7 @@ type reviewDB struct {
 // GetReviewByIDCourse implements ReviewRepository
 func (c reviewDB) GetReviewByIDCourse(CoID int) (*[]models.Review, error) {
 	review := []models.Review{}
-	result := c.db.Where("coID = ?", CoID).Find(&review)
+	result := c.db.Preload("Customer").Where("coID = ?", CoID).Find(&review)
 	if result.Error != nil {
 		return nil, result.Error
 	}

@@ -6,6 +6,7 @@ import (
 	"backEndGo/models"
 	coachdto "backEndGo/models/request"
 	coursesv "backEndGo/service/CoachService/CourseSV"
+	userservice "backEndGo/service/userService"
 	"fmt"
 
 	"net/http"
@@ -18,7 +19,7 @@ var courseDateService = coursesv.NewCourseDataService()
 var updatecourseDateService = coursesv.NewUpdateCourseDataService()
 var insertCourseDataService = coursesv.NewInsertCourseDataService()
 var deleteCourseDataService = coursesv.NewDeleteCourseDataService()
-
+var progess = userservice.NewProgessbarDataService()
 var modelsCourse = models.Course{}
 
 func NewCourseController(router *gin.Engine) {
@@ -31,9 +32,18 @@ func NewCourseController(router *gin.Engine) {
 		course.POST("/coachID/:cid", insertCourse)
 		course.DELETE("/courseID/:coID", deleteCourse)
 		course.PUT("/expiration/:coID", updateExpiration)
-		//course.PUT("/days/:coID", updateDays)
+		course.GET("/progess/:coID", GetProgessbar)
 	}
 
+}
+func GetProgessbar(ctx *gin.Context) {
+	courseID := ctx.Query("coID")
+	coID, err := strconv.Atoi(courseID)
+	course, err := progess.ServiceProgess(coID)
+	if err != nil {
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, course)
 }
 func updateExpiration(ctx *gin.Context) {
 	courseID := ctx.Param("coID")

@@ -20,9 +20,23 @@ type CourseRepository interface {
 	InsertCourseByID(CoID int, Bid int) (int, int, int, error)
 	DeleteCourse(CoID int) (int64, error)
 	UpdateExpiration(CoID int, Days int) (int64, error)
+	UpdateDay(CoID int, Day int) (int64, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// UpdateDay implements CourseRepository.
+func (c courseDB) UpdateDay(CoID int, Day int) (int64, error) {
+	result := c.db.Model(models.Course{}).Where("coID = ?", CoID).Update("days", Day)
+	if result.Error != nil {
+		return -1, result.Error
+	}
+
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
 }
 
 // UpdateExpiration implements CourseRepository.

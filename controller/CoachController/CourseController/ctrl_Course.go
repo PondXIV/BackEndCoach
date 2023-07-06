@@ -31,6 +31,7 @@ func NewCourseController(router *gin.Engine) {
 		course.POST("/coachID/:cid", insertCourse)
 		course.DELETE("/courseID/:coID", deleteCourse)
 		course.PUT("/expiration/:coID", updateExpiration)
+		//course.PUT("/days/:coID", updateDays)
 	}
 
 }

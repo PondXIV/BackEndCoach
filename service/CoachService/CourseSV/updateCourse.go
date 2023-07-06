@@ -12,11 +12,27 @@ type UpdateCourseDataService interface {
 	ServiceUpdateStatusCourse(Id int, Status string) int64
 	ServiceUpdateCourse(CoID int, course *models.Course) (int64, error)
 	ServiceUpdateExpiration(CoID int, Days int) (int64, error)
+	ServiceUpdateDay(CoID int, Days int) (int64, error)
 }
 
 var repo = repository.NewCourseRepository()
 
 type CourseDataUpdate struct {
+}
+
+// ServiceUpdateDay implements UpdateCourseDataService.
+func (CourseDataUpdate) ServiceUpdateDay(CoID int, Days int) (int64, error) {
+	RowsAffected, err := repo.UpdateDay(CoID, Days)
+	if err != nil {
+		return -1, err
+	}
+	if RowsAffected > 0 {
+		return 1, nil
+	} else if RowsAffected == 0 {
+		return 0, nil
+	} else {
+		return -1, nil
+	}
 }
 
 // ServiceUpdateExpiration implements UpdateCourseDataService.

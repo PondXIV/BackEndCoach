@@ -8,25 +8,29 @@ import (
 
 type ProgessbarService interface {
 	//ServiceUpdateStatus(CpID int, Status string) (int64, error)
-	ServiceProgess(CoID int) (*[]models.DayOfCouse, error)
+	ServiceProgess(CoID int) (*[]models.Clip, error)
 }
 type ProgessbarData struct {
 }
 
 // ServiceProgess implements ProgessbarService.
-func (ProgessbarData) ServiceProgess(CoID int) (*[]models.DayOfCouse, error) {
+func (ProgessbarData) ServiceProgess(CoID int) (*[]models.Clip, error) {
 	var repodays = repository.NewDayOfCourseRepository()
 	var repoclip = repository.NewClipRepository()
+	getclip, err := repoclip.GetClip(0, 0, 0)
 
 	getday, err := repodays.DayOfCourseByCoid(CoID)
 	if err != nil {
 		panic(err)
 	}
 	for _, valueDay := range *getday {
-		getclip, _ := repoclip.GetClip(0, 0, int(valueDay.Did))
+		getclip, err = repoclip.GetClip(0, 0, int(valueDay.Did))
 		fmt.Println("Mygetclip", getclip)
+		if err == nil {
+			panic(err)
+		}
 	}
-	return getday, nil
+	return getclip, nil
 }
 
 //	func (ClipData) ServiceUpdateStatus(CpID int, Status string) (int64, error) {

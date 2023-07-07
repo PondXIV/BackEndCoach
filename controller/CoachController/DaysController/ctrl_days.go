@@ -22,7 +22,7 @@ func NewDayController(router *gin.Engine) {
 		day.GET("", getDay)
 		day.PUT("/dayID/:did", updateDay)
 		day.DELETE("/dayID/:did", deleteDay)
-		day.POST("/coachID/:cid", insertDay)
+		day.POST("/courseID/:coID", insertDay)
 	}
 
 }
@@ -30,7 +30,7 @@ func NewDayController(router *gin.Engine) {
 func insertDay(ctx *gin.Context) {
 	coachID := ctx.Param("coID")
 
-	cid, errs := strconv.Atoi(coachID)
+	coID, errs := strconv.Atoi(coachID)
 	if errs != nil {
 		panic(errs)
 	}
@@ -43,7 +43,7 @@ func insertDay(ctx *gin.Context) {
 			"result": err.Error(),
 		})
 	}
-	rowsAffected, err := insertDayDataService.ServiceInsertDay(cid, &modelsDay)
+	rowsAffected, err := insertDayDataService.ServiceInsertDay(coID, &modelsDay)
 	if err != nil {
 		if http.StatusBadRequest == 400 {
 			ctx.JSON(http.StatusBadRequest, gin.H{

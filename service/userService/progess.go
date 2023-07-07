@@ -3,34 +3,36 @@ package userservice
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
-	"fmt"
 )
 
 type ProgessbarService interface {
 	//ServiceUpdateStatus(CpID int, Status string) (int64, error)
-	ServiceProgess(CoID int) (*[]models.Clip, error)
+	ServiceProgess(CoID int) (*[]models.DayOfCouse, error)
 }
 type ProgessbarData struct {
 }
 
 // ServiceProgess implements ProgessbarService.
-func (ProgessbarData) ServiceProgess(CoID int) (*[]models.Clip, error) {
+func (ProgessbarData) ServiceProgess(CoID int) (*[]models.DayOfCouse, error) {
 	var repodays = repository.NewDayOfCourseRepository()
-	var repoclip = repository.NewClipRepository()
-	getclip, err := repoclip.GetClip(0, 0, 0)
-
-	getday, err := repodays.DayOfCourseByCoid(CoID)
+	//var repoclip = repository.NewClipRepository()
+	getstatusclip, err := repodays.DayOfCourse(0, CoID, 0)
 	if err != nil {
 		panic(err)
 	}
-	for _, valueDay := range *getday {
-		getclip, err = repoclip.GetClip(0, 0, int(valueDay.Did))
-		fmt.Println("Mygetclip", getclip)
-		if err == nil {
-			panic(err)
-		}
-	}
-	return getclip, nil
+	//getday, err := repodays.DayOfCourseByCoid(CoID)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, valueDay := range *getday {
+	// 	fmt.Println(valueDay.Did)
+	// 	getclip, err = repoclip.GetClip(0, 0, int(valueDay.Did))
+	// 	fmt.Println("Mygetclip", getclip)
+	// 	if err == nil {
+	// 		panic(err)
+	// 	}
+	// }
+	return getstatusclip, nil
 }
 
 //	func (ClipData) ServiceUpdateStatus(CpID int, Status string) (int64, error) {

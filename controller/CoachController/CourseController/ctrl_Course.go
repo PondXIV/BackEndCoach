@@ -33,6 +33,7 @@ func NewCourseController(router *gin.Engine) {
 		course.DELETE("/courseID/:coID", deleteCourse)
 		course.PUT("/expiration/:coID", updateExpiration)
 		course.GET("/progess/:coID", GetProgessbar)
+
 	}
 
 }

@@ -28,7 +28,7 @@ func NewDayController(router *gin.Engine) {
 }
 
 func insertDay(ctx *gin.Context) {
-	coachID := ctx.Param("cid")
+	coachID := ctx.Param("coID")
 
 	cid, errs := strconv.Atoi(coachID)
 	if errs != nil {

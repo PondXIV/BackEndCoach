@@ -38,7 +38,7 @@ func NewCourseController(router *gin.Engine) {
 
 }
 func GetProgessbar(ctx *gin.Context) {
-	courseID := ctx.Query("coID")
+	courseID := ctx.Param("coID")
 	coID, err := strconv.Atoi(courseID)
 	course, err := progess.ServiceProgess(coID)
 	if err != nil {

@@ -6,8 +6,8 @@ type Clip struct {
 	DayOfCouseID uint   `gorm:"column:did"`
 	Status       string `gorm:"column:status;size:1"`
 
-	ListClip ListClip `gorm:"foreignKey:ListClipID"`
-	//DayOfCouse DayOfCouse `gorm:"foreignKey:DayOfCouseID"`
+	ListClip   ListClip   `gorm:"foreignKey:ListClipID"`
+	DayOfCouse DayOfCouse `gorm:"foreignKey:DayOfCouseID"`
 }
 
 func (Clip) TableName() string {

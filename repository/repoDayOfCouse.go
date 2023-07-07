@@ -16,9 +16,21 @@ type DayOfCourseRepository interface {
 	BuyInsertDayOfCourse(CourseID uint, Days int) (*[]models.DayOfCouse, int)
 	UpdateDay(Did int, Day *models.DayOfCouse) (int64, error)
 	DeleteDay(Did int) (int64, error)
+	InsertDay(courseID int, Day *models.DayOfCouse) (int64, error)
 }
 type DayOfCourseDB struct {
 	db *gorm.DB
+}
+
+// InsertDay implements DayOfCourseRepository.
+func (d DayOfCourseDB) InsertDay(courseID int, Day *models.DayOfCouse) (int64, error) {
+	result := d.db.Create(&models.DayOfCouse{
+		Did:      0,
+		CourseID: uint(courseID),
+		Sequence: Day.Sequence,
+	})
+
+	return result.RowsAffected, nil
 }
 
 // DeleteDay implements DayOfCourseRepository.

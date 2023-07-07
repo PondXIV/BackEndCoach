@@ -11,6 +11,7 @@ import (
 )
 
 var modelsDay = models.DayOfCouse{}
+var insertDayDataService = daysv.NewInsertDayDataService()
 var updaterDayDataService = daysv.NewUpdateDayDataService()
 var deleteDayDataService = daysv.NewDeleteDayDataService()
 var getDayDataService = daysv.NewDayDataService()
@@ -21,6 +22,46 @@ func NewDayController(router *gin.Engine) {
 		day.GET("", getDay)
 		day.PUT("/dayID/:did", updateDay)
 		day.DELETE("/dayID/:did", deleteDay)
+		day.POST("/coachID/:cid", insertDay)
+	}
+
+}
+
+func insertDay(ctx *gin.Context) {
+	coachID := ctx.Param("cid")
+
+	cid, errs := strconv.Atoi(coachID)
+	if errs != nil {
+		panic(errs)
+	}
+
+	err := ctx.ShouldBindJSON(&modelsDay)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
+	}
+	rowsAffected, err := insertDayDataService.ServiceInsertDay(cid, &modelsDay)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
+
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
 	}
 
 }

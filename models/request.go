@@ -8,7 +8,7 @@ type Request struct {
 	Status     string `gorm:"column:status;size:1"`
 	Details    string `gorm:"column:details;size:250"`
 
-	Coach    Coach    `gorm:"foreignKey:CoachID"`
+	//Coach    Coach    `gorm:"foreignKey:CoachID"`
 	Customer Customer `gorm:"foreignKey:CustomerID"`
 	Clip     Clip     `gorm:"foreignKey:ClipID"`
 }

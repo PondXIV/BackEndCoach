@@ -14,7 +14,7 @@ type UpdateClipData struct {
 // ServiceUpdateListFood implements UpdateListFoodDataService
 func (UpdateClipData) ServiceUpdateClip(CpID int, Clip *models.Clip) (int64, error) {
 	repoClip := repository.NewClipRepository()
-	getAllClip, err := repoClip.GetClip(0, int(Clip.ListClipID), 0)
+	getAllClip, err := repoClip.GetClip(0, 0, int(Clip.DayOfCouseID))
 
 	if err != nil {
 		panic(err)
@@ -25,7 +25,6 @@ func (UpdateClipData) ServiceUpdateClip(CpID int, Clip *models.Clip) (int64, err
 			if c.CpID != uint(CpID) {
 				return 14, nil
 			}
-
 		}
 
 	}

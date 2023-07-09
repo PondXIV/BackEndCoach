@@ -55,7 +55,7 @@ func (c ClipDB) InsertBuyClip(Did int, IcpID int, Status string) (int64, error) 
 // GetClip implements ClipRepository
 func (c ClipDB) GetClip(CpID int, IcpID int, Did int) (*[]models.Clip, error) {
 	clips := []models.Clip{}
-	result := c.db.Preload("ListClip").Preload("DayOfCouse")
+	result := c.db.Preload("ListClip")
 	if CpID != 0 {
 		result.Where("cpID=?", CpID)
 	}

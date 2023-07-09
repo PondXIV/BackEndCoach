@@ -15,16 +15,16 @@ type InsertClipData struct {
 func (InsertClipData) SeviceInsertClip(Did int, Clip *models.Clip) (int64, error) {
 	repoClip := repository.NewClipRepository()
 
-	// getAllClip, err := repoClip.GetClip(0, 0, Did)
+	getAllClip, err := repoClip.GetClip(0, 0, Did)
 
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// for _, c := range *getAllClip {
-	// 	if c.ListClipID == Clip.ListClipID {
-	// 		return 14, nil
-	// 	}
-	// }
+	if err != nil {
+		panic(err)
+	}
+	for _, c := range *getAllClip {
+		if c.ListClipID == Clip.ListClipID {
+			return 14, nil
+		}
+	}
 	RowsAffected, err := repoClip.InsertClip(Did, Clip)
 	if err != nil {
 		return -1, err

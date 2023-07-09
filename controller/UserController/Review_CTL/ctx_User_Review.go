@@ -1,6 +1,7 @@
 package reviewctl
 
 import (
+	"backEndGo/models"
 	userservice "backEndGo/service/userService"
 	"net/http"
 	"strconv"
@@ -14,6 +15,7 @@ func NewReviewController(router *gin.Engine) {
 	review := router.Group("/review")
 	{
 		review.GET("", GetReviewByCoID)
+		review.POST(":uid", InsertReview)
 
 	}
 
@@ -29,4 +31,47 @@ func GetReviewByCoID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, review)
 
+}
+func InsertReview(ctx *gin.Context) {
+	cusID := ctx.Param("uid")
+
+	uid, errs := strconv.Atoi(cusID)
+	if errs != nil {
+		panic(errs)
+	}
+	modelReview := models.Review{}
+	err := ctx.ShouldBindJSON(&modelReview)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code":   "400",
+			"result": err.Error(),
+		})
+	}
+	rowsAffected, err := reviewDataService.ServiceInsertReview(uid, &modelReview)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
+	}
+
+}
+func outputSoon(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":   "200",
+		"result": "0",
+	})
 }

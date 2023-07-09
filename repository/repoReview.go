@@ -8,9 +8,28 @@ import (
 
 type ReviewRepository interface {
 	GetReviewByIDCourse(CoID int) (*[]models.Review, error)
+	InsertReview(CusID int, review *models.Review) (int64, error)
 }
 type reviewDB struct {
 	db *gorm.DB
+}
+
+// InsertReview implements ReviewRepository.
+func (r reviewDB) InsertReview(CusID int, review *models.Review) (int64, error) {
+	result := r.db.Create(&models.Review{
+		Rid:        0,
+		CustomerID: CusID,
+		CourseID:   review.CourseID,
+		Details:    review.Details,
+		Score:      review.Score,
+		Weight:     review.Weight,
+		Customer:   models.Customer{},
+		Course:     models.Course{},
+	})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	return result.RowsAffected, nil
 }
 
 // GetReviewByIDCourse implements ReviewRepository

@@ -32,7 +32,7 @@ type courseDB struct {
 func (c courseDB) GetCourseByUser(Cid int) (*[]models.Course, error) {
 	courses := []models.Course{}
 
-	result := c.db.Preload("Coach").Preload("Buying").Where("cid = ?", Cid).Where("bid IS NOT NULL").Find(&courses)
+	result := c.db.Preload("Coach").Preload("Buying.Customer").Where("cid = ?", Cid).Where("bid IS NOT NULL").Find(&courses)
 	//
 	if result.Error != nil {
 		return nil, result.Error
@@ -140,7 +140,7 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
 
-	result := c.db.Preload("Coach").Preload("Buying.Customer")
+	result := c.db.Preload("Coach").Preload("Buying.Customer").Preload("DayOfCouses")
 	if CoID != 0 {
 		result.Where("coID=?", CoID)
 	}

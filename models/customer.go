@@ -21,8 +21,8 @@ type Customer struct {
 	FacebookID string    `gorm:"default:null;column:facebookId;size:100"`
 	Price      float64   `gorm:"default:null;column:price"`
 
-	Chats  []Chat   `gorm:"foreignKey:uid"`
-	Buying []Buying `gorm:"foreignKey:uid"`
+	// Chats  []Chat   `gorm:"foreignKey:uid"`
+	// Buying []Buying `gorm:"foreignKey:uid"`
 }
 
 func (Customer) TableName() string {

@@ -7,9 +7,9 @@ type Chat struct {
 	CoachID    uint   `gorm:"column:cid"`
 	Message    string `gorm:"column:message;size250"`
 
-	Customer Customer `gorm:"foreignKey:CustomerID"`
-	Buying   Buying   `gorm:"foreignKey:BuyingID"`
-	Coach    Coach    `gorm:"foreignKey:CoachID"`
+	// Customer Customer `gorm:"foreignKey:CustomerID"`
+	Buying Buying `gorm:"foreignKey:BuyingID"`
+	// Coach    Coach    `gorm:"foreignKey:CoachID"`
 }
 
 func (Chat) TableName() string {

@@ -21,8 +21,8 @@ type Coach struct {
 	FacebookID    string    `gorm:"default:null;column:facebookId;size:100"`
 	Price         int       `gorm:"default:null;column:price"`
 
-	Buyings []Buying `gorm:"foreignKey:CustomerID"`
-	Chats  []Chat `gorm:"foreignKey:CoachID"`
+	// Buyings []Buying `gorm:"foreignKey:CustomerID"`
+	// Chats  []Chat `gorm:"foreignKey:CoachID"`
 }
 
 func (Coach) TableName() string {

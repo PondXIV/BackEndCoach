@@ -11,8 +11,27 @@ type ShowCourseDataService interface {
 	SeviceGetCourseByName(Name string) (*[]models.Course, error)
 	SeviceGetCourseByCoID(CoID int) (*models.Course, error)
 	SeviceGetCourse(CoID int, Cid int, Name string) (*[]models.Course, error)
+	SeviceGetCourseByUser(Cid int) (*[]models.Course, error)
 }
 type CourseData struct {
+}
+
+// SeviceGetCourseByUser implements ShowCourseDataService.
+func (CourseData) SeviceGetCourseByUser(Cid int) (*[]models.Course, error) {
+	repo := repository.NewCourseRepository()
+	course, err := repo.GetCourseByUser(Cid)
+	keys := make(map[int]bool)
+	courses := []models.Course{}
+	for _, entry := range *course {
+		if _, value := keys[int(entry.Buying.CustomerID)]; !value {
+			keys[int(entry.Buying.CustomerID)] = true
+			courses = append(courses, entry)
+		}
+	}
+	if err != nil {
+		panic(err)
+	}
+	return &courses, nil
 }
 
 // SeviceGetCourseAll implements ShowCourseDataService

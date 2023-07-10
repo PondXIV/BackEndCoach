@@ -22,9 +22,23 @@ type CourseRepository interface {
 	DeleteCourse(CoID int) (int64, error)
 	UpdateExpiration(CoID int, Days int) (int64, error)
 	UpdateDay(CoID int, Day int) (int64, error)
+	GetCourseByUser(Cid int) (*[]models.Course, error)
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseByUser implements CourseRepository.
+func (c courseDB) GetCourseByUser(Cid int) (*[]models.Course, error) {
+	courses := []models.Course{}
+
+	result := c.db.Preload("Buying.Customer").Where("cid = ?", Cid).Where("bid IS NOT NULL").Find(&courses)
+	//
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &courses, nil
 }
 
 // GetCourseByIDCusEX implements CourseRepository.
@@ -126,12 +140,12 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
 
-	result := c.db.Where("bid IS NULL").Preload("Coach")
+	result := c.db.Preload("Coach")
 	if CoID != 0 {
 		result.Where("coID=?", CoID)
 	}
 	if Cid != 0 {
-		result.Where("cid = ?", Cid).Find(&courses)
+		result.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
 	}
 	if Name != "" {
 		result.Where("name like ?", "%"+Name+"%")

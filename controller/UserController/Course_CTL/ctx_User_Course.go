@@ -16,12 +16,21 @@ func NewCourseController(router *gin.Engine) {
 	courses := router.Group("/courses")
 	{
 		courses.PUT("/clip/:cpID", UpdateStatus)
-		courses.GET("", GetCourseByUid)
+		courses.GET("", GetCourseNotEX)
+		courses.GET("/EX", GetCourseEX)
 	}
 
 }
-
-func GetCourseByUid(ctx *gin.Context) {
+func GetCourseEX(ctx *gin.Context) {
+	cusID := ctx.Query("uid")
+	uid, err := strconv.Atoi(cusID)
+	course, err := mycourseService.ServiceGetCourseEX(uid)
+	if err != nil {
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, course)
+}
+func GetCourseNotEX(ctx *gin.Context) {
 	cusID := ctx.Query("uid")
 	uid, err := strconv.Atoi(cusID)
 	course, err := mycourseService.ServiceGetMycourse(uid)

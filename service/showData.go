@@ -72,7 +72,7 @@ func (s ShowData) PrintAllCustomer() {
 // PrintAllBuying implements ShowDataService
 func (s ShowData) PrintAllBuying() {
 	repo := repository.NewBuyingRepository()
-	buying, err := repo.GetBuyingrAll()
+	buying, err := repo.GetBuyingrAll(0, 0)
 
 	if err != nil {
 		panic(err)

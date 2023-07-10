@@ -21,6 +21,7 @@ import (
 	auth "backEndGo/controller/auth"
 
 	//Buying
+	buyctls "backEndGo/controller/BuyCourseController"
 	buyctl "backEndGo/controller/UserController/Buy_CTL"
 
 	//WalletGB
@@ -60,7 +61,7 @@ func StartServer() {
 
 	//Buy
 	buyctl.NewBuyingCourseController(router)
-
+	buyctls.NewBuyCourseController(router)
 	//WalletGB
 	walletctl.NewWalletGBController(router)
 	wallbill.NewWalletController(router)

@@ -7,7 +7,7 @@ import (
 )
 
 type BuyingRepository interface {
-	GetBuyingrAll() (*[]models.Buying, error)
+	GetBuyingrAll(uid int, coID int) (*[]models.Buying, error)
 	BuyCourse(Buying *models.Buying) (int, error)
 }
 type buyingDB struct {
@@ -21,7 +21,6 @@ func (b buyingDB) BuyCourse(Buying *models.Buying) (int, error) {
 		Bid:         0,
 		CustomerID:  Buying.CustomerID,
 		BuyDateTime: Buying.BuyDateTime,
-		Image:       Buying.Image,
 		//Customer:    models.Customer{},
 	})
 	if result.Error != nil {
@@ -36,12 +35,16 @@ func (b buyingDB) BuyCourse(Buying *models.Buying) (int, error) {
 }
 
 // GetBuyingrAll implements BuyingRepository
-func (b buyingDB) GetBuyingrAll() (*[]models.Buying, error) {
+func (b buyingDB) GetBuyingrAll(uid int, coID int) (*[]models.Buying, error) {
 	buying := []models.Buying{}
-	result := b.db.Preload("Customer").Find(&buying)
-	if result.Error != nil {
-		return nil, result.Error
+	result := b.db.Preload("Customer")
+	if uid != 0 {
+		result.Where("uid=?", uid)
 	}
+	// if coID != 0 {
+	// 	result.Where("coID=?", coID)
+	// }
+	result.Find(&buying)
 	return &buying, nil
 }
 

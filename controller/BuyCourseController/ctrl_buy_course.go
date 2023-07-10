@@ -12,12 +12,29 @@ import (
 )
 
 var modelsBuying = models.Buying{}
+var show = buycourse.NewBuyingDataService()
 
 func NewBuyCourseController(router *gin.Engine) {
 	buy := router.Group("/buy")
 	{
+		buy.GET("", getBuying)
 		buy.POST("/:coID", buyPostBody)
 	}
+
+}
+func getBuying(ctx *gin.Context) {
+	quid := ctx.Query("uid")
+	qcoID := ctx.Query("coID")
+
+	uid, err := strconv.Atoi(quid)
+	coID, err := strconv.Atoi(qcoID)
+
+	Buys, err := show.GetBuying(uid, coID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, Buys)
 
 }
 func buyPostBody(ctx *gin.Context) {

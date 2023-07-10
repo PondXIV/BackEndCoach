@@ -18,7 +18,7 @@ type Course struct {
 	//DayOfCouses    []DayOfCouse `gorm:"foreignKey:coID"`
 
 	Coach  Coach  `gorm:"foreignKey:CoachID"`
-	Buying Buying `gorm:"refernces:Bid"`
+	Buying Buying `gorm:"foreignKey:BuyingID"`
 
 	DayOfCouses []DayOfCouse `gorm:"foreignKey:CourseID"`
 }

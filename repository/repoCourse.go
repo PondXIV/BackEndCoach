@@ -140,7 +140,7 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
 
-	result := c.db.Preload("Coach").Preload("Buying.Customer").Preload("DayOfCouses")
+	result := c.db.Preload("Coach")
 	if CoID != 0 {
 		result.Where("coID=?", CoID)
 	}

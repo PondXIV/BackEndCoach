@@ -37,7 +37,7 @@ func (b buyingDB) BuyCourse(Buying *models.Buying) (int, error) {
 // GetBuyingrAll implements BuyingRepository
 func (b buyingDB) GetBuyingrAll(uid int, coID int) (*[]models.Buying, error) {
 	buying := []models.Buying{}
-	result := b.db.Preload("Customer").Preload("Courses").Distinct("uid")
+	result := b.db.Preload("Customer").Preload("Courses")
 	if uid != 0 {
 		result.Where("uid=?", uid)
 	}

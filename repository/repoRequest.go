@@ -33,7 +33,7 @@ func (r RequestDB) InsertRequest(CusID int, request *models.Request) (int64, err
 // GetRequest implements RequestRepository.
 func (r RequestDB) GetRequest(RqID int, Uid int, Cid int) (*[]models.Request, error) {
 	request := []models.Request{}
-	result := r.db.Preload("Customer").Preload("Clip")
+	result := r.db.Preload("Customer").Joins("Clip").Preload("Clip.ListClip")
 
 	if RqID != 0 {
 		result.Where("rqID=?", RqID)

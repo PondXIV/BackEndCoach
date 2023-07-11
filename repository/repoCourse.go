@@ -45,7 +45,7 @@ func (c courseDB) GetCourseByUser(Cid int) (*[]models.Course, error) {
 func (c courseDB) GetCourseByIDCusEX(Uid int) (*[]models.Course, error) {
 	dt := time.Now()
 	courses := []models.Course{}
-	result := c.db.Joins("Buying").Where("uid=?", Uid).Where("expiration_date < ?", dt).Find(&courses)
+	result := c.db.Preload("Coach").Joins("Buying").Where("uid=?", Uid).Where("expiration_date < ?", dt).Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -163,7 +163,7 @@ func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, e
 func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
 	dt := time.Now()
 	courses := []models.Course{}
-	result := c.db.Joins("Buying").Where("uid=?", Uid).Where("expiration_date > ? OR expiration_date IS NULL ", dt).Find(&courses)
+	result := c.db.Preload("Coach").Joins("Buying").Where("uid=?", Uid).Where("expiration_date > ? OR expiration_date IS NULL ", dt).Find(&courses)
 	if result.Error != nil {
 		return nil, result.Error
 	}

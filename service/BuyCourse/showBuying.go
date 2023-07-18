@@ -14,7 +14,7 @@ type BuyingData struct {
 // SeviceGetListClipByIDCoach implements ShowListClipDataService
 func (c BuyingData) GetBuying(uid int, coID int) (*[]models.Buying, error) {
 	repo := repository.NewBuyingRepository()
-	Buys, err := repo.GetBuyingrAll(uid, coID)
+	Buys, err := repo.GetBuyingrAll(uid, coID, 0)
 	if err != nil {
 		return nil, err
 	}

@@ -8,18 +8,18 @@ import (
 
 type ReviewRepository interface {
 	GetReviewByIDCourse(CoID int) (*[]models.Review, error)
-	InsertReview(CusID int, review *models.Review) (int64, error)
+	InsertReview(CoID int, review *models.Review) (int64, error)
 }
 type reviewDB struct {
 	db *gorm.DB
 }
 
 // InsertReview implements ReviewRepository.
-func (r reviewDB) InsertReview(CusID int, review *models.Review) (int64, error) {
+func (r reviewDB) InsertReview(CoID int, review *models.Review) (int64, error) {
 	result := r.db.Create(&models.Review{
 		Rid:        0,
-		CustomerID: CusID,
-		CourseID:   review.CourseID,
+		CustomerID: review.CustomerID,
+		CourseID:   CoID,
 		Details:    review.Details,
 		Score:      review.Score,
 		Weight:     review.Weight,

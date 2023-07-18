@@ -9,7 +9,7 @@ type Buying struct {
 	CourseID    uint      `gorm:"column:coID"`
 
 	Customer Customer `gorm:"foreignKey:CustomerID"`
-	//Courses  []Course `gorm:"foreignKey:BuyingID"`
+	Courses  []Course `gorm:"foreignKey:BuyingID"`
 }
 
 func (Buying) TableName() string {

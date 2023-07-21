@@ -18,18 +18,35 @@ func NewBuyCourseController(router *gin.Engine) {
 	buy := router.Group("/buy")
 	{
 		buy.GET("", getBuying)
+		buy.GET("/user/:cid", getCourseByUser)
 		buy.POST("/:coID", buyPostBody)
 	}
+
+}
+func getCourseByUser(ctx *gin.Context) {
+
+	coachId := ctx.Param("cid")
+
+	cid, _ := strconv.Atoi(coachId)
+
+	course, err := show.SeviceGetCourseByUser(cid)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, course)
 
 }
 func getBuying(ctx *gin.Context) {
 	quid := ctx.Query("uid")
 	qcoID := ctx.Query("coID")
+	qcid := ctx.Query("cid")
 
 	uid, err := strconv.Atoi(quid)
 	coID, err := strconv.Atoi(qcoID)
+	cid, err := strconv.Atoi(qcid)
 
-	Buys, err := show.GetBuying(uid, coID)
+	Buys, err := show.GetBuying(uid, coID, cid)
 	if err != nil {
 		panic(err)
 	}

@@ -8,15 +8,15 @@ import (
 var repo = repository.NewCourseRepository()
 
 type GetMycourseService interface {
-	ServiceGetMycourse(Uid int) (*[]models.Course, error)
-	ServiceGetCourseEX(Uid int) (*[]models.Course, error)
+	ServiceGetMycourse(Uid int) (*[]models.Buying, error)
+	ServiceGetCourseEX(Uid int) (*[]models.Buying, error)
 }
 type MyCourseData struct {
 }
 
 // ServiceGetCourseEX implements GetMycourseService.
-func (MyCourseData) ServiceGetCourseEX(Uid int) (*[]models.Course, error) {
-	course, err := repo.GetCourseByIDCusEX(Uid)
+func (MyCourseData) ServiceGetCourseEX(Uid int) (*[]models.Buying, error) {
+	course, err := repository.NewBuyingRepository().GetCourseByIDCusEX(Uid)
 	if err != nil {
 		panic(err)
 	}
@@ -24,9 +24,9 @@ func (MyCourseData) ServiceGetCourseEX(Uid int) (*[]models.Course, error) {
 }
 
 // ServiceGetMycourse implements GetMycourseService
-func (MyCourseData) ServiceGetMycourse(Uid int) (*[]models.Course, error) {
+func (MyCourseData) ServiceGetMycourse(Uid int) (*[]models.Buying, error) {
 
-	course, err := repo.GetCourseByIDCus(Uid)
+	course, err := repository.NewBuyingRepository().GetCourseByIDCus(Uid)
 	if err != nil {
 		panic(err)
 	}

@@ -6,15 +6,34 @@ import (
 )
 
 type ShowBuyingDataService interface {
-	GetBuying(uid int, coID int) (*[]models.Buying, error)
+	GetBuying(uid int, coID int, cid int) (*[]models.Buying, error)
+	SeviceGetCourseByUser(Cid int) (*[]models.Buying, error)
 }
 type BuyingData struct {
 }
 
-// SeviceGetListClipByIDCoach implements ShowListClipDataService
-func (c BuyingData) GetBuying(uid int, coID int) (*[]models.Buying, error) {
+// SeviceGetCourseByUser implements ShowCourseDataService.
+func (b BuyingData) SeviceGetCourseByUser(Cid int) (*[]models.Buying, error) {
 	repo := repository.NewBuyingRepository()
-	Buys, err := repo.GetBuyingrAll(uid, coID, 0)
+	course, err := repo.GetBuyingrAll(0, 0, 0, Cid)
+	keys := make(map[int]bool)
+	buying := []models.Buying{}
+	for _, entry := range *course {
+		if _, value := keys[int(entry.CustomerID)]; !value {
+			keys[int(entry.CustomerID)] = true
+			buying = append(buying, entry)
+		}
+	}
+	if err != nil {
+		panic(err)
+	}
+	return &buying, nil
+}
+
+// SeviceGetListClipByIDCoach implements ShowListClipDataService
+func (c BuyingData) GetBuying(uid int, coID int, cid int) (*[]models.Buying, error) {
+	repo := repository.NewBuyingRepository()
+	Buys, err := repo.GetBuyingrAll(uid, coID, 0, cid)
 	if err != nil {
 		return nil, err
 	}

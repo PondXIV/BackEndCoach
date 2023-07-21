@@ -2,16 +2,41 @@ package repository
 
 import (
 	"backEndGo/models"
+	"time"
 
 	"gorm.io/gorm"
 )
 
 type BuyingRepository interface {
-	GetBuyingrAll(uid int, coID int, bid int) (*[]models.Buying, error)
+	GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.Buying, error)
 	BuyCourse(Buying *models.Buying) (int, error)
+	GetCourseByIDCusEX(Uid int) (*[]models.Buying, error)
+	GetCourseByIDCus(Uid int) (*[]models.Buying, error)
 }
 type buyingDB struct {
 	db *gorm.DB
+}
+
+// GetCourseByIDCus implements CourseRepository
+func (b buyingDB) GetCourseByIDCus(Uid int) (*[]models.Buying, error) {
+	dt := time.Now()
+	buying := []models.Buying{}
+	result := b.db.Joins("Course").Preload("Course.Coach").Where("uid=?", Uid).Where("expiration_date > ? OR expiration_date IS NULL ", dt).Find(&buying)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &buying, nil
+}
+
+// GetCourseByIDCusEX implements CourseRepository.
+func (b buyingDB) GetCourseByIDCusEX(Uid int) (*[]models.Buying, error) {
+	dt := time.Now()
+	buying := []models.Buying{}
+	result := b.db.Joins("Course").Preload("Course.Coach").Where("uid=?", Uid).Where("expiration_date < ?", dt).Find(&buying)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &buying, nil
 }
 
 // BuyCourse implements BuyingRepository
@@ -35,9 +60,9 @@ func (b buyingDB) BuyCourse(Buying *models.Buying) (int, error) {
 }
 
 // GetBuyingrAll implements BuyingRepository
-func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int) (*[]models.Buying, error) {
+func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.Buying, error) {
 	buying := []models.Buying{}
-	result := b.db.Preload("Customer").Preload("Courses")
+	result := b.db.Joins("Course").Preload("Customer").Preload("Course.Coach")
 	if uid != 0 {
 		result.Where("uid=?", uid)
 	}
@@ -46,6 +71,9 @@ func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int) (*[]models.Buying, e
 	}
 	if coID != 0 {
 		result.Where("coID=?", coID)
+	}
+	if cid != 0 {
+		result.Where("cid=?", cid)
 	}
 	if result.Error != nil {
 		return nil, result.Error

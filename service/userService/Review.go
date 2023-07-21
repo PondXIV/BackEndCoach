@@ -27,7 +27,7 @@ func (ReviewData) ServiceInsertReview(CoID int, review *models.Review) (int64, e
 	fmt.Println(billID.BuyingID)
 	//3
 	repobill := repository.NewBuyingRepository()
-	courseId, err := repobill.GetBuyingrAll(0, 0, int(billID.BuyingID))
+	courseId, err := repobill.GetBuyingrAll(0, 0, int(billID.BuyingID), 0)
 	for _, valuecourseId := range *courseId {
 
 		rowsAffecteds, _ := repoReview.InsertReview(int(valuecourseId.CourseID), review)

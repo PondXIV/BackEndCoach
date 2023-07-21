@@ -16,41 +16,15 @@ type CourseRepository interface {
 	GetCouseByCoID(CoID int) (*models.Course, error)
 	UpdateCourse(CoID int, course *models.Course) (int64, error)
 	InsertCourse(Cid int, course *models.Course) (int64, error)
-	GetCourseByIDCus(Uid int) (*[]models.Course, error)
-	GetCourseByIDCusEX(Uid int) (*[]models.Course, error)
 	InsertCourseByID(CoID int, Bid int) (int, int, int, error)
 	DeleteCourse(CoID int) (int64, error)
 	UpdateExpiration(CoID int, Days int) (int64, error)
 	UpdateDay(CoID int, Day int) (int64, error)
-	GetCourseByUser(Cid int) (*[]models.Course, error)
 }
 type courseDB struct {
 	db *gorm.DB
 }
 
-// GetCourseByUser implements CourseRepository.
-func (c courseDB) GetCourseByUser(Cid int) (*[]models.Course, error) {
-	courses := []models.Course{}
-
-	result := c.db.Preload("Coach").Preload("Buying.Customer").Where("cid = ?", Cid).Where("bid IS NOT NULL").Find(&courses)
-	//
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return &courses, nil
-}
-
-// GetCourseByIDCusEX implements CourseRepository.
-func (c courseDB) GetCourseByIDCusEX(Uid int) (*[]models.Course, error) {
-	dt := time.Now()
-	courses := []models.Course{}
-	result := c.db.Preload("Coach").Joins("Buying").Where("uid=?", Uid).Where("expiration_date < ?", dt).Find(&courses)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &courses, nil
-}
 
 // UpdateDay implements CourseRepository.
 func (c courseDB) UpdateDay(CoID int, Day int) (int64, error) {
@@ -159,16 +133,7 @@ func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, e
 	return &courses, nil
 }
 
-// GetCourseByIDCus implements CourseRepository
-func (c courseDB) GetCourseByIDCus(Uid int) (*[]models.Course, error) {
-	dt := time.Now()
-	courses := []models.Course{}
-	result := c.db.Preload("Coach").Joins("Buying").Where("uid=?", Uid).Where("expiration_date > ? OR expiration_date IS NULL ", dt).Find(&courses)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return &courses, nil
-}
+
 
 // InsertCourse implements CourseRepository
 func (c courseDB) InsertCourse(Cid int, course *models.Course) (int64, error) {

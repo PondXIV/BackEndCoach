@@ -17,8 +17,8 @@ type Course struct {
 	ExpirationDate time.Time `gorm:"default:null;column:expiration_date"`
 	//DayOfCouses    []DayOfCouse `gorm:"foreignKey:coID"`
 
-	Coach  Coach  `gorm:"foreignKey:CoachID"`
-	Buying Buying `gorm:"foreignKey:BuyingID"`
+	Coach Coach `gorm:"foreignKey:CoachID"`
+	//Buying Buying `gorm:"foreignKey:BuyingID"`
 
 	//DayOfCouses []DayOfCouse `gorm:"foreignKey:CourseID"`
 }

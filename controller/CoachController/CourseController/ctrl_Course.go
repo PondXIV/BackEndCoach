@@ -26,7 +26,6 @@ func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
 		course.GET("", getCourse)
-		course.GET("/user", getCourseByUser)
 		course.GET("/sell/:coID", getCoursebidnotnull)
 		// course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/courseID/:coID", updateCourse)
@@ -38,20 +37,7 @@ func NewCourseController(router *gin.Engine) {
 	}
 
 }
-func getCourseByUser(ctx *gin.Context) {
 
-	qcid := ctx.Query("cid")
-
-	cid, err := strconv.Atoi(qcid)
-
-	course, err := courseDateService.SeviceGetCourseByUser(cid)
-	if err != nil {
-		panic(err)
-	}
-
-	ctx.JSON(http.StatusOK, course)
-
-}
 func GetProgessbar(ctx *gin.Context) {
 	courseID := ctx.Param("coID")
 	coID, err := strconv.Atoi(courseID)

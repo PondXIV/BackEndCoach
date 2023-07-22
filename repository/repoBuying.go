@@ -67,7 +67,7 @@ func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.
 		result.Where("uid=?", uid)
 	}
 	if bid != 0 {
-		result.Where("bid=?", bid)
+		result.Where("Buying.bid=?", bid)
 	}
 	if coID != 0 {
 		result.Where("coID=?", coID)

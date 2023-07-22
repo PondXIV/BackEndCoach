@@ -15,7 +15,7 @@ func NewReviewController(router *gin.Engine) {
 	review := router.Group("/review")
 	{
 		review.GET("", GetReviewByCoID)
-		review.POST(":coID", InsertReview)
+		review.POST(":bid", InsertReview)
 
 	}
 
@@ -33,9 +33,9 @@ func GetReviewByCoID(ctx *gin.Context) {
 
 }
 func InsertReview(ctx *gin.Context) {
-	courseID := ctx.Param("coID")
+	billID := ctx.Param("bid")
 
-	coID, errs := strconv.Atoi(courseID)
+	bid, errs := strconv.Atoi(billID)
 	if errs != nil {
 		panic(errs)
 	}
@@ -48,7 +48,7 @@ func InsertReview(ctx *gin.Context) {
 			"result": err.Error(),
 		})
 	}
-	rowsAffected, err := reviewDataService.ServiceInsertReview(coID, &modelReview)
+	rowsAffected, err := reviewDataService.ServiceInsertReview(bid, &modelReview)
 	if err != nil {
 		if http.StatusBadRequest == 400 {
 			ctx.JSON(http.StatusBadRequest, gin.H{

@@ -21,7 +21,7 @@ func (ReviewData) ServiceInsertReview(Bid int, review *models.Review) (int64, er
 	courseId, err := repobill.GetBuyingrAll(0, 0, Bid, 0)
 	for _, valuecourseId := range *courseId {
 
-		rowsAffecteds, _ := repoReview.InsertReview(int(valuecourseId.CourseID), review)
+		rowsAffecteds, _ := repoReview.InsertReview(int(valuecourseId.OriginalID), review)
 		fmt.Printf("rowsAffecteds", rowsAffecteds)
 	}
 	//4

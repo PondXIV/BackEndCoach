@@ -16,6 +16,7 @@ func NewRequestController(router *gin.Engine) {
 	{
 		request.GET("", showRequest)
 		request.POST(":uid", Insertrequest)
+		request.PUT(":rqID", Updaterequest)
 	}
 
 }
@@ -36,6 +37,33 @@ func Insertrequest(ctx *gin.Context) {
 		})
 	}
 	rowsAffected, err := requestservice.NewInsertRequestDataService().ServiceInsertRequest(uid, &modelsRequest)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
+	}
+
+}
+
+func Updaterequest(ctx *gin.Context) {
+	qrqID := ctx.Param("rqID")
+
+	rqID, _ := strconv.Atoi(qrqID)
+
+	rowsAffected, err := requestservice.NewUpdateRequestDataService().ServiceUpdateRequest(rqID)
 	if err != nil {
 		if http.StatusBadRequest == 400 {
 			ctx.JSON(http.StatusBadRequest, gin.H{

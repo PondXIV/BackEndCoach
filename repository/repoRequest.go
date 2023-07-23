@@ -9,9 +9,23 @@ import (
 type RequestRepository interface {
 	GetRequest(RqID int, Uid int, Cid int) (*[]models.Request, error)
 	InsertRequest(CusID int, request *models.Request) (int64, error)
+	UpdateRequest(RqID int) (int64, error)
 }
 type RequestDB struct {
 	db *gorm.DB
+}
+
+// UpdateRequest implements RequestRepository.
+func (r RequestDB) UpdateRequest(RqID int) (int64, error) {
+	result := r.db.Model(models.Request{}).Where("rqID = ?", RqID).Updates(
+		models.Request{
+			Status: "1",
+		})
+	if result.Error != nil {
+		return -1, result.Error
+	}
+
+	return result.RowsAffected, nil
 }
 
 // InsertRequest implements RequestRepository.

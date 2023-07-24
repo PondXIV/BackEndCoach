@@ -10,7 +10,7 @@ type Review struct {
 
 	//Coach    Coach    `gorm:"foreignKey:cid"`
 	Customer Customer `gorm:"foreignKey:CustomerID"`
-	Course   Course   `gorm:"foreignKey:CourseID"`
+	//Course   Course   `gorm:"foreignKey:CourseID"`
 }
 
 func (Review) TableName() string {

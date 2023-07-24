@@ -24,7 +24,6 @@ func (r reviewDB) InsertReview(CoID int, review *models.Review) (int64, error) {
 		Score:      review.Score,
 		Weight:     review.Weight,
 		Customer:   models.Customer{},
-		Course:     models.Course{},
 	})
 	if result.Error != nil {
 		return -1, result.Error

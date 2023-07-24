@@ -55,7 +55,7 @@ func buycourse(ctx *gin.Context) {
 		if rowsAffected >= 1 {
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":   "200",
-				"result": rowsAffected,
+				"result": strconv.Itoa(int(rowsAffected)),
 			})
 
 		} else {

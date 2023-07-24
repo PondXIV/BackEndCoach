@@ -21,7 +21,7 @@ type BuyCourseData struct {
 // ServiceBuyCourse implements BuyCourseDataService
 func (BuyCourseData) ServiceBuyCourse(CoID int, Buying *models.Buying) (int64, error) {
 
-	bid, err := repoBuying.BuyCourse(Buying)
+	bid, err := repoBuying.BuyCourse(CoID, Buying)
 	if err != nil {
 		return -1, err
 	}

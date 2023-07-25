@@ -22,12 +22,28 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	repoClip := repository.NewClipRepository()
 	repoFood := repository.NewFoodRepository()
 	repoCus := repository.NewCustomerRepository()
+	repoCoach := repository.NewCoachRepository()
+
 	user := repoUser.GetUserID(int(BuyCourse.CustomerID))
+
 	sum := 0.0
+	priceCoach := 0
+	cid := 0
+	var ListCoach *[]models.Coach
+
 	Pricecourse, _ := repoCourse.GetCourse(CoID, 0, "")
 	for _, value := range *Pricecourse {
+
 		sum = float64(user.Price) - float64(value.Price)
+		ListCoach, _ = repoCoach.GetCoachByID(value.CoachID)
+
 	}
+	for _, value := range *ListCoach {
+		priceCoach = int(sum) + int(value.Price)
+		cid = int(value.Cid)
+	}
+	fmt.Println("ListCoach ", ListCoach)
+
 	fmt.Println("DayID ", sum)
 	res := math.Signbit(sum)
 
@@ -35,6 +51,7 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 		r, _ := repoCus.EditPrice(int(BuyCourse.CustomerID), sum)
 		fmt.Println("DayID ", r)
 		bid, err := repoBuycourse.BuyCourse(CoID, BuyCourse)
+		repoCoach.UpdatePriceCoach(cid, priceCoach)
 		//fid, err := repoFood.InsertFood(foods,&foodMD)
 
 		if err != nil {

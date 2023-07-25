@@ -28,21 +28,23 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 
 	sum := 0.0
 	priceCoach := 0
+	price := 0
 	cid := 0
 	var ListCoach *[]models.Coach
 
 	Pricecourse, _ := repoCourse.GetCourse(CoID, 0, "")
 	for _, value := range *Pricecourse {
-
+		price = int(value.Price)
 		sum = float64(user.Price) - float64(value.Price)
 		ListCoach, _ = repoCoach.GetCoachByID(value.CoachID)
 
 	}
 	for _, value := range *ListCoach {
-		priceCoach = int(sum) + int(value.Price)
+		priceCoach = int(price) + int(value.Price)
 		cid = int(value.Cid)
+		fmt.Println("pp ", sum, "+", value.Price)
+		fmt.Println("priceCoach.Price ", priceCoach)
 	}
-	fmt.Println("ListCoach ", ListCoach)
 
 	fmt.Println("DayID ", sum)
 	res := math.Signbit(sum)
@@ -52,7 +54,6 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 		fmt.Println("DayID ", r)
 		bid, err := repoBuycourse.BuyCourse(CoID, BuyCourse)
 		repoCoach.UpdatePriceCoach(cid, priceCoach)
-		//fid, err := repoFood.InsertFood(foods,&foodMD)
 
 		if err != nil {
 			return -1, err
@@ -92,8 +93,6 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 				clip, _ := repoClip.InsertBuyClip(didNew[i], int(valueClip.ListClipID), valueClip.Status)
 				fmt.Print("Myclip", clip)
 			}
-			fmt.Println("MyGetFood", getFood)
-			fmt.Println("MyGetFood", getCilp)
 		}
 
 		return 1, nil

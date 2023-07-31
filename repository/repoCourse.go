@@ -25,7 +25,6 @@ type courseDB struct {
 	db *gorm.DB
 }
 
-
 // UpdateDay implements CourseRepository.
 func (c courseDB) UpdateDay(CoID int, Day int) (int64, error) {
 	result := c.db.Model(models.Course{}).Where("coID = ?", CoID).Update("days", Day)
@@ -114,12 +113,12 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
 
-	result := c.db.Preload("Coach")
+	result := c.db.Preload("Coach").Where("bid IS NULL")
 	if CoID != 0 {
 		result.Where("coID=?", CoID)
 	}
 	if Cid != 0 {
-		result.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
+		result.Where("cid = ?", Cid).Find(&courses)
 	}
 	if Name != "" {
 		result.Where("name like ?", "%"+Name+"%")
@@ -132,8 +131,6 @@ func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, e
 
 	return &courses, nil
 }
-
-
 
 // InsertCourse implements CourseRepository
 func (c courseDB) InsertCourse(Cid int, course *models.Course) (int64, error) {

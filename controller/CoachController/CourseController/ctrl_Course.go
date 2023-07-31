@@ -210,7 +210,7 @@ func insertCourse(ctx *gin.Context) {
 		if rowsAffected >= 1 {
 			ctx.JSON(http.StatusOK, gin.H{
 				"code":   "200",
-				"result": "1",
+				"result": strconv.Itoa(int(rowsAffected)),
 			})
 
 		} else {

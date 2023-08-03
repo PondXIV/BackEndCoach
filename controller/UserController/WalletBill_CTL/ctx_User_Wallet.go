@@ -3,6 +3,7 @@ package walletbillctl
 import (
 	"backEndGo/models"
 	userservice "backEndGo/service/userService"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,8 +14,19 @@ func NewWalletController(router *gin.Engine) {
 	wallet := router.Group("/wallet")
 	{
 		wallet.POST(":uid", Insertwallet)
+		wallet.GET("", GetHistoryWallet)
 	}
 
+}
+func GetHistoryWallet(ctx *gin.Context) {
+	cusID := ctx.Query("uid")
+	fmt.Println(cusID)
+	uid, err := strconv.Atoi(cusID)
+	wallet, err := userservice.NewGbprimeDataService().ServiceHistoryWallet(uid)
+	if err != nil {
+		panic(err)
+	}
+	ctx.JSON(http.StatusOK, wallet)
 }
 func Insertwallet(ctx *gin.Context) {
 	cusID := ctx.Param("uid")

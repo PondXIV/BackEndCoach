@@ -12,20 +12,22 @@ type GbprimeService interface {
 	ServiceGbprime(Gbprime *models.Gbprimpay)
 	ServiceWallet(ReferenceNo string, ResGb *models.Gbprimpay) (int64, error)
 	ServiceInsertWallet(CusID int, wallet *models.Wallet) (int64, error)
+	ServiceHistoryWallet(CusID int) (*[]models.Wallet, error)
 	//ServiceInsertWalletUid(CusID int, price int) (int64, error)
 }
 
 type GbprimeData struct {
 }
 
-// ServiceInsertWalletUid implements GbprimeService.
-// func (g GbprimeData) ServiceInsertWalletUid(CusID int, price int) (int64, error) {
-// 	rowsAffecteds, err := repoWallet.UpdateWalletUid(CusID, price)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return int64(rowsAffecteds), nil
-// }
+// ServiceHistoryWallet implements GbprimeService.
+func (GbprimeData) ServiceHistoryWallet(CusID int) (*[]models.Wallet, error) {
+	wallet, err := repoWallet.GetHistoryWallet(CusID)
+	fmt.Println(CusID)
+	if err != nil {
+		panic(err)
+	}
+	return wallet, nil
+}
 
 // ServiceInsertWallet implements GbprimeService.
 func (g GbprimeData) ServiceInsertWallet(CusID int, wallet *models.Wallet) (int64, error) {

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -11,10 +12,44 @@ type UserRepository interface {
 	LoginFB(fackbookID string) (*models.Coach, *models.Customer, error)
 	RegisterCus(cus *models.Customer) (int64, error)
 	RegisterCoach(coach *models.Coach) (int64, error)
+	UpdatePasswordCus(uid int, password string) (int64, error)
+	UpdatePasswordCoach(cid int, password string) (int64, error)
 	GetUserID(Uid int) *models.Customer
 }
 type userDB struct {
 	db *gorm.DB
+}
+
+// UpdatePasswordCoach implements UserRepository.
+func (u userDB) UpdatePasswordCoach(cid int, password string) (int64, error) {
+	result := u.db.Model(models.Coach{}).Where("cid = ?", cid).Updates(
+		models.Coach{
+			Password: password,
+		})
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
+}
+
+// UpdatePasswordCus implements UserRepository.
+func (u userDB) UpdatePasswordCus(uid int, password string) (int64, error) {
+	result := u.db.Model(models.Customer{}).Where("uid = ?", uid).Updates(
+		models.Customer{
+			Password: password,
+		})
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
 }
 
 // GetUserID implements UserRepository

@@ -11,8 +11,30 @@ type UserDataService interface {
 	ServiceLoginFB(FackbookID string) (*models.Coach, *models.Customer, error)
 	ServiceRegisterCus(cus *models.Customer) (int64, error)
 	ServiceRegisterCoach(coach *models.Coach) (int64, error)
+	ServiceUpdatePasswordCus(uid int, cus *models.Customer) (int64, error)
+	ServiceUpdatePasswordCoach(cid int, coach *models.Coach) (int64, error)
 }
 type UserData struct {
+}
+
+// ServiceUpdatePasswordCoach implements UserDataService.
+func (UserData) ServiceUpdatePasswordCoach(cid int, coach *models.Coach) (int64, error) {
+	repo := repository.NewUserRepository()
+	result, err := repo.UpdatePasswordCoach(cid, coach.Password)
+	if err != nil {
+		panic(err)
+	}
+	return result, nil
+}
+
+// ServiceUpdatePasswordCus implements UserDataService.
+func (UserData) ServiceUpdatePasswordCus(uid int, cus *models.Customer) (int64, error) {
+	repo := repository.NewUserRepository()
+	result, err := repo.UpdatePasswordCus(uid, cus.Password)
+	if err != nil {
+		panic(err)
+	}
+	return result, nil
 }
 
 // ServiceLoginFB implements UserDataService

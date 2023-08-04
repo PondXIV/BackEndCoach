@@ -9,12 +9,22 @@ import (
 
 type BuyingRepository interface {
 	GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.Buying, error)
-	BuyCourse(Buying *models.Buying) (int, error)
+	BuyCourse(CoID int, Buying *models.Buying) (int, error)
 	GetCourseByIDCusEX(Uid int) (*[]models.Buying, error)
 	GetCourseByIDCus(Uid int) (*[]models.Buying, error)
+	UpdateCoIDBuying(Bid int, CourseNewID int) error
 }
 type buyingDB struct {
 	db *gorm.DB
+}
+
+// updateCoIDBuying implements BuyingRepository.
+func (b buyingDB) UpdateCoIDBuying(Bid int, CourseNewID int) error {
+	result := b.db.Model(models.Buying{}).Where("bid = ?", Bid).Update("coID", CourseNewID)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	return result.Error
 }
 
 // GetCourseByIDCus implements CourseRepository
@@ -40,12 +50,14 @@ func (b buyingDB) GetCourseByIDCusEX(Uid int) (*[]models.Buying, error) {
 }
 
 // BuyCourse implements BuyingRepository
-func (b buyingDB) BuyCourse(Buying *models.Buying) (int, error) {
+func (b buyingDB) BuyCourse(OriginalID int, Buying *models.Buying) (int, error) {
 
 	result := b.db.Create(&models.Buying{
 		Bid:         0,
 		CustomerID:  Buying.CustomerID,
 		BuyDateTime: Buying.BuyDateTime,
+		CourseID:    uint(OriginalID),
+		OriginalID:  uint(OriginalID),
 		//Customer:    models.Customer{},
 	})
 	if result.Error != nil {

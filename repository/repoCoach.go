@@ -13,10 +13,25 @@ type CoachRepository interface {
 	GetCoachByName(Name string) (*[]models.Coach, error)
 	Getcoach(Id int, Name string) (*[]models.Coach, error)
 	UpdateCoach(Cid int, coach *models.Coach) (int64, error)
+	UpdatePriceCoach(Cid int, Price int) (int64, error)
 }
 
 type coachDB struct {
 	db *gorm.DB
+}
+
+// UpdatePriceCoach implements CoachRepository.
+func (c coachDB) UpdatePriceCoach(Cid int, Price int) (int64, error) {
+	result := c.db.Model(models.Coach{}).Where("cid = ?", Cid).Updates(
+		models.Coach{Price: Price})
+
+	if result.Error != nil {
+		return -1, result.Error
+	}
+	if result.RowsAffected > 0 {
+		fmt.Println("Update completed")
+	}
+	return result.RowsAffected, nil
 }
 
 // UpdateCoach implements CoachRepository.

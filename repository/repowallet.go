@@ -21,7 +21,7 @@ type WalletDB struct {
 // GetHistoryWallet implements WalletRepository.
 func (w WalletDB) GetHistoryWallet(CusID int) (*[]models.Wallet, error) {
 	wallet := []models.Wallet{}
-	result := w.db.Where("uid = ?", CusID).Where("status = 1").Find(wallet)
+	result := w.db.Where("uid = ?", CusID).Where("status = 1").Find(&wallet)
 	if result.Error != nil {
 		return nil, result.Error
 	}

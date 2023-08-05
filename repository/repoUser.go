@@ -14,7 +14,7 @@ type UserRepository interface {
 	RegisterCoach(coach *models.Coach) (int64, error)
 	UpdatePasswordCus(uid int, password string) (int64, error)
 	UpdatePasswordCoach(cid int, password string) (int64, error)
-	GetUserID(Uid int) *models.Customer
+	GetUserID(Uid int, Email string) *models.Customer
 }
 type userDB struct {
 	db *gorm.DB
@@ -53,9 +53,16 @@ func (u userDB) UpdatePasswordCus(uid int, password string) (int64, error) {
 }
 
 // GetUserID implements UserRepository
-func (u userDB) GetUserID(Uid int) *models.Customer {
+func (u userDB) GetUserID(Uid int, Email string) *models.Customer {
 	customer := models.Customer{}
-	result := u.db.Where("uid = ?", Uid).Find(&customer)
+	result := u.db.Where("")
+	if Uid != 0 {
+		result.Where("uid = ?", Uid).Find(&customer)
+	}
+	if Email != "" {
+		result.Where("email = ?", Email).Find(&customer)
+	}
+	result.Find(&customer)
 	if result.Error != nil {
 		panic(result.Error)
 	}

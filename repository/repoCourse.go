@@ -113,12 +113,12 @@ func (c courseDB) InsertCourseByID(CoID int, Bid int) (int, int, int, error) {
 func (c courseDB) GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
 
-	result := c.db.Preload("Coach").Where("bid IS NULL")
+	result := c.db.Preload("Coach")
 	if CoID != 0 {
 		result.Where("coID=?", CoID)
 	}
 	if Cid != 0 {
-		result.Where("cid = ?", Cid).Find(&courses)
+		result.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
 	}
 	if Name != "" {
 		result.Where("name like ?", "%"+Name+"%")

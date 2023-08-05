@@ -10,6 +10,8 @@ import (
 
 type CourseRepository interface {
 	GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error)
+	GetCourseCountnotEX(CoID int) (*[]models.Course, error)
+	GetCourseCountEX(CoID int) (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
@@ -23,6 +25,28 @@ type CourseRepository interface {
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseCountEX implements CourseRepository.
+func (c courseDB) GetCourseCountEX(CoID int) (*[]models.Course, error) {
+	dt := time.Now()
+	course := []models.Course{}
+	result := c.db.Where("coID=?", CoID).Where("expiration_date < ?", dt).Find(&course)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &course, nil
+}
+
+// GetCourseCount implements CourseRepository.
+func (c courseDB) GetCourseCountnotEX(CoID int) (*[]models.Course, error) {
+	dt := time.Now()
+	course := []models.Course{}
+	result := c.db.Where("coID=?", CoID).Where("expiration_date > ? OR expiration_date IS NULL ", dt).Find(&course)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &course, nil
 }
 
 // UpdateDay implements CourseRepository.

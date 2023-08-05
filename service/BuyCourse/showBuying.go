@@ -3,13 +3,50 @@ package buycourse
 import (
 	"backEndGo/models"
 	"backEndGo/repository"
+	"fmt"
+	"time"
 )
 
 type ShowBuyingDataService interface {
 	GetBuying(uid int, coID int, cid int, ocoID int) (*[]models.Buying, error)
 	SeviceGetCourseByUser(Cid int) (*[]models.Buying, error)
+	SeviceGetCourseCount(OcoID int) int
 }
 type BuyingData struct {
+}
+
+// SeviceGetCourseCount implements ShowBuyingDataService.
+func (BuyingData) SeviceGetCourseCount(OcoID int) int {
+	sum := 0
+	count := 0
+	dt := time.Now()
+	repobuy := repository.NewBuyingRepository()
+	repocourse := repository.NewCourseRepository()
+	courseOriginal, err := repobuy.GetBuyingrAll(0, 0, 0, 0, OcoID)
+	for _, valuecourseId := range *courseOriginal {
+		course, _ := repocourse.GetCourse(int(valuecourseId.CourseID), 0, "")
+		for _, valuecourse := range *course {
+			if valuecourse.ExpirationDate.After(dt) {
+				fmt.Printf("CoID1", "%v", valuecourse.CoID)
+				fmt.Printf("time1", "%v", valuecourse.ExpirationDate)
+				count++
+			} else if valuecourse.ExpirationDate.IsZero() {
+				fmt.Printf("CoID2", "%v", valuecourse.CoID)
+				fmt.Printf("time2", "%v", valuecourse.ExpirationDate)
+				count++
+			} else if valuecourse.ExpirationDate.Before(dt) {
+				fmt.Printf("CoID23", "%v", valuecourse.CoID)
+				fmt.Printf("time3", "%v", valuecourse.ExpirationDate)
+				count--
+			}
+			sum = sum + count
+			fmt.Println(sum)
+		}
+	}
+	if err != nil {
+		panic(err)
+	}
+	return sum
 }
 
 // SeviceGetCourseByUser implements ShowCourseDataService.

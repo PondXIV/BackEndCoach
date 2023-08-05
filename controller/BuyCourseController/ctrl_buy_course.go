@@ -20,7 +20,21 @@ func NewBuyCourseController(router *gin.Engine) {
 		buy.GET("", getBuying)
 		buy.GET("/user/:cid", getCourseByUser)
 		buy.POST("/:coID", buyPostBody)
+		buy.GET("/count", getCountBuying)
 	}
+
+}
+func getCountBuying(ctx *gin.Context) {
+	qocoID := ctx.Query("originalID")
+
+	ocoID, err := strconv.Atoi(qocoID)
+
+	Buys := show.SeviceGetCourseCount(ocoID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, Buys)
 
 }
 func getCourseByUser(ctx *gin.Context) {

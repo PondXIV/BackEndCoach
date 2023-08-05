@@ -20,7 +20,21 @@ func NewBuyCourseController(router *gin.Engine) {
 		buy.GET("", getBuying)
 		buy.GET("/user/:cid", getCourseByUser)
 		buy.POST("/:coID", buyPostBody)
+		buy.GET("/count", getCountBuying)
 	}
+
+}
+func getCountBuying(ctx *gin.Context) {
+	qocoID := ctx.Query("originalID")
+
+	ocoID, err := strconv.Atoi(qocoID)
+
+	Buys := show.SeviceGetCourseCount(ocoID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, Buys)
 
 }
 func getCourseByUser(ctx *gin.Context) {
@@ -41,12 +55,14 @@ func getBuying(ctx *gin.Context) {
 	quid := ctx.Query("uid")
 	qcoID := ctx.Query("coID")
 	qcid := ctx.Query("cid")
+	qocoID := ctx.Query("originalID")
 
 	uid, err := strconv.Atoi(quid)
 	coID, err := strconv.Atoi(qcoID)
 	cid, err := strconv.Atoi(qcid)
+	ocoID, err := strconv.Atoi(qocoID)
 
-	Buys, err := show.GetBuying(uid, coID, cid)
+	Buys, err := show.GetBuying(uid, coID, cid, ocoID)
 	if err != nil {
 		panic(err)
 	}

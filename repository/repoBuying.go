@@ -2,13 +2,14 @@ package repository
 
 import (
 	"backEndGo/models"
+	"fmt"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 type BuyingRepository interface {
-	GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.Buying, error)
+	GetBuyingrAll(uid int, coID int, bid int, cid int, ocoID int) (*[]models.Buying, error)
 	BuyCourse(CoID int, Buying *models.Buying) (int, error)
 	GetCourseByIDCusEX(Uid int) (*[]models.Buying, error)
 	GetCourseByIDCus(Uid int) (*[]models.Buying, error)
@@ -72,10 +73,11 @@ func (b buyingDB) BuyCourse(OriginalID int, Buying *models.Buying) (int, error) 
 }
 
 // GetBuyingrAll implements BuyingRepository
-func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.Buying, error) {
+func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int, cid int, ocoID int) (*[]models.Buying, error) {
 	buying := []models.Buying{}
 	result := b.db.Joins("Course").Preload("Customer").Preload("Course.Coach")
 	if uid != 0 {
+		fmt.Println(uid)
 		result.Where("uid=?", uid)
 	}
 	if bid != 0 {
@@ -87,10 +89,13 @@ func (b buyingDB) GetBuyingrAll(uid int, coID int, bid int, cid int) (*[]models.
 	if cid != 0 {
 		result.Where("cid=?", cid)
 	}
+	if ocoID != 0 {
+		fmt.Println(ocoID)
+		result.Where("originalID=?", ocoID)
+	}
 	if result.Error != nil {
 		return nil, result.Error
 	}
-
 	result.Find(&buying)
 	return &buying, nil
 }

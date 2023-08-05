@@ -41,12 +41,14 @@ func getBuying(ctx *gin.Context) {
 	quid := ctx.Query("uid")
 	qcoID := ctx.Query("coID")
 	qcid := ctx.Query("cid")
+	qocoID := ctx.Query("originalID")
 
 	uid, err := strconv.Atoi(quid)
 	coID, err := strconv.Atoi(qcoID)
 	cid, err := strconv.Atoi(qcid)
+	ocoID, err := strconv.Atoi(qocoID)
 
-	Buys, err := show.GetBuying(uid, coID, cid)
+	Buys, err := show.GetBuying(uid, coID, cid, ocoID)
 	if err != nil {
 		panic(err)
 	}

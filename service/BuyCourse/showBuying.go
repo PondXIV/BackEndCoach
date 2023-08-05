@@ -6,7 +6,7 @@ import (
 )
 
 type ShowBuyingDataService interface {
-	GetBuying(uid int, coID int, cid int) (*[]models.Buying, error)
+	GetBuying(uid int, coID int, cid int, ocoID int) (*[]models.Buying, error)
 	SeviceGetCourseByUser(Cid int) (*[]models.Buying, error)
 }
 type BuyingData struct {
@@ -15,7 +15,7 @@ type BuyingData struct {
 // SeviceGetCourseByUser implements ShowCourseDataService.
 func (b BuyingData) SeviceGetCourseByUser(Cid int) (*[]models.Buying, error) {
 	repo := repository.NewBuyingRepository()
-	course, err := repo.GetBuyingrAll(0, 0, 0, Cid)
+	course, err := repo.GetBuyingrAll(0, 0, 0, Cid, 0)
 	keys := make(map[int]bool)
 	buying := []models.Buying{}
 	for _, entry := range *course {
@@ -31,9 +31,9 @@ func (b BuyingData) SeviceGetCourseByUser(Cid int) (*[]models.Buying, error) {
 }
 
 // SeviceGetListClipByIDCoach implements ShowListClipDataService
-func (c BuyingData) GetBuying(uid int, coID int, cid int) (*[]models.Buying, error) {
+func (c BuyingData) GetBuying(uid int, coID int, cid int, ocoID int) (*[]models.Buying, error) {
 	repo := repository.NewBuyingRepository()
-	Buys, err := repo.GetBuyingrAll(uid, coID, 0, cid)
+	Buys, err := repo.GetBuyingrAll(uid, coID, 0, cid, ocoID)
 	if err != nil {
 		return nil, err
 	}

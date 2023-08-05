@@ -18,7 +18,7 @@ type ReviewData struct {
 // ServiceInsertReview implements ShowReviewService.
 func (ReviewData) ServiceInsertReview(Bid int, review *models.Review) (int64, error) {
 	repobill := repository.NewBuyingRepository()
-	courseId, err := repobill.GetBuyingrAll(0, 0, Bid, 0)
+	courseId, err := repobill.GetBuyingrAll(0, 0, Bid, 0, 0)
 	for _, valuecourseId := range *courseId {
 
 		rowsAffecteds, _ := repoReview.InsertReview(int(valuecourseId.OriginalID), review)

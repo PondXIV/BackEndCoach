@@ -10,8 +10,6 @@ import (
 
 type CourseRepository interface {
 	GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error)
-	GetCourseCountnotEX(CoID int) (*[]models.Course, error)
-	GetCourseCountEX(CoID int) (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)

@@ -11,7 +11,7 @@ type CoachRepository interface {
 	GetCoachAll() (*[]models.Coach, error)
 	GetCoachByID(Id int) (*[]models.Coach, error)
 	GetCoachByName(Name string) (*[]models.Coach, error)
-	Getcoach(Id int, Name string) (*[]models.Coach, error)
+	Getcoach(Id int, Name string, Email string) (*[]models.Coach, error)
 	UpdateCoach(Cid int, coach *models.Coach) (int64, error)
 	UpdatePriceCoach(Cid int, Price int) (int64, error)
 }
@@ -48,7 +48,7 @@ func (c coachDB) UpdateCoach(Cid int, coach *models.Coach) (int64, error) {
 }
 
 // Getcoach implements CoachRepository
-func (c coachDB) Getcoach(Id int, Name string) (*[]models.Coach, error) {
+func (c coachDB) Getcoach(Id int, Name string, Email string) (*[]models.Coach, error) {
 	coachs := []models.Coach{}
 	var result *gorm.DB = c.db.Find(&coachs)
 	if Id != 0 {
@@ -57,6 +57,9 @@ func (c coachDB) Getcoach(Id int, Name string) (*[]models.Coach, error) {
 	}
 	if Name != "" {
 		result.Where("username  like ?", "%"+Name+"%").Find(&coachs)
+	}
+	if Email != "" {
+		result.Where("email = ?", Email).Find(&coachs)
 	}
 	result.Find(&coachs)
 	return &coachs, nil

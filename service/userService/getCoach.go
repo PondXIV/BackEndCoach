@@ -7,15 +7,15 @@ import (
 
 type GetNamecoachService interface {
 	ServiceGetNameCoach(Name string) (*[]models.Coach, error)
-	ServiceGetNameCoachs(Id int, Name string) (*[]models.Coach, error)
+	ServiceGetNameCoachs(Id int, Name string, Email string) (*[]models.Coach, error)
 }
 type CoachByNameData struct {
 }
 
 // ServiceGetNameCoachs implements GetNamecoachService
-func (CoachByNameData) ServiceGetNameCoachs(Id int, Name string) (*[]models.Coach, error) {
+func (CoachByNameData) ServiceGetNameCoachs(Id int, Name string, Email string) (*[]models.Coach, error) {
 	repo := repository.NewCoachRepository()
-	coachs, err := repo.Getcoach(Id, Name)
+	coachs, err := repo.Getcoach(Id, Name, Email)
 	if err != nil {
 		panic(err)
 	}

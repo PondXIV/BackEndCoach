@@ -24,7 +24,7 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	repoCus := repository.NewCustomerRepository()
 	repoCoach := repository.NewCoachRepository()
 
-	user := repoUser.GetUserID(int(BuyCourse.CustomerID))
+	user := repoUser.GetUserID(int(BuyCourse.CustomerID), "")
 
 	sum := 0.0
 	priceCoach := 0

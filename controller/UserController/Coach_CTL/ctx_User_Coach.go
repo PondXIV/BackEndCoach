@@ -21,8 +21,9 @@ func NewCoachController(router *gin.Engine) {
 func GetCoach(ctx *gin.Context) {
 	qcid := ctx.Query("cid")
 	name := ctx.Query("username")
+	email := ctx.Query("email")
 	cid, err := strconv.Atoi(qcid)
-	coach, err := coachDateService.ServiceGetNameCoachs(cid, name)
+	coach, err := coachDateService.ServiceGetNameCoachs(cid, name, email)
 	if err != nil {
 		panic(err)
 	}

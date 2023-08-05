@@ -26,6 +26,8 @@ func NewAuthController(router *gin.Engine) {
 		auth.POST("/Cus", registerCus)
 		auth.POST("/Coach", registerCoach)
 		auth.PUT("/Coach/:cid", updateCoach)
+		auth.PUT("/password/Coach/:cid", updatePasswordCoach)
+		auth.PUT("/password/Cus/:uid", updatePasswordCus)
 	}
 
 }
@@ -219,6 +221,65 @@ func updateCoach(ctx *gin.Context) {
 	}
 
 }
+
+func updatePasswordCoach(ctx *gin.Context) {
+	coachID := ctx.Param("cid")
+
+	cid, _ := strconv.Atoi(coachID)
+
+	err := ctx.ShouldBindJSON(&modelsCoach)
+	// // process
+	rowsAffected, err := userDateService.ServiceUpdatePasswordCoach(cid, &modelsCoach)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
+
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
+	}
+}
+
+func updatePasswordCus(ctx *gin.Context) {
+	userID := ctx.Param("uid")
+
+	uid, _ := strconv.Atoi(userID)
+
+	err := ctx.ShouldBindJSON(&modelsCus)
+	// // process
+	rowsAffected, err := userDateService.ServiceUpdatePasswordCus(uid, &modelsCus)
+	if err != nil {
+		if http.StatusBadRequest == 400 {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"code":   "400",
+				"result": err.Error(),
+			})
+		}
+
+	} else {
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
+
+		} else {
+			outputSoon(ctx)
+		}
+	}
+}
+
 func outputSoon(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":   "200",

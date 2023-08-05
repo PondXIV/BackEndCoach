@@ -6,7 +6,7 @@ import (
 )
 
 type ShowUserService interface {
-	ServiceGetUserByUid(Uid int) (*models.Customer, error)
+	ServiceGetUserByUid(Uid int, Email string) (*models.Customer, error)
 	ServiceUpdateCustomer(Uid int, customer *models.Customer) (int64, error)
 }
 type UserData struct {
@@ -29,12 +29,10 @@ func (UserData) ServiceUpdateCustomer(Uid int, customer *models.Customer) (int64
 }
 
 // ServiceGetUserByUid implements ShowUserService
-func (UserData) ServiceGetUserByUid(Uid int) (*models.Customer, error) {
-	repo := repository.NewCustomerRepository()
-	course, err := repo.GetCustomerByID(Uid)
-	if err != nil {
-		panic(err)
-	}
+func (UserData) ServiceGetUserByUid(Uid int, Email string) (*models.Customer, error) {
+	repo := repository.NewUserRepository()
+	course := repo.GetUserID(Uid, Email)
+
 	return course, nil
 }
 

@@ -59,8 +59,9 @@ func updateCustomer(ctx *gin.Context) {
 
 func Customer(ctx *gin.Context) {
 	cusID := ctx.Query("uid")
+	email := ctx.Query("email")
 	uid, err := strconv.Atoi(cusID)
-	customer, err := customerService.ServiceGetUserByUid(uid)
+	customer, err := customerService.ServiceGetUserByUid(uid, email)
 	if err != nil {
 		panic(err)
 	}

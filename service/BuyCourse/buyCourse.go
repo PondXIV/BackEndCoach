@@ -26,7 +26,7 @@ func (BuyCourseData) ServiceBuyCourse(CoID int, Buying *models.Buying) (int64, e
 		return -1, err
 	}
 
-	user := repoUser.GetUserID(int(Buying.CustomerID))
+	user := repoUser.GetUserID(int(Buying.CustomerID), "")
 
 	Price, courseID, Days, err := repoCourse.InsertCourseByID(CoID, int(bid))
 	sum := int64(Price) - int64(user.Price)

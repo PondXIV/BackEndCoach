@@ -6,7 +6,7 @@ import (
 	"backEndGo/models"
 	coachdto "backEndGo/models/request"
 	coursesv "backEndGo/service/CoachService/CourseSV"
-	userservice "backEndGo/service/userService"
+	daysv "backEndGo/service/CoachService/DaySV"
 	"fmt"
 
 	"net/http"
@@ -19,7 +19,7 @@ var courseDateService = coursesv.NewCourseDataService()
 var updatecourseDateService = coursesv.NewUpdateCourseDataService()
 var insertCourseDataService = coursesv.NewInsertCourseDataService()
 var deleteCourseDataService = coursesv.NewDeleteCourseDataService()
-var progess = userservice.NewProgessbarDataService()
+var getDayDataService = daysv.NewDayDataService()
 var modelsCourse = models.Course{}
 
 func NewCourseController(router *gin.Engine) {
@@ -32,20 +32,22 @@ func NewCourseController(router *gin.Engine) {
 		course.POST("/coachID/:cid", insertCourse)
 		course.DELETE("/courseID/:coID", deleteCourse)
 		course.PUT("/expiration/:coID", updateExpiration)
-		course.GET("/progess/:coID", GetProgessbar)
+		course.GET("/progess", GetProgessbar)
 
 	}
 
 }
-
 func GetProgessbar(ctx *gin.Context) {
-	courseID := ctx.Param("coID")
+	courseID := ctx.Query("coID")
+
 	coID, err := strconv.Atoi(courseID)
-	course, err := progess.ServiceProgess(coID)
+	course := getDayDataService.SeviceShowProgess(coID)
 	if err != nil {
 		panic(err)
 	}
+
 	ctx.JSON(http.StatusOK, course)
+
 }
 func updateExpiration(ctx *gin.Context) {
 	courseID := ctx.Param("coID")

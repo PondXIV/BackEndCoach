@@ -47,7 +47,9 @@ func Getamountclip(ctx *gin.Context) {
 		panic(err)
 	}
 
-	ctx.JSON(http.StatusOK, course)
+	ctx.JSON(http.StatusOK, gin.H{
+		"amount": course,
+	})
 
 }
 func GetProgessbar(ctx *gin.Context) {
@@ -59,7 +61,9 @@ func GetProgessbar(ctx *gin.Context) {
 		panic(err)
 	}
 
-	ctx.JSON(http.StatusOK, course)
+	ctx.JSON(http.StatusOK, gin.H{
+		"percent": course,
+	})
 
 }
 func updateExpiration(ctx *gin.Context) {

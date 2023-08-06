@@ -30,12 +30,16 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	priceCoach := 0
 	price := 0
 	cid := 0
-	var ListCoach *[]models.Coach
 
+	var ListCoach *[]models.Coach
+	userPrice := 0
+	for _, value := range *user {
+		userPrice = int(value.Price)
+	}
 	Pricecourse, _ := repoCourse.GetCourse(CoID, 0, "")
 	for _, value := range *Pricecourse {
 		price = int(value.Price)
-		sum = float64(user.Price) - float64(value.Price)
+		sum = float64(userPrice) - float64(value.Price)
 		ListCoach, _ = repoCoach.GetCoachByID(value.CoachID)
 
 	}

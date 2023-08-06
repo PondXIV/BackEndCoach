@@ -9,8 +9,31 @@ import (
 type ShowDayDataService interface {
 	SeviceGetDay(Did int, CoID int, Sequence int) (*[]models.DayOfCouse, error)
 	SeviceShowProgess(CoID int) float64
+	SeviceGetAmoutclip(CoID int) int
 }
 type DayData struct {
+}
+
+// SeviceShowProgess implements SeviceGetAmoutclip.
+func (DayData) SeviceGetAmoutclip(CoID int) int {
+
+	sum := 0
+	repoday := repository.NewDayOfCourseRepository()
+	repoclip := repository.NewClipRepository()
+	days, err := repoday.DayOfCourse(0, CoID, 0)
+	for _, valueDay := range *days {
+		clip, _ := repoclip.GetClip(0, 0, int(valueDay.Did))
+		for _, valueClip := range *clip {
+			sum++
+			fmt.Println(valueClip.CpID)
+
+		}
+	}
+	fmt.Println("sum ", sum)
+	if err != nil {
+		panic(err)
+	}
+	return sum
 }
 
 // SeviceShowProgess implements ShowDayDataService.

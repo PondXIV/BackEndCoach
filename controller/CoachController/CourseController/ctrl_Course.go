@@ -33,8 +33,21 @@ func NewCourseController(router *gin.Engine) {
 		course.DELETE("/courseID/:coID", deleteCourse)
 		course.PUT("/expiration/:coID", updateExpiration)
 		course.GET("/progess", GetProgessbar)
+		course.GET("/amount", Getamountclip)
 
 	}
+
+}
+func Getamountclip(ctx *gin.Context) {
+	courseID := ctx.Query("coID")
+
+	coID, err := strconv.Atoi(courseID)
+	course := getDayDataService.SeviceGetAmoutclip(coID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, course)
 
 }
 func GetProgessbar(ctx *gin.Context) {

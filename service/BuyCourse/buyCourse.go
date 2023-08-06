@@ -29,7 +29,11 @@ func (BuyCourseData) ServiceBuyCourse(CoID int, Buying *models.Buying) (int64, e
 	user := repoUser.GetUserID(int(Buying.CustomerID), "")
 
 	Price, courseID, Days, err := repoCourse.InsertCourseByID(CoID, int(bid))
-	sum := int64(Price) - int64(user.Price)
+	userPrice := 0
+	for _, value := range *user {
+		userPrice = int(value.Price)
+	}
+	sum := int64(Price) - int64(userPrice)
 
 	rowsAffected := repoDay.InsertDayOfCourse(uint(courseID), Days)
 	if rowsAffected != 0 {

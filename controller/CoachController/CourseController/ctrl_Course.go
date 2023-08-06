@@ -26,6 +26,7 @@ func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
 		course.GET("", getCourse)
+		course.GET("/opensell", getCourseSell)
 		course.GET("/sell/:coID", getCoursebidnotnull)
 		// course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/courseID/:coID", updateCourse)
@@ -36,6 +37,24 @@ func NewCourseController(router *gin.Engine) {
 		course.GET("/amount", Getamountclip)
 
 	}
+
+}
+func getCourseSell(ctx *gin.Context) {
+	qcoid := ctx.Query("coID")
+	qcid := ctx.Query("cid")
+	qname := ctx.Query("name")
+
+	coid, err := strconv.Atoi(qcoid)
+	cid, err := strconv.Atoi(qcid)
+
+	// If params not exist string = "", int = 0
+
+	course, err := courseDateService.SeviceGetCourseSell(coid, cid, qname)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, course)
 
 }
 func Getamountclip(ctx *gin.Context) {

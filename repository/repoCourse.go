@@ -44,7 +44,7 @@ func (c courseDB) GetCourseSell(CoID int, Cid int, Name string) (*[]models.Cours
 		return nil, result.Error
 	}
 
-	result.Where("status = 1").Find(&courses)
+	result.Where("bid IS NULL").Where("status = 1").Find(&courses)
 
 	return &courses, nil
 }

@@ -32,7 +32,7 @@ func (c custumerDB) EditPrice(Uid int, Price float64) (int64, error) {
 // UpdateUser implements CustomerRepository
 func (c custumerDB) UpdateUser(Uid int, customer *models.Customer) (int64, error) {
 	result := c.db.Model(models.Customer{}).Where("uid = ?", Uid).Updates(
-		models.Customer{Username: customer.Username, Password: customer.Username, FullName: customer.FullName, Birthday: customer.Birthday,
+		models.Customer{Username: customer.Username, Password: customer.Password, FullName: customer.FullName, Birthday: customer.Birthday,
 			Gender: customer.Gender, Phone: customer.Phone, Image: customer.Image, Weight: customer.Weight, Height: customer.Height})
 
 	if result.Error != nil {

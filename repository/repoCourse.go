@@ -10,6 +10,7 @@ import (
 
 type CourseRepository interface {
 	GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error)
+	GetCourseSell(CoID int, Cid int, Name string) (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
@@ -23,6 +24,29 @@ type CourseRepository interface {
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseSell implements CourseRepository.
+func (c courseDB) GetCourseSell(CoID int, Cid int, Name string) (*[]models.Course, error) {
+	courses := []models.Course{}
+
+	result := c.db.Preload("Coach")
+	if CoID != 0 {
+		result.Where("coID=?", CoID)
+	}
+	if Cid != 0 {
+		result.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
+	}
+	if Name != "" {
+		result.Where("name like ?", "%"+Name+"%")
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	result.Where("bid IS NULL").Where("status = 1").Find(&courses)
+
+	return &courses, nil
 }
 
 // GetCourseCountEX implements CourseRepository.

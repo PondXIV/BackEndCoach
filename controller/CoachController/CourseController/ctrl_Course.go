@@ -6,7 +6,7 @@ import (
 	"backEndGo/models"
 	coachdto "backEndGo/models/request"
 	coursesv "backEndGo/service/CoachService/CourseSV"
-	userservice "backEndGo/service/userService"
+	daysv "backEndGo/service/CoachService/DaySV"
 	"fmt"
 
 	"net/http"
@@ -19,33 +19,71 @@ var courseDateService = coursesv.NewCourseDataService()
 var updatecourseDateService = coursesv.NewUpdateCourseDataService()
 var insertCourseDataService = coursesv.NewInsertCourseDataService()
 var deleteCourseDataService = coursesv.NewDeleteCourseDataService()
-var progess = userservice.NewProgessbarDataService()
+var getDayDataService = daysv.NewDayDataService()
 var modelsCourse = models.Course{}
 
 func NewCourseController(router *gin.Engine) {
 	course := router.Group("/course")
 	{
 		course.GET("", getCourse)
+		course.GET("/opensell", getCourseSell)
 		course.GET("/sell/:coID", getCoursebidnotnull)
 		// course.PUT("/updateStatusCourse", updateStatusCourse)
 		course.PUT("/courseID/:coID", updateCourse)
 		course.POST("/coachID/:cid", insertCourse)
 		course.DELETE("/courseID/:coID", deleteCourse)
 		course.PUT("/expiration/:coID", updateExpiration)
-		course.GET("/progess/:coID", GetProgessbar)
+		course.GET("/progess", GetProgessbar)
+		course.GET("/amount", Getamountclip)
 
 	}
 
 }
+func getCourseSell(ctx *gin.Context) {
+	qcoid := ctx.Query("coID")
+	qcid := ctx.Query("cid")
+	qname := ctx.Query("name")
 
-func GetProgessbar(ctx *gin.Context) {
-	courseID := ctx.Param("coID")
-	coID, err := strconv.Atoi(courseID)
-	course, err := progess.ServiceProgess(coID)
+	coid, err := strconv.Atoi(qcoid)
+	cid, err := strconv.Atoi(qcid)
+
+	// If params not exist string = "", int = 0
+
+	course, err := courseDateService.SeviceGetCourseSell(coid, cid, qname)
 	if err != nil {
 		panic(err)
 	}
+
 	ctx.JSON(http.StatusOK, course)
+
+}
+func Getamountclip(ctx *gin.Context) {
+	courseID := ctx.Query("coID")
+
+	coID, err := strconv.Atoi(courseID)
+	course := getDayDataService.SeviceGetAmoutclip(coID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"amount": course,
+	})
+
+}
+func GetProgessbar(ctx *gin.Context) {
+	courseID := ctx.Query("coID")
+
+	coID, err := strconv.Atoi(courseID)
+	course := getDayDataService.SeviceShowProgess(coID)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"percent": course,
+	})
+
 }
 func updateExpiration(ctx *gin.Context) {
 	courseID := ctx.Param("coID")

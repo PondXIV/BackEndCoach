@@ -43,7 +43,7 @@ func (c courseDB) GetCourseSell(CoID int, Cid int, Name string) (*[]models.Cours
 
 	result := c.db.Preload("Coach")
 	if CoID != 0 {
-		result.Where("coID=?", CoID).Where("bid IS NULL").Where("status = 1").Find(&courses)
+		result.Where("coID=?", CoID)
 	}
 	if Cid != 0 {
 		result.Where("cid = ?", Cid)
@@ -55,7 +55,7 @@ func (c courseDB) GetCourseSell(CoID int, Cid int, Name string) (*[]models.Cours
 		return nil, result.Error
 	}
 
-	result.Find(&courses)
+	result.Find(&courses).Where("bid IS NULL").Where("status = 1").Find(&courses)
 
 	return &courses, nil
 }

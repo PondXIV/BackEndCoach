@@ -17,36 +17,40 @@ type BuyingData struct {
 
 // SeviceGetCourseCount implements ShowBuyingDataService.
 func (BuyingData) SeviceGetCourseCount(OcoID int) int {
-	sum := 0
+	//sum := 0
 	count := 0
 	dt := time.Now()
 	repobuy := repository.NewBuyingRepository()
 	repocourse := repository.NewCourseRepository()
 	courseOriginal, err := repobuy.GetBuyingrAll(0, 0, 0, 0, OcoID)
 	for _, valuecourseId := range *courseOriginal {
-		course, _ := repocourse.GetCourse(int(valuecourseId.CourseID), 0, "")
+		course, _ := repocourse.GetCourseNotNull(int(valuecourseId.CourseID))
 		for _, valuecourse := range *course {
 			if valuecourse.ExpirationDate.After(dt) {
 				fmt.Printf("CoID1", "%v", valuecourse.CoID)
 				fmt.Printf("time1", "%v", valuecourse.ExpirationDate)
-				count++
+				fmt.Println("count1", "%v", count)
+				count = count + 1
 			} else if valuecourse.ExpirationDate.IsZero() {
 				fmt.Printf("CoID2", "%v", valuecourse.CoID)
 				fmt.Printf("time2", "%v", valuecourse.ExpirationDate)
-				count++
+				fmt.Println("count2", count)
+				count = count + 1
 			} else if valuecourse.ExpirationDate.Before(dt) {
-				fmt.Printf("CoID23", "%v", valuecourse.CoID)
+				fmt.Printf("CoID3", "%v", valuecourse.CoID)
 				fmt.Printf("time3", "%v", valuecourse.ExpirationDate)
-				count--
+				fmt.Println("count3", count)
+				count = count - 1
 			}
-			sum = sum + count
-			fmt.Println(sum)
+			fmt.Println("count", count)
 		}
+		//sum = sum + count
+		fmt.Println("count", count)
 	}
 	if err != nil {
 		panic(err)
 	}
-	return sum
+	return count
 }
 
 // SeviceGetCourseByUser implements ShowCourseDataService.

@@ -12,6 +12,7 @@ type CourseRepository interface {
 	GetCourse(CoID int, Cid int, Name string) (*[]models.Course, error)
 	GetCourseSell(CoID int, Cid int, Name string) (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
+	GetCourseNotNull(CoID int) (*[]models.Course, error)
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
 	GetCouseByCoID(CoID int) (*models.Course, error)
@@ -26,16 +27,26 @@ type courseDB struct {
 	db *gorm.DB
 }
 
+// GetCourseNotNull implements CourseRepository.
+func (c courseDB) GetCourseNotNull(CoID int) (*[]models.Course, error) {
+	course := []models.Course{}
+	result := c.db.Where("coID = ?", CoID).Where("bid IS NOT NULL").Where("status = 1").Find(&course)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &course, nil
+}
+
 // GetCourseSell implements CourseRepository.
 func (c courseDB) GetCourseSell(CoID int, Cid int, Name string) (*[]models.Course, error) {
 	courses := []models.Course{}
 
 	result := c.db.Preload("Coach")
 	if CoID != 0 {
-		result.Where("coID=?", CoID)
+		result.Where("coID=?", CoID).Where("bid IS NULL").Where("status = 1").Find(&courses)
 	}
 	if Cid != 0 {
-		result.Where("cid = ?", Cid).Where("bid IS NULL").Find(&courses)
+		result.Where("cid = ?", Cid)
 	}
 	if Name != "" {
 		result.Where("name like ?", "%"+Name+"%")
@@ -44,7 +55,7 @@ func (c courseDB) GetCourseSell(CoID int, Cid int, Name string) (*[]models.Cours
 		return nil, result.Error
 	}
 
-	result.Where("bid IS NULL").Where("status = 1").Find(&courses)
+	result.Find(&courses)
 
 	return &courses, nil
 }

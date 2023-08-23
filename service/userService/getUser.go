@@ -15,6 +15,17 @@ type UserData struct {
 // ServiceUpdateCustomer implements ShowUserService
 func (UserData) ServiceUpdateCustomer(Uid int, customer *models.Customer) (int64, error) {
 	repo := repository.NewCustomerRepository()
+	repoUser := repository.NewUserRepository()
+	user := repoUser.GetUserID(Uid, "")
+
+	for _, c := range *user {
+		if c.Email == customer.Email {
+			if c.Uid != uint(Uid) {
+				return -14, nil
+			}
+		}
+	}
+
 	RowsAffected, err := repo.UpdateUser(Uid, customer)
 	if err != nil {
 		return -1, err

@@ -36,8 +36,20 @@ func (c coachDB) UpdatePriceCoach(Cid int, Price int) (int64, error) {
 
 // UpdateCoach implements CoachRepository.
 func (c coachDB) UpdateCoach(Cid int, coach *models.Coach) (int64, error) {
-	result := c.db.Model(models.Coach{}).Where("cid = ?", Cid).Updates(&coach)
-
+	//result := c.db.Model(models.Coach{}).Where("cid = ?", Cid).Updates(&coach)
+	result := c.db.Model(models.Coach{}).Where("cid = ?", Cid).Updates(
+		models.Coach{
+			Username:      coach.Username,
+			Password:      coach.Password,
+			Email:         coach.Email,
+			FullName:      coach.FullName,
+			Birthday:      coach.Birthday,
+			Gender:        coach.Gender,
+			Phone:         coach.Phone,
+			Image:         coach.Image,
+			Qualification: coach.Qualification,
+			Property:      coach.Property,
+		})
 	if result.Error != nil {
 		return -1, result.Error
 	}

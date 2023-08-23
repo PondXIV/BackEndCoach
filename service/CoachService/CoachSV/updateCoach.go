@@ -19,13 +19,7 @@ func (CoachDataUpdate) ServiceUpdateCoach(Cid int, coach *models.Coach) (int64, 
 	for _, c := range *getAllCoach {
 		if c.Email == coach.Email {
 			if c.Cid != uint(Cid) {
-				return 0, nil
-			}
-		}
-		if c.Phone == coach.Phone {
-
-			if c.Cid != uint(Cid) {
-				return 0, nil
+				return -14, nil
 			}
 		}
 	}

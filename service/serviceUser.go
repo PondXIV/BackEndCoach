@@ -60,16 +60,14 @@ func (UserData) ServiceRegisterCoach(coach *models.Coach) (int64, error) {
 	}
 	for _, c := range *getAllCoach {
 		if c.Email == coach.Email {
-			if c.Phone == coach.Phone {
-				return 0, nil
-			}
+			return -14, nil
 		}
 	}
 
-	RowsAffected, err := repoRegister.RegisterCoach(coach)
-	if err != nil {
-		return 0, err
-	}
+	RowsAffected, _ := repoRegister.RegisterCoach(coach)
+	// if err != nil {
+	// 	return 0, err
+	// }
 	if RowsAffected > 0 {
 		return 1, nil
 	} else if RowsAffected == 0 {
@@ -89,9 +87,8 @@ func (UserData) ServiceRegisterCus(cus *models.Customer) (int64, error) {
 	}
 	for _, c := range *getAllCus {
 		if c.Email == cus.Email {
-			if c.Phone == cus.Phone {
-				return 0, nil
-			}
+			return -14, nil
+
 		}
 	}
 	RowsAffected, err := repoRegister.RegisterCus(cus)

@@ -48,8 +48,11 @@ func updateCustomer(ctx *gin.Context) {
 		error400(ctx)
 
 	} else {
-		if rowsAffected == 1 {
-			outputOne(ctx)
+		if rowsAffected >= 1 {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
 
 		} else {
 			outputSoon(ctx)

@@ -25,7 +25,7 @@ func (InsertFoodData) SeviceInsertFood(Did int, food *models.Food) (int64, error
 		if f.ListFoodID == food.ListFoodID {
 			if f.Time == food.Time {
 
-				return 14, nil
+				return -14, nil
 
 			}
 		}

@@ -76,8 +76,13 @@ func insertFood(ctx *gin.Context) {
 				"result": strconv.Itoa(int(rowsAffected)),
 			})
 
-		} else {
+		} else if rowsAffected == 0 {
 			outputSoon(ctx)
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{
+				"code":   "200",
+				"result": strconv.Itoa(int(rowsAffected)),
+			})
 		}
 	}
 

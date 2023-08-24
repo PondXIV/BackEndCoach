@@ -99,7 +99,7 @@ func (c courseDB) UpdateDay(CoID int, Day int) (int64, error) {
 func (c courseDB) UpdateExpiration(CoID int, Days int) (int64, error) {
 	dt := time.Now()
 
-	day := dt.AddDate(0, 0, Days)
+	day := dt.AddDate(0, 0, Days-1)
 
 	//ex_date := day.Format("01-02-2006")
 	// days := strconv.ParseInt(Days)

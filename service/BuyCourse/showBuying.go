@@ -26,15 +26,10 @@ func (BuyingData) SeviceGetCourseCount(OcoID int) int {
 	for _, valuecourseId := range *courseOriginal {
 		course, _ := repocourse.GetCourseNotNull(int(valuecourseId.CourseID))
 		for _, valuecourse := range *course {
-			if valuecourse.ExpirationDate.After(dt) {
+			if valuecourse.ExpirationDate.After(dt) || valuecourse.ExpirationDate.IsZero() {
 				fmt.Printf("CoID1", "%v", valuecourse.CoID)
 				fmt.Printf("time1", "%v", valuecourse.ExpirationDate)
 				fmt.Println("count1", "%v", count)
-				count = count + 1
-			} else if valuecourse.ExpirationDate.IsZero() {
-				fmt.Printf("CoID2", "%v", valuecourse.CoID)
-				fmt.Printf("time2", "%v", valuecourse.ExpirationDate)
-				fmt.Println("count2", count)
 				count = count + 1
 			} else if valuecourse.ExpirationDate.Before(dt) {
 				fmt.Printf("CoID3", "%v", valuecourse.CoID)

@@ -20,11 +20,13 @@ func (BuyingData) SeviceGetCourseCount(OcoID int) int {
 	sum := 0
 	count := 0
 	dt := time.Now()
+	day := dt.AddDate(0, 0, -1)
 	repobuy := repository.NewBuyingRepository()
 	repocourse := repository.NewCourseRepository()
 	courseOriginal, err := repobuy.GetBuyingrAll(0, 0, 0, 0, OcoID)
 	for _, valuecourseId := range *courseOriginal {
 		sum++
+		fmt.Println("Sum++", sum)
 		course, _ := repocourse.GetCourseNotNull(int(valuecourseId.CourseID))
 		for _, valuecourse := range *course {
 
@@ -33,10 +35,11 @@ func (BuyingData) SeviceGetCourseCount(OcoID int) int {
 				fmt.Printf("time1", "%v", valuecourse.ExpirationDate)
 				fmt.Println("count1", "%v", count)
 				//count = count + 1
-			} else if valuecourse.ExpirationDate.Before(dt) {
+			} else if valuecourse.ExpirationDate.Before(day) {
 				fmt.Printf("CoID3", "%v", valuecourse.CoID)
 				fmt.Printf("time3", "%v", valuecourse.ExpirationDate)
-				fmt.Println("count3", count)
+				//fmt.Println("count3", count)
+				fmt.Println("day", day)
 				count = count - 1
 			}
 			fmt.Println("count", count)

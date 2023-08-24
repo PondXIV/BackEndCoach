@@ -10,7 +10,7 @@ import (
 
 type BuyingRepository interface {
 	GetBuyingrAll(uid int, coID int, bid int, cid int, ocoID int) (*[]models.Buying, error)
-	BuyCourse(CoID int, Buying *models.Buying) (int, error)
+	BuyCourse(CoID int, Weight int, Buying *models.Buying) (int, error)
 	GetCourseByIDCusEX(Uid int) (*[]models.Buying, error)
 	GetCourseByIDCus(Uid int) (*[]models.Buying, error)
 	UpdateCoIDBuying(Bid int, CourseNewID int) error
@@ -51,7 +51,7 @@ func (b buyingDB) GetCourseByIDCusEX(Uid int) (*[]models.Buying, error) {
 }
 
 // BuyCourse implements BuyingRepository
-func (b buyingDB) BuyCourse(OriginalID int, Buying *models.Buying) (int, error) {
+func (b buyingDB) BuyCourse(OriginalID int, Weight int, Buying *models.Buying) (int, error) {
 
 	result := b.db.Create(&models.Buying{
 		Bid:         0,
@@ -59,6 +59,7 @@ func (b buyingDB) BuyCourse(OriginalID int, Buying *models.Buying) (int, error) 
 		BuyDateTime: Buying.BuyDateTime,
 		CourseID:    uint(OriginalID),
 		OriginalID:  uint(OriginalID),
+		Weight:      Weight,
 		//Customer:    models.Customer{},
 	})
 	if result.Error != nil {

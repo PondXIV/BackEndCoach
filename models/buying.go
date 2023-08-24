@@ -8,6 +8,7 @@ type Buying struct {
 	BuyDateTime time.Time `gorm:"column:buyDateTime"`
 	CourseID    uint      `gorm:"column:coID;foreignKey"`
 	OriginalID  uint      `gorm:"column:originalID"`
+	Weight      int       `gorm:"column:weight"`
 
 	Customer Customer `gorm:"foreignKey:CustomerID"`
 	Course   Course   `gorm:"foreignKey:CourseID"`

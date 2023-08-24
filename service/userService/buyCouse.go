@@ -30,11 +30,13 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	priceCoach := 0
 	price := 0
 	cid := 0
-
+	weight := 0
 	var ListCoach *[]models.Coach
 	userPrice := 0
 	for _, value := range *user {
 		userPrice = int(value.Price)
+		weight = int(value.Weight)
+
 	}
 	Pricecourse, _ := repoCourse.GetCourse(CoID, 0, "")
 	for _, value := range *Pricecourse {
@@ -56,7 +58,7 @@ func (BuyingCourseData) ServiceBuyCourse(CoID int, BuyCourse *models.Buying) (in
 	if res != true {
 		r, _ := repoCus.EditPrice(int(BuyCourse.CustomerID), sum)
 		fmt.Println("DayID ", r)
-		bid, err := repoBuycourse.BuyCourse(CoID, BuyCourse)
+		bid, err := repoBuycourse.BuyCourse(CoID, weight, BuyCourse)
 		repoCoach.UpdatePriceCoach(cid, priceCoach)
 
 		if err != nil {

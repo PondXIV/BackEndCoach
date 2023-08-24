@@ -8,7 +8,7 @@ import (
 )
 
 type ShowBuyingDataService interface {
-	GetBuying(uid int, coID int, cid int, ocoID int) (*[]models.Buying, error)
+	GetBuying(uid int, coID int, bid int, cid int, ocoID int) (*[]models.Buying, error)
 	SeviceGetCourseByUser(Cid int) (*[]models.Buying, error)
 	SeviceGetCourseCount(OcoID int) int
 }
@@ -73,9 +73,9 @@ func (b BuyingData) SeviceGetCourseByUser(Cid int) (*[]models.Buying, error) {
 }
 
 // SeviceGetListClipByIDCoach implements ShowListClipDataService
-func (c BuyingData) GetBuying(uid int, coID int, cid int, ocoID int) (*[]models.Buying, error) {
+func (c BuyingData) GetBuying(uid int, coID int, bid int, cid int, ocoID int) (*[]models.Buying, error) {
 	repo := repository.NewBuyingRepository()
-	Buys, err := repo.GetBuyingrAll(uid, coID, 0, cid, ocoID)
+	Buys, err := repo.GetBuyingrAll(uid, coID, bid, cid, ocoID)
 	if err != nil {
 		return nil, err
 	}

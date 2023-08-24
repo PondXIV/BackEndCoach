@@ -31,8 +31,9 @@ func (b buyingDB) UpdateCoIDBuying(Bid int, CourseNewID int) error {
 // GetCourseByIDCus implements CourseRepository
 func (b buyingDB) GetCourseByIDCus(Uid int) (*[]models.Buying, error) {
 	dt := time.Now()
+	day := dt.AddDate(0, 0, -1)
 	buying := []models.Buying{}
-	result := b.db.Joins("Course").Preload("Course.Coach").Where("uid=?", Uid).Where("expiration_date > ? OR expiration_date IS NULL ", dt).Find(&buying)
+	result := b.db.Joins("Course").Preload("Course.Coach").Where("uid=?", Uid).Where("expiration_date >= ? OR expiration_date IS NULL ", day).Find(&buying)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -42,8 +43,10 @@ func (b buyingDB) GetCourseByIDCus(Uid int) (*[]models.Buying, error) {
 // GetCourseByIDCusEX implements CourseRepository.
 func (b buyingDB) GetCourseByIDCusEX(Uid int) (*[]models.Buying, error) {
 	dt := time.Now()
+	day := dt.AddDate(0, 0, -1)
 	buying := []models.Buying{}
-	result := b.db.Joins("Course").Preload("Course.Coach").Where("uid=?", Uid).Where("expiration_date < ?", dt).Find(&buying)
+	result := b.db.Joins("Course").Preload("Course.Coach").Where("uid=?", Uid).Where("expiration_date < ?", day).Find(&buying)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}

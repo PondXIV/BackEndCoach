@@ -31,7 +31,9 @@ func GetReviewByCid(ctx *gin.Context) {
 		panic(err)
 	}
 
-	ctx.JSON(http.StatusOK, review)
+	ctx.JSON(http.StatusOK, gin.H{
+		"score": review,
+	})
 
 }
 func GetReviewByCoID(ctx *gin.Context) {

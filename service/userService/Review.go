@@ -35,10 +35,18 @@ func (ReviewData) ServiceGetReviewByCid(Cid int) (float64, error) {
 
 		}
 	}
-	avg = sum / float64(count)
-	fmt.Println("count =", count)
-	fmt.Println("sum =", sum)
-	fmt.Println("avg =", avg)
+	if sum > 0 {
+		avg = sum / float64(count)
+		fmt.Println("count =", count)
+		fmt.Println("sum =", sum)
+		fmt.Println("avg =", avg)
+	} else {
+		avg = 0.0
+		fmt.Println("count =", count)
+		fmt.Println("sum =", sum)
+		fmt.Println("avg =", avg)
+	}
+
 	if err != nil {
 		panic(err)
 	}

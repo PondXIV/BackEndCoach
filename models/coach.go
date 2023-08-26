@@ -20,6 +20,8 @@ type Coach struct {
 	Property      string    `gorm:"column:property;size:1000"`
 	FacebookID    string    `gorm:"default:null;column:facebookId;size:100"`
 	Price         int       `gorm:"default:null;column:price"`
+	BankName      string    `gorm:"column:bankName"`
+	IdCard        string    `gorm:"column:idCard"`
 
 	// Buyings []Buying `gorm:"foreignKey:CustomerID"`
 	// Chats  []Chat `gorm:"foreignKey:CoachID"`

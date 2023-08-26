@@ -49,6 +49,8 @@ func (c coachDB) UpdateCoach(Cid int, coach *models.Coach) (int64, error) {
 			Image:         coach.Image,
 			Qualification: coach.Qualification,
 			Property:      coach.Property,
+			BankName:      coach.BankName,
+			IdCard:        coach.IdCard,
 		})
 	if result.Error != nil {
 		return -1, result.Error

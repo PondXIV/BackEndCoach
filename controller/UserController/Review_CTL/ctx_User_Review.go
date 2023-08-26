@@ -3,6 +3,7 @@ package reviewctl
 import (
 	"backEndGo/models"
 	userservice "backEndGo/service/userService"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -15,9 +16,22 @@ func NewReviewController(router *gin.Engine) {
 	review := router.Group("/review")
 	{
 		review.GET("", GetReviewByCoID)
+		review.GET(":cid", GetReviewByCid)
 		review.POST(":bid", InsertReview)
 
 	}
+
+}
+func GetReviewByCid(ctx *gin.Context) {
+	fmt.Println()
+	coachID := ctx.Param("cid")
+	cid, err := strconv.Atoi(coachID)
+	review, err := reviewDataService.ServiceGetReviewByCid(cid)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx.JSON(http.StatusOK, review)
 
 }
 func GetReviewByCoID(ctx *gin.Context) {

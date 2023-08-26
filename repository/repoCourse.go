@@ -13,6 +13,7 @@ type CourseRepository interface {
 	GetCourseSell(CoID int, Cid int, Name string) (*[]models.Course, error)
 	GetCourseByIDCoach(Cid int) (*[]models.Course, error)
 	GetCourseNotNull(CoID int) (*[]models.Course, error)
+	GetCourseCidNotNull(CoID int) (*[]models.Course, error)
 	UpdateStatusCourse(CoID int, Status string) int64
 	GetCouseByname(Name string) (*[]models.Course, error)
 	GetCouseByCoID(CoID int) (*models.Course, error)
@@ -25,6 +26,16 @@ type CourseRepository interface {
 }
 type courseDB struct {
 	db *gorm.DB
+}
+
+// GetCourseNotNull implements CourseRepository.
+func (c courseDB) GetCourseCidNotNull(Cid int) (*[]models.Course, error) {
+	course := []models.Course{}
+	result := c.db.Where("cid = ?", Cid).Where("bid IS NOT NULL").Where("status = 1").Find(&course)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &course, nil
 }
 
 // GetCourseNotNull implements CourseRepository.
